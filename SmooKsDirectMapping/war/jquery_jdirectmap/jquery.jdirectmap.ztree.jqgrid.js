@@ -213,9 +213,9 @@ function helper_grid(table_element){
 			 //setting action as PUT
 			 data[data.length]=new param('action','PUT');
 			
-	
+			 	$.download("/transformXML",data); 
 		
-		 			$.download("/downloadXML",data);   // pass all the parameters
+		 		//	$.download("/downloadXML",data);   // pass all the parameters
 		
 				//	helper_grid();
 					

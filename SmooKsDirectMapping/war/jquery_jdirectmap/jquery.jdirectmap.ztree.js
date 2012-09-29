@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
 											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
 								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["destination"]), $("#tree_destination"),"destination");
 								 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
-								 			jQuery.fn.jDirectMapTreeInit.destinationKey = request["sourceXML"];
+								 			jQuery.fn.jDirectMapTreeInit.destinationKey = request["destinationXML"];
 											 
 
 							    	

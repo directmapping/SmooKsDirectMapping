@@ -5,9 +5,14 @@
 		<servlet-class>org.milyn.smooks.directmapping.gae.SmooKsDirectMappingServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>XML Serving Servlet</description>
-		<servlet-name>convertXML</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.XMLConverter</servlet-class>
+		<description>Template Builder</description>
+		<servlet-name>templatebuilder</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.TemplateBuilderServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>XML Transform Servlet</description>
+		<servlet-name>transformXML</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.TransformServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description>XML Serving Servlet</description>
@@ -37,27 +42,19 @@
 		<url-pattern>/input</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>convertXML</servlet-name>
-		<url-pattern>/xml/*</url-pattern>
+		<servlet-name>transformXML</servlet-name>
+		<url-pattern>/transformXML</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>displayXML</servlet-name>
 		<url-pattern>/result/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>templatebuilder</servlet-name>
+		<url-pattern>/templatebuilder/*</url-pattern>
+	</servlet-mapping>	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
- <servlet>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-  <init-param>
-   <param-name>services</param-name>
-   <param-value/>
-  </init-param>
- </servlet>
- <servlet-mapping>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <url-pattern>/_ah/spi/*</url-pattern>
- </servlet-mapping>
 </web-app>

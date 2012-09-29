@@ -101,28 +101,6 @@ public class XMLConverter extends HttpServlet {
 	}
 
 	
-	/*
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		String ctx = req.getRequestURL().toString();
-		String keyStr = ctx.substring(ctx.lastIndexOf('/') + 1, ctx.length());
-		DatastoreService datastore = DatastoreServiceFactory
-				.getDatastoreService();
-		Key key = KeyFactory.stringToKey(keyStr);
-		try {
-			Entity entity = datastore.get(key);
-			Text content = (Text) entity.getProperty("content");
-			String xml = content.getValue();
-			resp.setContentType("text/xml");
-		//	resp.getWriter().println("<?xml version=\"1.0\"?>");
-			parseXML(xml, resp.getWriter());
-		} catch (EntityNotFoundException e) {
-			logger.log(Level.SEVERE,"Exception happening when processing key " + key, e);
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Exception happening when processing key " + key, e);
-			throw new RuntimeException("Failed to process XML document", e);
-		} 
-	}*/
 	
 	
 	}
