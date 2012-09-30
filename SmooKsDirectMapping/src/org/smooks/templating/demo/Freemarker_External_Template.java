@@ -1,19 +1,17 @@
 package org.smooks.templating.demo;
  
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
  
+import freemarker.ext.dom.NodeModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,7 +27,7 @@ public class Freemarker_External_Template {
             //Template     	template 	= cfg.getTemplate("src/template/freemarker_template.ftl");
             Template     	template 	= cfg.getTemplate("template/freemarker_template_generic.ftl");
             
-            Map 			root 		= new HashMap();
+            Map<String, NodeModel> 			root 		= new HashMap<String, NodeModel>();
             try {
 				root.put("doc", freemarker.ext.dom.NodeModel.parse(new File("input/input-message_test.xml")));
 			} catch (SAXException e) {

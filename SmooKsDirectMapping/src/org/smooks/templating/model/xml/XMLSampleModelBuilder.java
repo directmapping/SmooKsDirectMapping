@@ -50,10 +50,12 @@ import org.milyn.xml.DomUtils;
 
 /**
  * XML Model Builder from an XML Sample.
+ * Extended by Michal Skackov
  * <p/>
  * The generated model can then be used by the {@link XMLFreeMarkerTemplateBuilder}.
  *
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author <a href="mailto:mskackov@ google mail .com">michal skackov</a>
  */
 public class XMLSampleModelBuilder extends ModelBuilder {
 		
@@ -99,6 +101,16 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 		registerNamepsaces(documentElement);
     }
     
+
+    /**
+     * Extended by MS
+     * to generate the model only do not configure element types and cardinality 
+     * 
+     * @param xmlSampleURI
+     * @param configuration
+     * @throws IOException
+     * @throws ModelBuilderException
+     */
     public XMLSampleModelBuilder(URI xmlSampleURI, boolean configuration) throws IOException, ModelBuilderException {
     	Assert.isNotNull(xmlSampleURI, "Null 'xmlSampleURI' arg in method call."); //$NON-NLS-1$
     	
@@ -133,6 +145,14 @@ public class XMLSampleModelBuilder extends ModelBuilder {
     }
     
     
+    /**
+     * Extended by MS
+     * Generate model from XML supplied as string from GAE servlet
+     * 
+     * @param xml
+     * @throws IOException
+     * @throws ModelBuilderException
+     */
     public XMLSampleModelBuilder(String xml) throws IOException, ModelBuilderException {
     	
     	
@@ -155,6 +175,11 @@ public class XMLSampleModelBuilder extends ModelBuilder {
     }
     
     
+    /* 
+     * Extended by MS 
+     * apply just configuration to the model
+     * @see org.smooks.templating.model.ModelBuilder#configureModel()
+     */
     public void configureModel(){
     	Element documentElement = model.getDocumentElement();
 		

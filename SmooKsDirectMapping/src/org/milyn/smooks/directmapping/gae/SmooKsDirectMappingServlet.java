@@ -33,7 +33,7 @@ public class SmooKsDirectMappingServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String source = req.getParameter("source");
-		String destination = req.getParameter("destination");
+		//String destination = req.getParameter("destination");
 		
 		if (source != null && source.length() > 0) {
 			String sourcekey = processXML(source);

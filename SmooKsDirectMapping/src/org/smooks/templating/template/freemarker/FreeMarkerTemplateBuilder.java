@@ -12,7 +12,6 @@ package org.smooks.templating.template.freemarker;
 
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
-import org.smooks.templating.template.CollectionMapping;
 import org.smooks.templating.template.Mapping;
 import org.smooks.templating.template.TemplateBuilder;
 import org.smooks.templating.template.ValueMapping;
@@ -25,6 +24,7 @@ import org.w3c.dom.Node;
 /**
  * Abstract FreeMarker template builder.
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
+ * @author <a href="mailto:mskackov@ google mail .com">michal skackov</a>
  */
 public abstract class FreeMarkerTemplateBuilder extends TemplateBuilder {
 
@@ -49,7 +49,6 @@ public abstract class FreeMarkerTemplateBuilder extends TemplateBuilder {
 
 	@Override
 	public AddCollectionResult addCollectionMapping(String srcCollectionPath, Element modelCollectionPath, String collectionItemName) throws InvalidMappingException {
-		ModelBuilder.setCollectionVariable(modelCollectionPath, collectionItemName, srcCollectionPath);
 		return super.addCollectionMapping(FreeMarkerUtil.normalizePath(srcCollectionPath), modelCollectionPath, collectionItemName);
 	}
 	

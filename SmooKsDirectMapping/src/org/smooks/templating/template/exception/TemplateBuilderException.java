@@ -25,7 +25,12 @@ package org.smooks.templating.template.exception;
  */
 public class TemplateBuilderException extends Exception {
 
-    public TemplateBuilderException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8383863786523764704L;
+
+	public TemplateBuilderException(String message) {
         super(message);
     }
 

@@ -20,18 +20,13 @@ package org.smooks.templating.demo;
 import org.eclipse.emf.common.util.URI;
 import org.milyn.Smooks;
 import org.milyn.SmooksException;
-import org.milyn.xml.XmlUtil;
-import org.smooks.templating.mapping.model.JSONMappingModelBuilder;
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
-import org.smooks.templating.model.ModelNodeResolver;
 import org.smooks.templating.model.xml.XMLSampleModelBuilder;
-import org.smooks.templating.template.TemplateBuilder;
 import org.smooks.templating.template.exception.InvalidMappingException;
 import org.smooks.templating.template.exception.TemplateBuilderException;
 import org.smooks.templating.template.freemarker.FreeMarkerTemplateBuilder;
 import org.smooks.templating.template.xml.XMLFreeMarkerTemplateBuilder;
-import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
@@ -48,12 +43,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -147,7 +140,7 @@ public class Freemarker_Smooks_Test {
 
 		builder = new XMLSampleModelBuilder(URI.createFileURI(newFilePath),false);
 				
-		JSONMappingModelBuilder destination = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
+	//	JSONMappingModelBuilder destination = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
 		//System.out.println(destination.getJSON());
 		
 		

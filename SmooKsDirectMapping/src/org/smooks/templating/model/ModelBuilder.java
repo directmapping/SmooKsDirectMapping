@@ -36,7 +36,9 @@ import javax.xml.parsers.ParserConfigurationException;
 /**
  * Abstract message model builder.
  * 
+ * Extended by Michal Skackov
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author <a href="mailto:mskackov@ google mail .com">michal skackov</a>
  * 
  *   changes 
  *   

@@ -25,7 +25,12 @@ package org.smooks.templating.template.exception;
  */
 public class InvalidMappingException extends TemplateBuilderException {
 
-    public InvalidMappingException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6817391087446172616L;
+
+	public InvalidMappingException(String message) {
         super(message);
     }
 

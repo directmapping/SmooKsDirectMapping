@@ -15,7 +15,7 @@ public class ZTreeModel {
 	    this.id = id;
 	    this.pId = pId;
 	    this.name = name;
-	    this.setXpath(xpath);
+	    this.xpath =  xpath;
 	    this.open = false;
 	    this.isFolder = false;
 	  }
@@ -25,7 +25,7 @@ public class ZTreeModel {
 		    this.id = id;
 		    this.pId = pId;
 		    this.name = name;
-		    this.setXpath(xpath);
+		    this.xpath =  xpath;
 		    this.open = open;
 		    this.isFolder = isFolder;
 		  }
@@ -38,6 +38,56 @@ public class ZTreeModel {
 
 	public void setXpath(String xpath) {
 		this.xpath = xpath;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public int getpId() {
+		return pId;
+	}
+
+
+	public void setpId(int pId) {
+		this.pId = pId;
+	}
+
+
+	public boolean isOpen() {
+		return open;
+	}
+
+
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+
+	public boolean isFolder() {
+		return isFolder;
+	}
+
+
+	public void setFolder(boolean isFolder) {
+		this.isFolder = isFolder;
 	}
 	 	  
 	  

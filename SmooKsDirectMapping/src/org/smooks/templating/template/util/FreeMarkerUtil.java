@@ -31,6 +31,7 @@ import org.smooks.templating.template.exception.TemplateBuilderException;
  * FreeMarker utility methods.
  * 
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author <a href="mailto:mskackov@ google mail .com">michal skackov</a>
  */
 public class FreeMarkerUtil {
 
@@ -122,7 +123,7 @@ public class FreeMarkerUtil {
 
 	public static String toPath(String srcPath, boolean nodeModelSource) {
 		
-		//TODO rewrite to get freemarker variables back.
+		//TODO MS rewrite to get freemarker variables back.
 		
 		if(nodeModelSource) {
 			StringBuilder builder = new StringBuilder();

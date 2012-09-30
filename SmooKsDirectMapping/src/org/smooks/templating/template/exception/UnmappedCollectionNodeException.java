@@ -28,7 +28,11 @@ import org.milyn.xml.DomUtils;
  */
 public class UnmappedCollectionNodeException extends InvalidMappingException {
 
-    private Element unmappedCollectionNode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 949045009182046074L;
+	private Element unmappedCollectionNode;
 
     public UnmappedCollectionNodeException(Element unmappedCollectionNode) {
         super("Unmapped collection node '" + DomUtils.getName(unmappedCollectionNode) + "'."); //$NON-NLS-1$ //$NON-NLS-2$

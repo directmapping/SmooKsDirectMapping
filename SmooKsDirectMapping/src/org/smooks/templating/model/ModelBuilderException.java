@@ -25,7 +25,12 @@ package org.smooks.templating.model;
  */
 public class ModelBuilderException extends Exception {
 
-    public ModelBuilderException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6715402652051755247L;
+
+	public ModelBuilderException(String message) {
         super(message);
     }
 

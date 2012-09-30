@@ -2,58 +2,25 @@ package org.milyn.smooks.directmapping.gae;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-import javax.servlet.ServletContext;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.smooks.templating.mapping.model.JSONMappingModelBuilder;
-import org.smooks.templating.model.ModelBuilder;
-import org.smooks.templating.model.ModelBuilderException;
-import org.smooks.templating.model.xml.XMLSampleModelBuilder;
 import org.smooks.templating.template.exception.InvalidMappingException;
-import org.smooks.templating.template.exception.TemplateBuilderException;
 import org.smooks.templating.template.freemarker.FreeMarkerTemplateBuilder;
-import org.smooks.templating.template.xml.XMLFreeMarkerTemplateBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Text;
-import com.google.appengine.api.datastore.Transaction;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -135,7 +102,7 @@ public class DownloadServlet extends HttpServlet {
 			
 	      int                 length   = 0;
 	      ServletOutputStream op       = resp.getOutputStream();
-	      ServletContext      context  = getServletConfig().getServletContext();
+	   //   ServletContext      context  = getServletConfig().getServletContext();
 	      String              mimetype = "text/json";
 	      
 	      	

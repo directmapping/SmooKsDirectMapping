@@ -1,6 +1,5 @@
 package org.milyn.smooks.directmapping.gae;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -8,10 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -28,7 +23,6 @@ import com.google.appengine.api.datastore.Text;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
@@ -48,9 +42,9 @@ public class XMLConverter extends HttpServlet {
 		try {
 			Entity entity = datastore.get(key);
 			Text content = (Text) entity.getProperty("content");
-			String xml = content.getValue();
+			//String xml = content.getValue();
 			resp.setContentType("application/json");
-			Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+		//	Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
 			Gson gsonBuilder = new GsonBuilder().create();
 			String [] test = {"foo","100","1000","21","true","null"};
 	        String json = gsonBuilder.toJson(test)   ;
@@ -86,13 +80,14 @@ public class XMLConverter extends HttpServlet {
          
 			
 	}
-	
+	/*
 	private void parseXML(String xml, PrintWriter out) throws IOException, SAXException {
 		logger.log(Level.INFO, "XMLConverter writing XML " + xml);
 		
 		out.println(xml);
 		
 	}
+	*/
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
