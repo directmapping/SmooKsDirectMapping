@@ -172,10 +172,49 @@ public abstract class TemplateBuilder {
 		
 		List<Mapping> removeMappings = new ArrayList<Mapping>();
 		findChildMappings(modelCollectionPath, mapping, parseSourcePath(mapping), removeMappings);
+		//TODO MS remove mapping contains all nodes which need to be rewritten.
+		//TODO MS I will add attribute smk:fm_list_variable - to pull in template builder
+		//TODO MS and smk:fm_list_match - to say how many levels it matches in case of multiple lists
+		
+		 renameChildren(srcCollectionPath, modelCollectionPath, collectionItemName, removeMappings);
+		
 		
 		AddCollectionResult result = new AddCollectionResult(mapping, removeMappings);		
 
 		return result;
+	}
+	
+	private void renameChildren(String srcCollectionPath, Element modelCollectionPath, String collectionItemName, List<Mapping> mappings){
+		
+		
+
+		
+		String[] srcPathTokens = parseSourcePath(getMapping(modelCollectionPath));
+		for(Mapping child : mappings) {
+			
+				String[] childbMappingSrcPathTokens = parseSourcePath(child);	
+				Node destination = child.getMappingNode();
+				int level = getLevelChildSourceMapping(childbMappingSrcPathTokens, srcPathTokens);
+				
+				if (destination.getNodeType() == Node.ELEMENT_NODE) {
+					
+					//TODO Only do when level match is higher than the one already existing!!!
+				
+					ModelBuilder.setListLevelMatch((Element) destination, level);
+					ModelBuilder.setListVariable((Element) destination, renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));
+				}	
+				else{
+					child.setSrcPath(renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));
+					child.setCollectionVariable(renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));
+				}
+					
+			
+			
+			
+			
+		}
+			
+		
 	}
 
 	/**
@@ -284,6 +323,46 @@ public abstract class TemplateBuilder {
 		
 		return true;
 	}
+	
+	
+	private int getLevelChildSourceMapping(String[] childSrcPathTokens, String[] srcPathTokens) {
+		int i = 0;
+		if(childSrcPathTokens.length < srcPathTokens.length) {
+			return i;
+		}
+		
+		for(i= 0; i < srcPathTokens.length; i++) {
+			if(!srcPathTokens[i].equals(childSrcPathTokens[i])) {
+				return i+1;
+			}
+		}
+		
+		return i;
+	}
+	
+	
+	private String renameListChildSourceMapping(String childSrcPath, String[] childSrcPathTokens, String collectionName, int level) {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(collectionName); 
+		
+		if(level == 0) {
+			return childSrcPath;
+		}
+		
+		for(int i= level; i < childSrcPathTokens.length; i++) {
+			
+			
+				  builder.append(".");
+				  builder.append(childSrcPathTokens[i]);
+			
+			
+		}
+		
+		return  builder.toString();
+	}
+	
+	
 
 	private void hideUnmappedPaths(Element compositor, Mapping mapping) {
 		NodeList children = compositor.getChildNodes();

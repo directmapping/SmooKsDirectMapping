@@ -141,12 +141,12 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 					//TODO rewrite to get freemarker variables back.
 					if(ModelBuilder.getCollectionPath(element)!= null)
 					{
-						templateWriter.write("<#list " + FreeMarkerUtil.toPath(ModelBuilder.getCollectionPath(element), isNodeModelSource()) + " as " + collectionMapping.getCollectionItemName() + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						templateWriter.write("<#list " + FreeMarkerUtil.toPathPerElementCollection(ModelBuilder.getCollectionPath(element), isNodeModelSource()) + " as " + collectionMapping.getCollectionItemName() + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						
 					}
 					else
 					{
-						templateWriter.write("<#list " + FreeMarkerUtil.toPath(collectionMapping.getSrcPath(), isNodeModelSource()) + " as " + collectionMapping.getCollectionItemName() + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						templateWriter.write("<#list " + FreeMarkerUtil.toPathPerElement(collectionMapping.getSrcPath(), isNodeModelSource()) + " as " + collectionMapping.getCollectionItemName() + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 					//ModelBuilder.setCollectionVariable(element, collectionMapping.getCollectionItemName(), FreeMarkerUtil.toPath(collectionMapping.getSrcPath(), isNodeModelSource()));
 				}
@@ -185,7 +185,12 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 				Mapping mapping = getMapping(attribute);
 				
 				if(mapping != null) {
+					if(mapping.getCollectionVariable() !=null){
+						writeAttribute(attribute.getNodeName(), "${" + mapping.getCollectionVariable() + "}", templateWriter); //$NON-NLS-1$	
+					}
+					else{
 					writeAttribute(attribute.getNodeName(), FreeMarkerUtil.toFreeMarkerVariable((ValueMapping)mapping, isNodeModelSource()), templateWriter); //$NON-NLS-1$
+					}
 				} else if(ModelBuilder.isRequired(attribute)) {
 					writeAttribute(attribute.getNodeName(), attribute.getValue(), templateWriter);
 				}
@@ -361,7 +366,7 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 			}
 
 			String[] tokens = description.split(" +?"); //$NON-NLS-1$
-			TemplateBuilder.writeListStart(templateRewriteBuffer, FreeMarkerUtil.toPath(tokens[1], isNodeModelSource()), tokens[3]);
+			TemplateBuilder.writeListStart(templateRewriteBuffer, FreeMarkerUtil.toPathPerElement(tokens[1], isNodeModelSource()), tokens[3]);
 
 			Enumeration<TemplateElement> children = element.children();			
 			while(children != null && children.hasMoreElements()) {

@@ -354,25 +354,145 @@ public abstract class ModelBuilder {
 	}
 	
 	
-	
-	 public static void setCollectionVariable(Element element, String collectionName, String collectionpath) {
-	        element.setAttributeNS(NAMESPACE, "smk:collection_name", collectionName); //$NON-NLS-1$
-	        element.setAttributeNS(NAMESPACE, "smk:collection_path", collectionpath); //$NON-NLS-1$
-	    }
+
+		/**
+		 * Extended by Michal Skackov
+		 * @param element
+		 * @param collectionName
+		 * @param collectionpath
+		 */
+		public static void setCollectionVariable(Element element, String collectionName, String collectionpath) {
+		        element.setAttributeNS(NAMESPACE, "smk:collection_name", collectionName); //$NON-NLS-1$
+		        element.setAttributeNS(NAMESPACE, "smk:collection_path", collectionpath); //$NON-NLS-1$
+		}
 	 
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * @return
+	     */
 	    public static String getCollectionName(Element element) {
 	        String collectionName = element.getAttributeNS(NAMESPACE, "collection_name"); //$NON-NLS-1$
-
 	       
 	        return collectionName;
 	    }
 	    
 	    
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * @return
+	     */
 	    public static String getCollectionPath(Element element) {
 	        String collectionpath = element.getAttributeNS(NAMESPACE, "collection_path"); //$NON-NLS-1$
-
 	       
 	        return collectionpath;
 	    }
+	    
+	    
+	    /**
+		 * Extended by Michal Skackov
+		 * @param element
+		 * @param collectionName
+		 * @param collectionpath
+		 */
+		public static void setElementOccurrances(Element element, int number) {
+		        element.setAttributeNS(NAMESPACE, "smk:element_occur", String.valueOf(number)); //$NON-NLS-1$
+		}
+	 
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * @return
+	     */
+	    public static int getElementOccurrances(Element element) {
+	    	try{
+	        int number = Integer.parseInt(element.getAttributeNS(NAMESPACE, "element_occur")); //$NON-NLS-1$
+	        return number;
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		return 0;
+	    	}
+	        
+	    }
+	    
+	    
+	    /**
+		 * Extended by Michal Skackov
+		 * @param element
+		 * @param collectionName
+		 * @param collectionpath
+		 */
+		public static void setListLevelMatch(Element element, int number) {
+		        element.setAttributeNS(NAMESPACE, "smk:list_level", String.valueOf(number)); //$NON-NLS-1$
+		}
+	 
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * @return
+	     */
+	    public static int getListLevelMatch(Element element) {
+	    	try{
+	        int number = Integer.parseInt(element.getAttributeNS(NAMESPACE, "list_level")); //$NON-NLS-1$
+	        return number;
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		return 0;
+	    	}
+	        
+	    }
+	    
+	    /**
+		 * Extended by Michal Skackov
+		 * @param element
+		 * @param collectionName
+		 * @param collectionpath
+		 */
+		public static void setListVariable(Element element, String variable) {
+		        element.setAttributeNS(NAMESPACE, "smk:list_variable", variable); //$NON-NLS-1$
+		}
+	 
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * @return
+	     */
+	    public static String getListVariable(Element element) {
+	    	
+	    	return  element.getAttributeNS(NAMESPACE, "list_variable"); //$NON-NLS-1$
+	        
+	    }
+	    
+	    /**
+	     * 
+	     *  Extended by Michal Skackov
+	     * @param element
+	     * 
+	     */
+	    public static void increaseElementOccurrances(Element element) {
+	        String number = element.getAttributeNS(NAMESPACE, "element_occur"); //$NON-NLS-1$
+	        
+	        try{
+		        if(number == null){
+		        	element.setAttributeNS(NAMESPACE, "smk:element_occur", "1"); //$NON-NLS-1$
+		        }
+		        else{	        	
+		        	 element.setAttributeNS(NAMESPACE, "smk:element_occur", String.valueOf(Integer.parseInt(number)+1)); //$NON-NLS-1$
+		        }
+		    }catch(Exception e)
+	        {
+	        	element.setAttributeNS(NAMESPACE, "smk:element_occur", "1"); //$NON-NLS-1$
+	        }
+	       
+	    }
+	 
 	 
 }

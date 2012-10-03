@@ -134,10 +134,12 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 		// so mark it as not being a strict model...
         ModelBuilder.setStrictModel(model, false);
 		
-		trimNonModelNodes(documentElement);
 		
 		if(configuration)
 		{
+			
+		    configureModelElementOccurence(documentElement);
+		    trimNonModelNodes(documentElement);
 			configureModelElementTypes(documentElement);
 			configureModelElementCardinality(documentElement);
 			registerNamepsaces(documentElement);
@@ -163,13 +165,10 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 			throw new ModelBuilderException("Error parsing XML Sample file.", e); //$NON-NLS-1$ 
 		}
 		
-		Element documentElement = model.getDocumentElement();
-		
-        // The model has no metadata attached since it is based on only a sample, 
+	    // The model has no metadata attached since it is based on only a sample, 
 		// so mark it as not being a strict model...
         ModelBuilder.setStrictModel(model, false);
-		
-		trimNonModelNodes(documentElement);
+	
 		
 		
     }
@@ -181,13 +180,19 @@ public class XMLSampleModelBuilder extends ModelBuilder {
      * @see org.smooks.templating.model.ModelBuilder#configureModel()
      */
     public void configureModel(){
-    	Element documentElement = model.getDocumentElement();
+    	
+		Element documentElement = model.getDocumentElement();
 		
-    	configureModelElementTypes(documentElement);
+    	configureModelElementOccurence(documentElement);
+    	trimNonModelNodes(documentElement);
+        configureModelElementTypes(documentElement);
 		configureModelElementCardinality(documentElement);
 		registerNamepsaces(documentElement);
     	
     }
+    
+    
+	
 
 	public static void trimNonModelNodes(Element element) {
 		NodeList children = element.getChildNodes();
@@ -212,6 +217,7 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 					trimNonModelNodes((Element) child);				
 				} else {
 					removeableChildren.add(child);
+					//todo: increase the max value + 1 as is element and is already present
 				}
 			} else {
 				removeableChildren.add(child);
@@ -221,6 +227,50 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 		for(Node child : removeableChildren) {
 			element.removeChild(child);
 		}
+	}
+	
+	private void configureModelElementOccurence(Element documentElement ) {
+		Map<String, Element> childElementByNames = new HashMap<String, Element>();
+		ModelBuilder.setElementOccurrances(documentElement, 1);
+		ModelBuilder.setElementType(documentElement, ElementType.complex);
+		ModelBuilder.setMinMax(documentElement, 1,1);
+		childElementByNames.put(DomUtils.getName(documentElement) + ":" + documentElement.getNamespaceURI(), documentElement);
+		configureModelElementOccurences(documentElement, childElementByNames ) ;
+	}
+		
+	
+	private void configureModelElementOccurences(Element element, Map<String, Element> childElementByNames ) {
+		NodeList children = element.getChildNodes();
+		int childCount = children.getLength();
+
+	
+		for(int i = 0; i < childCount; i++) {
+			Node child = children.item(i);			
+
+			if(child.getNodeType() == Node.ELEMENT_NODE) {
+				Element childElement = (Element) child;
+				String elementName = DomUtils.getName(childElement) + ":" + childElement.getNamespaceURI(); // Yes, namespace can be null, but that's OK. //$NON-NLS-1$
+				Element earlierOccurance = childElementByNames.get(elementName);
+
+				
+				if(earlierOccurance != null) {
+					// According to the sample XML, this element is definitely a 
+					// collection item because it exists more than once, so lets mark it 
+					// such that sub mappings on this element require this collection to be mapped beforehand...
+					ModelBuilder.increaseElementOccurrances(earlierOccurance);
+					// And remove the duplicates...
+					
+				} else {
+					// We've no way of knowing whether or not this element is a collection
+					// item or not, so lets not enforce the collection sub mapping rules...
+					ModelBuilder.setElementOccurrances(childElement, 1);
+					childElementByNames.put(elementName, childElement);
+				}
+			
+				configureModelElementOccurences(childElement, childElementByNames);
+		}
+		}
+		
 	}
 
 	private void configureModelElementTypes(Element element) {
@@ -261,7 +311,16 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 				Element earlierOccurance = childElementByNames.get(elementName);
 
 				// Mark every element as being optional and possibly being multiple...
-				ModelBuilder.setMinMax(childElement, 0, -1);
+				if(ModelBuilder.getElementOccurrances(childElement) < ModelBuilder.getElementOccurrances((Element) childElement.getParentNode()))
+				{
+					ModelBuilder.setMinMax(childElement, 0,ModelBuilder.getElementOccurrances(childElement));
+				}
+				else
+				{
+					ModelBuilder.setMinMax(childElement, 1, 1 + (ModelBuilder.getElementOccurrances(childElement) - ModelBuilder.getElementOccurrances((Element) childElement.getParentNode()) ));
+				}
+				
+				
 				
 				if(earlierOccurance != null) {
 					// According to the sample XML, this element is definitely a 
@@ -274,6 +333,7 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 					// We've no way of knowing whether or not this element is a collection
 					// item or not, so lets not enforce the collection sub mapping rules...
 					ModelBuilder.setEnforceCollectionSubMappingRules(childElement, false);
+					childElementByNames.put(elementName, childElement);
 				}
 				
 				configureModelElementCardinality(childElement);

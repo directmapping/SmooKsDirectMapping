@@ -78,7 +78,8 @@ public class FreeMarkerUtil {
 	
 	public static String toFreeMarkerVariable(ValueMapping mapping, boolean isNodeModelSource) {
 		if(isNodeModelSource) {
-			return "${" + FreeMarkerUtil.toPath(mapping.getSrcPath(), true) + "}";
+			//MS CHANGE return "${" + FreeMarkerUtil.toPath(mapping.getSrcPath(), true) + "}";
+			 return "${" + FreeMarkerUtil.toPathPerElement(mapping.getSrcPath(), true) + "}";
 		} else {
 			StringBuilder builder = new StringBuilder();
 			Properties encodeProperties = mapping.getEncodeProperties();
@@ -150,6 +151,68 @@ public class FreeMarkerUtil {
 			return srcPath;
 		}
 	}
+	
+	public static String toPathPerElement(String srcPath, boolean nodeModelSource) {
+		
+		//TODO MS rewrite to get freemarker variables back.
+		
+		if(nodeModelSource) {
+			StringBuilder builder = new StringBuilder();
+			
+			if(srcPath.startsWith("/") && srcPath.length() > 0) {
+				srcPath = srcPath.substring(1);
+			}
+			
+			String[] tokens = srcPath.split("/");
+			builder.append(".vars[\"").append(tokens[0]).append("\"]");
+			if(tokens.length > 1) {
+				builder.append("[\"");
+				for(int i = 1; i < tokens.length; i++) {
+					if(i > 1) {
+						builder.append("\"][\"");
+					}
+					builder.append(tokens[i]);
+				}
+				builder.append("\"][0]!");
+			}
+			
+			return builder.toString();
+		} else {
+			return srcPath;
+		}
+	}
+	
+	// Extended by Michal Skackov
+public static String toPathPerElementCollection(String srcPath, boolean nodeModelSource) {
+		
+		//TODO MS rewrite to get freemarker variables back.
+		
+		if(nodeModelSource) {
+			StringBuilder builder = new StringBuilder();
+			
+			if(srcPath.startsWith("/") && srcPath.length() > 0) {
+				srcPath = srcPath.substring(1);
+			}
+			
+			String[] tokens = srcPath.split("/");
+			builder.append(".vars[\"").append(tokens[0]).append("\"]");
+			if(tokens.length > 1) {
+				builder.append("[\"");
+				for(int i = 1; i < tokens.length; i++) {
+					if(i > 1) {
+						builder.append("\"][\"");
+					}
+					builder.append(tokens[i]);
+				}
+				builder.append("\"]");
+			}
+			
+			return builder.toString();
+		} else {
+			return srcPath;
+		}
+	}
+	
 	
 	private static Pattern varsSinglePattern = Pattern.compile(".vars\\[\"(.*)\"\\]");
 	private static Pattern varsDoublePattern = Pattern.compile(".vars\\[\"(.*)\"\\]\\[\"(.*)\"\\]");

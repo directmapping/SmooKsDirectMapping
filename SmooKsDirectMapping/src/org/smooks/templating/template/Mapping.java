@@ -27,18 +27,21 @@ import org.smooks.templating.model.ModelBuilder;
 import org.w3c.dom.Node;
 
 /**
+ * Extended by Michal Skackov
  * Abstract Mapping.
  * <p/>
  * Represents a successful mapping. It also tells if the mapping requires
  * other model nodes to be hidden in the Editor view, so as to restrict mappings to these nodes.
  *
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author Michal Skackov
  */
 public abstract class Mapping {
 
 	private String srcPath;
 	private Node mappingNode;
 	private List<Node> hideNodes;
+	private String collectionVariable = null;
 
     /**
      * Public constructor.
@@ -54,6 +57,11 @@ public abstract class Mapping {
 
 	public String getSrcPath() {
 	    return srcPath;
+	}
+	
+	// Extended by Michal Skackov
+	public void setSrcPath(String srcPath) {
+	    this.srcPath = srcPath;
 	}
 
 	public Node getMappingNode() {
@@ -85,5 +93,13 @@ public abstract class Mapping {
 		}
 		
 		return false;
+	}
+
+	public String getCollectionVariable() {
+		return collectionVariable;
+	}
+
+	public void setCollectionVariable(String collectionVariable) {
+		this.collectionVariable = collectionVariable;
 	}
 }
