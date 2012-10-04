@@ -33,7 +33,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.eclipse.core.runtime.Assert;
+//import org.eclipse.core.runtime.Assert;
 import org.milyn.xml.DomUtils;
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
@@ -74,7 +74,7 @@ public abstract class TemplateBuilder {
 	 *             Error building model.
 	 */
 	public TemplateBuilder(ModelBuilder modelBuilder) throws ModelBuilderException {
-		Assert.isNotNull(modelBuilder, "modelBuilder"); //$NON-NLS-1$
+		//Assert.isNotNull(modelBuilder, "modelBuilder"); //$NON-NLS-1$
 		this.modelBuilder = modelBuilder;
 		this.model = modelBuilder.buildModel();
 		this.namespaceContext = new XPathNamespaceContext(modelBuilder.getNamespaces());
@@ -199,6 +199,8 @@ public abstract class TemplateBuilder {
 				if (destination.getNodeType() == Node.ELEMENT_NODE) {
 					
 					//TODO Only do when level match is higher than the one already existing!!!
+					child.setSrcPath(renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));
+					child.setCollectionVariable(renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));
 				
 					ModelBuilder.setListLevelMatch((Element) destination, level);
 					ModelBuilder.setListVariable((Element) destination, renameListChildSourceMapping(srcCollectionPath, childbMappingSrcPathTokens, collectionItemName,level));

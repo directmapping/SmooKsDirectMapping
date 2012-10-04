@@ -186,7 +186,7 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 				
 				if(mapping != null) {
 					if(mapping.getCollectionVariable() !=null){
-						writeAttribute(attribute.getNodeName(), "${" + mapping.getCollectionVariable() + "}", templateWriter); //$NON-NLS-1$	
+						writeAttribute(attribute.getNodeName(), FreeMarkerUtil.toFreeMarkerVariable(mapping.getCollectionVariable() ), templateWriter); //$NON-NLS-1$	
 					}
 					else{
 					writeAttribute(attribute.getNodeName(), FreeMarkerUtil.toFreeMarkerVariable((ValueMapping)mapping, isNodeModelSource()), templateWriter); //$NON-NLS-1$
@@ -233,8 +233,18 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 				writeHistory.startClosed = true;
 				if(mapping != null) {
 					
-					//TODO variable collection override
-					templateWriter.write(FreeMarkerUtil.toFreeMarkerVariable((ValueMapping)mapping, isNodeModelSource()));
+					
+						if(mapping.getCollectionVariable() !=null){
+							// Michal Skackov variable collection override 
+							templateWriter.write(FreeMarkerUtil.toFreeMarkerVariable(mapping.getCollectionVariable() ));
+							
+						}
+						else{
+							//TODO variable collection override
+							templateWriter.write(FreeMarkerUtil.toFreeMarkerVariable((ValueMapping)mapping, isNodeModelSource()));
+						}
+					
+					
 				} else {
 					templateWriter.write(ModelBuilder.REQUIRED);
 				}

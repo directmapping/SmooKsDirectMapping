@@ -132,6 +132,8 @@
 		+'					<input type="button" id="collapse"  value="Collapse All"  />'
 		+'					<input type="button" id="import"  value="Import"  />'
 		+'					<input type="button" id="export"  value="Export"  />'
+		+'					<input type="button" id="transform"  value="Transform"  />'
+		+'					<input type="button" id="template"  value="Template"  />'
 		+'			</div> '
 		+'			</div>'
 		+'			<br />'

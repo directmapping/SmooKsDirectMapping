@@ -184,7 +184,44 @@ function helper_grid(table_element){
 		 });
 	
 	
+	
 	$("#export").click(function(){
+		
+		var rowIds = $('#mapping_list').jqGrid('getDataIDs');
+		jQuery.fn.jDirectMapTreeInit.mapping = [];
+
+		 var data=new Array();
+		 
+			//parameter object definition
+			var param=function(name,value){
+				this.name=name;
+				this.value=value;
+			}	
+			
+				 
+			 
+		// iterate through the rows and delete each of them
+		for(var i=0,len=rowIds.length;i<len;i++){
+		    var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
+		    
+		    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
+				
+		}  
+		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
+		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
+		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
+		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
+		 //setting action as transform xml
+	  //  data[data.length]=new param('action','transform');
+		
+	 	$.download("/downloadXML",data);   // pass all the parameters
+	
+				
+
+
+			 });	
+	
+	$("#transform").click(function(){
 					
 			var rowIds = $('#mapping_list').jqGrid('getDataIDs');
 			jQuery.fn.jDirectMapTreeInit.mapping = [];
@@ -210,8 +247,8 @@ function helper_grid(table_element){
 			data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
 			data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
 			data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
-			 //setting action as PUT
-			 data[data.length]=new param('action','PUT');
+			 //setting action as transform xml
+			 data[data.length]=new param('action','transform');
 			
 			 	$.download("/transformXML",data); 
 		
@@ -222,7 +259,41 @@ function helper_grid(table_element){
 					
 
 
-				 });				
+				 });	
+	
+	
+	$("#template").click(function(){
+		var rowIds = $('#mapping_list').jqGrid('getDataIDs');
+		jQuery.fn.jDirectMapTreeInit.mapping = [];
+
+		 var data=new Array();
+		 
+			//parameter object definition
+			var param=function(name,value){
+				this.name=name;
+				this.value=value;
+			}	
+			
+				 
+			 
+		// iterate through the rows and delete each of them
+		for(var i=0,len=rowIds.length;i<len;i++){
+		    var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
+		    
+		    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
+				
+		}  
+		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
+		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
+		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
+		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
+		 //setting action as export template
+		 data[data.length]=new param('action','export_template');
+		
+		 	$.download("/transformXML",data); 
+	
+	});
+	
 				 
 	$("#moveup").click(function(){
 				   move('up');

@@ -76,6 +76,14 @@ public class FreeMarkerUtil {
 		return (variable.startsWith("${") && variable.endsWith("}")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
+	/*
+	 * Extended by Michal Skackov
+	 */
+	public static String toFreeMarkerVariable(String srcPath) {
+				 return "${" + srcPath + "[0]!\"\"" + "}";
+		
+	}
+	
 	public static String toFreeMarkerVariable(ValueMapping mapping, boolean isNodeModelSource) {
 		if(isNodeModelSource) {
 			//MS CHANGE return "${" + FreeMarkerUtil.toPath(mapping.getSrcPath(), true) + "}";

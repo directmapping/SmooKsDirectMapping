@@ -22,7 +22,7 @@ package org.smooks.templating.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
+//import org.eclipse.core.runtime.Assert;
 import org.smooks.templating.model.ModelBuilder;
 import org.w3c.dom.Node;
 
@@ -49,8 +49,8 @@ public abstract class Mapping {
      * @param mappingNode The mapping node.
      */
     public Mapping(String srcPath, Node mappingNode) {
-        Assert.isNotNull(srcPath, "srcPath"); //$NON-NLS-1$
-       Assert.isNotNull(mappingNode, "mappingNode"); //$NON-NLS-1$
+     //   Assert.isNotNull(srcPath, "srcPath"); //$NON-NLS-1$
+     //  Assert.isNotNull(mappingNode, "mappingNode"); //$NON-NLS-1$
         this.srcPath = srcPath;
         this.mappingNode = mappingNode;
     }

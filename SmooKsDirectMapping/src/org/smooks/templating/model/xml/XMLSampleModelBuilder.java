@@ -34,7 +34,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.core.runtime.Assert;
+//import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.URI;
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
@@ -73,7 +73,7 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 	}
 
     public XMLSampleModelBuilder(URI xmlSampleURI) throws IOException, ModelBuilderException {
-    	Assert.isNotNull(xmlSampleURI, "Null 'xmlSampleURI' arg in method call."); //$NON-NLS-1$
+    	//Assert.isNotNull(xmlSampleURI, "Null 'xmlSampleURI' arg in method call."); //$NON-NLS-1$
     	
     	File xmlSampleFile =  new File(xmlSampleURI.toFileString());
     	
@@ -112,7 +112,7 @@ public class XMLSampleModelBuilder extends ModelBuilder {
      * @throws ModelBuilderException
      */
     public XMLSampleModelBuilder(URI xmlSampleURI, boolean configuration) throws IOException, ModelBuilderException {
-    	Assert.isNotNull(xmlSampleURI, "Null 'xmlSampleURI' arg in method call."); //$NON-NLS-1$
+    //	Assert.isNotNull(xmlSampleURI, "Null 'xmlSampleURI' arg in method call."); //$NON-NLS-1$
     	
     	File xmlSampleFile =  new File(xmlSampleURI.toFileString());
     	
