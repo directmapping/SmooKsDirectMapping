@@ -1,4 +1,30 @@
-	function helper_init_xml(){
+
+	function storeGrid(){
+			var rowIds = $('#mapping_list').jqGrid('getDataIDs');
+			jQuery.fn.jDirectMapTreeInit.mapping = [];
+			// iterate through the rows and delete each of them
+			
+			
+			jQuery.each(rowIds, function(i, val) {
+			      
+			      var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
+				    
+				    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
+			
+			    });
+
+					
+			//Session persistency 
+			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+			
+			if(jQuery.fn.jDirectMapTreeInit.functions == null)
+				{
+				jQuery.fn.jDirectMapTreeInit.functions = [];
+				}
+			
+		}
+	
+function helper_init_xml(){
 		$("#source_xml_area").val("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>	<shiporder orderid=\"889923\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"shiporder.xsd\"><orderperson>John Smith</orderperson>							  <shipto>							    <name>Ola Nordmann</name>							    <address>Langgt 23</address>							    <city>4000 Stavanger</city>							    <country>Norway</country>							  </shipto>							  <item>							    <title>Empire Burlesque</title>							    <note>Special Edition</note>							    <quantity>1</quantity>							    <price>10.90</price>							  </item>							  <item>							    <title>Hide your heart</title>							    <quantity>1</quantity>							    <price>9.90</price>							  </item>							</shiporder>");
 	
 	$("#dest_xml_area").val("<?xml version=\"1.0\"?> " +

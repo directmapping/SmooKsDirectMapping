@@ -217,7 +217,6 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 					trimNonModelNodes((Element) child);				
 				} else {
 					removeableChildren.add(child);
-					//todo: increase the max value + 1 as is element and is already present
 				}
 			} else {
 				removeableChildren.add(child);

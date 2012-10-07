@@ -3,6 +3,46 @@
 jQuery(document).ready(function(){
 
 							
+							if(sessvars.sourceXML!=null)
+							{
+								helper_init_xml();
+							
+								jQuery.fn.jDirectMapTreeInit.sourceKey = sessvars.sourceXML;
+								jQuery.fn.jDirectMapTreeInit.destinationKey = sessvars.destinationXML;
+								jQuery.fn.jDirectMapTreeInit.mapping = sessvars.mapping;
+								jQuery.fn.jDirectMapTreeInit.functions = sessvars.functions;
+								
+								jQuery.fn.jDirectMapTreeInit(sessvars.source, $("#tree_source"),"source");
+					 			jQuery.fn.jDirectMapTreeInit(sessvars.destination, $("#tree_destination"),"destination");
+					 		
+					 			
+					 			helper_grid("#mapping_list");	
+			            		helper_ui_xml_to_map();
+			            		
+			            		
+			            		if(sessvars.mapping!=null)
+								{
+			            			var map = sessvars.mapping;
+					            	
+			            			
+			            		for(var i=0,len=map.length;i<len;i++){
+			            			jQuery.fn.jDirectMapTreeInit.mapping = [];
+			        			    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": map[i]['id'] , "from":  map[i]['from'], "to": map[i]['to'],"rowid" : map[i]['id']});
+			        			    jQuery("#mapping_list").jqGrid('addRowData',map[i]['id'],{id: map[i]['id'], sparam: map[i]['from'], dparam: map[i]['to']  } );
+							
+											
+			        			} 
+			            		}
+			            		
+			            		
+			            		$("#par_tree_source").empty();
+								$("#par_tree_destination").empty();
+								$("#functionname").val("");
+								$("#function_area").val("");
+			            		
+							}
+							else{							
+							
 							helper_init_xml();
 							$("#mapping_main").hide();
 							$("#xmlsubmit").click(function(){  
@@ -38,22 +78,26 @@ jQuery(document).ready(function(){
 										success : function(request) {
 										
 											
-											//helper_read_xml();
 											  
 											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
 								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["destination"]), $("#tree_destination"),"destination");
 								 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
 								 			jQuery.fn.jDirectMapTreeInit.destinationKey = request["destinationXML"];
-											 
-
-							    	
+								 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
+						            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
+										  
+						            		sessvars.sourceXML = jQuery.fn.jDirectMapTreeInit.sourceKey;
+						        			sessvars.destinationXML = jQuery.fn.jDirectMapTreeInit.destinationKey;
+						        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+						        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+						        			sessvars.source = jQuery.parseJSON(request["source"]);
+											sessvars.destination = jQuery.parseJSON(request["destination"]);
+									
 							
 				            		helper_grid("#mapping_list");	
 				            		helper_ui_xml_to_map();
 				            		    
-								 var mapping = request["mapping"];
-								 var functions = request["functions"];
-								 
+				            	
 														},
 								 
 										error: function(){
@@ -62,7 +106,8 @@ jQuery(document).ready(function(){
 										 
 								});
 			
-						}); 		
+						}); 	
+							}
 								
 					});
  
@@ -74,7 +119,7 @@ jQuery(document).ready(function(){
 		$("#mapping_main").show();
 		
 		$("#function_area").val("//Please specify function.\n//Example : \nout1 = in1 + in2;\nout2 = new Date();");
-		   var editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
+		jQuery.fn.jDirectMapTreeInit.editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
 		       lineNumbers: true,
 		       matchBrackets: true
 		     });

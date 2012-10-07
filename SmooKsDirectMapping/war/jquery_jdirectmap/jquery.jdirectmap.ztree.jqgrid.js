@@ -36,27 +36,98 @@ function helper_grid(table_element){
 						var streeObj = $.fn.zTree.getZTreeObj("tree_source");
 						var snode = streeObj.getNodesByParam("xpath",  $table.getRowData(id).sparam);
 						
-						for( var i=0, l=snode.length; i<l; i++) {
-								
-								$("#" + snode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
-						}
-												
-						
-						streeObj.expandAll(true);
-					
-						
-						var dtreeObj = $.fn.zTree.getZTreeObj("tree_destination");
-						var dnode = dtreeObj.getNodesByParam("xpath",  $table.getRowData(id).dparam);
-					
-						for( var i=0, l=dnode.length; i<l; i++) {
+						if(snode.length > 0){
+							for( var i=0, l=snode.length; i<l; i++) {
+									
+									$("#" + snode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
+							}
 							
-							$("#" + dnode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
-						}
+							streeObj.expandAll(true);
+							
+							
+							var dtreeObj = $.fn.zTree.getZTreeObj("tree_destination");
+							var dnode = dtreeObj.getNodesByParam("xpath",  $table.getRowData(id).dparam);
 						
-						dtreeObj.expandAll(true);
+							for( var i=0, l=dnode.length; i<l; i++) {
+								
+								$("#" + dnode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
+							}
+							
+							dtreeObj.expandAll(true);
+							
+						
+							  if($("#createfunction").val() == "Update"){
+								  $("#createfunction").val("Create");
+							  }
+						}
+				      else{
+				          // function
+				    	  
+				    	  var functionname = $table.getRowData(id).sparam.replace(" Input", "");
+				    	  
+				    									
+							// iterate through the rows and delete each of them
+							for(var i=0,len=jQuery.fn.jDirectMapTreeInit.functions.length;i<len;i++){
+							  
+							   if(jQuery.fn.jDirectMapTreeInit.functions[i]['functionname'] == functionname )
+								   {
+								   
+								    $("#par_tree_source").empty();
+									$("#par_tree_destination").empty();
+									$("#functionname").val(functionname);
+									$("#createfunction").val("Update");
+									
+									jQuery.fn.jDirectMapTreeInit.editor.setValue(jQuery.fn.jDirectMapTreeInit.functions[i]['value']);
+
+									var input_param = jQuery.fn.jDirectMapTreeInit.functions[i]['input'];
+									var output_param = jQuery.fn.jDirectMapTreeInit.functions[i]['output'];
+									  $("#tree_source").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+									  $("#tree_destination").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+											
+									jQuery.each(input_param,function(i,e){  
+									var id = input_param[i]['name'].substring(0,input_param[i]['name'].indexOf(':'));
+									$("#par_tree_source").append("<span class='domBtn_source'   domId='tree_source"  + id +   "' xpath='"   + input_param[i]['xpath'] + "'>" +  input_param[i]['name'] + "</span>");
+									  
+										  var streeObj = $.fn.zTree.getZTreeObj("tree_source");
+										var snode = streeObj.getNodesByParam("xpath",  input_param[i]['xpath']);
+										
+										
+											for( var i=0, l=snode.length; i<l; i++) {
+													
+													$("#" + snode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
+											}
+											
+											streeObj.expandAll(true);
+										
+										
+									  
+									});
+									
+									jQuery.each(output_param,function(i,e){  
+									var id = output_param[i]['name'].substring(0,output_param[i]['name'].indexOf(':'));
+									$("#par_tree_destination").append("<span class='domBtn_destination'   domId='tree_destination"  + id +   "' xpath='"   + output_param[i]['xpath'] + "'>" +  output_param[i]['name'] + "</span>");
+									
+										
+										var dtreeObj = $.fn.zTree.getZTreeObj("tree_destination");
+										var dnode = dtreeObj.getNodesByParam("xpath",  output_param[i]['xpath']);
+									
+										for( var i=0, l=dnode.length; i<l; i++) {
+											
+											$("#" + dnode[i].tId + $.fn.zTree.consts.id.A).addClass($.fn.zTree.consts.node.CURSELECTED);
+										}
+										
+										dtreeObj.expandAll(true);
+										
+										
+									});
+							}  
+				      }										
+						
+						
 		
 						
 					}
+				}
 				},
 				
 				
@@ -73,6 +144,11 @@ function helper_grid(table_element){
 	$("#deletedata").click(function(){
 				var tableData = new Array();
 				var ids = '';
+				
+				  var name = $table.getRowData($table.getGridParam('selrow')).sparam;
+				  
+					
+				  
 				$table.delRowData($table.getGridParam('selrow'));
 				ids = $table.getDataIDs();
 					for(var i = 0; i < ids.length; i++){
@@ -83,17 +159,56 @@ function helper_grid(table_element){
 					for(i = 0; i < tableData.length; i++){
 						 $table.addRowData(i + 1, tableData[i]);
 					}
-				});
+					
+					//TODO delete functions
+					  
+					if(name.indexOf(" Input")>0){
+						
+				    	  
+							var functionslist = []
+							// iterate through the rows and delete each of them
+							for(var i=0,len=jQuery.fn.jDirectMapTreeInit.functions.length;i<len;i++){
+							  
+								
+								   if(!(jQuery.fn.jDirectMapTreeInit.functions[i]['functionname'] == name.replace(" Input","") ))
+								   {
+								   
+								   functionslist[functionslist.length] = jQuery.fn.jDirectMapTreeInit.functions[i];
+								   
+								   }
+							   
+							}
+							
+							jQuery.fn.jDirectMapTreeInit.functions = functionslist;
+							
+							$("#par_tree_source").empty();
+							$("#par_tree_destination").empty();
+							$("#functionname").val("");
+							jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
+							
+							
+					}
+					
+					sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+					storeGrid();
+	});
 	
 	$("#clearfunction").click(function(){
 		$("#par_tree_source").empty();
 		$("#par_tree_destination").empty();
-		$("#function_area").val("//Please specify function.\n//Example : \nout1 = in1 + in2;\nout2 = new Date();");
+		jQuery.fn.jDirectMapTreeInit.editor.setValue("");
 	});
 
 	$("#createfunction").click(function(){
 		
 		var numberOfRecords = jQuery("#mapping_list").getGridParam("records");
+		var functionname = $("#functionname").val();
+		var functions = jQuery.fn.jDirectMapTreeInit.functions;
+		var unique  = true;
+		if (functions === undefined)
+			{
+			functions = [];
+			}
 		
 		if($("#functionname").val() == ""){
 			alert("Please specify unique funcation name");	
@@ -105,32 +220,83 @@ function helper_grid(table_element){
 			alert("Please specify at least one input parameter");				
 		}
 		else{
-			jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: $("#functionname").val() +  " Input" , dparam: $("#functionname").val() +  " Output" });
 			
-			var input_param = new Array();
-			var output_param = new Array();
 			
-			$("#par_tree_source" ).find('span').each(function(i,e){  input_param.push({name : $(this).text() , xpath : $(this).attr("xpath")  });  });
-			$("#par_tree_destination" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
+		
+			
+			
+			// iterate through the functions
+			for(var i=0,len=functions.length;i<len;i++){
+			  
+			   if(functions[i]['functionname'] == functionname )
+				   {
+					   			
+					   if($("#createfunction").val() == "Update"){
+						   functions[i]['value'] = jQuery.fn.jDirectMapTreeInit.editor.getValue();
+						   functions[i]['functionname'] = $("#functionname").val();  
+						   var input_param = new Array();
+							var output_param = new Array();
+							
+							$("#par_tree_source" ).find('span').each(function(i,e){  input_param.push({name : $(this).text() , xpath : $(this).attr("xpath")  });  });
+							$("#par_tree_destination" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
+							
+							 functions[i]['input'] = input_param;
+							 functions[i]['output'] = output_param;
+				
+								$("#par_tree_source").empty();
+								$("#par_tree_destination").empty();
+								$("#functionname").val("");
+								jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
+								
+							
+					   }
+					   else{
+						   unique  = false;
+					   }
+				   }
+			   
+			}  
+			
+			
+			if(unique && $("#createfunction").val() == "Create"){
+				
+				jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: $("#functionname").val() +  " Input" , dparam: $("#functionname").val() +  " Output" });
+				
+				var input_param = new Array();
+				var output_param = new Array();
+				
+				$("#par_tree_source" ).find('span').each(function(i,e){  input_param.push({name : $(this).text() , xpath : $(this).attr("xpath")  });  });
+				$("#par_tree_destination" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
 
+				
+				functions.push({id: numberOfRecords, functionname: $("#functionname").val(), value : jQuery.fn.jDirectMapTreeInit.editor.getValue(), input : input_param, output : output_param});
+				
+				jQuery.fn.jDirectMapTreeInit.functions = functions ;
+				
 			
-			var functions = jQuery.fn.jDirectMapTreeInit.functions;
-			if (functions === undefined)
-				{
-				functions = [];
+				
+				// TODO add input parameters and output parameters
+				$("#par_tree_source").empty();
+				$("#par_tree_destination").empty();
+				$("#functionname").val("");
+				jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
+				
+				
+				
+			}
+			else{
+				if($("#createfunction").val() == "Create"){
+					alert("Function with name " + functionname + " already exists!")
 				}
+				
+				
+			}
 			
 			
-			functions.push({id: numberOfRecords, functionname: $("#functionname").val(), value : $("#function_area").val(), input : input_param, output : output_param});
+			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+			storeGrid();
 			
-			jQuery.fn.jDirectMapTreeInit.functions = functions ;
-			
-			
-			// TODO add input parameters and output parameters
-			$("#par_tree_source").empty();
-			$("#par_tree_destination").empty();
-			$("#functionname").val("");
-			$("#function_area").val("//Please specify function.\n//Example : \nout1 = in1 + in2;\nout2 = new Date();");
+
 		}
 	});
 	
@@ -149,6 +315,10 @@ function helper_grid(table_element){
 						dataString += 'postion: ' + i + ' ' + ids[i] + '\n';
 					 }
 				 alert(dataString);
+				 
+				 
+				 
+				 
 				 });
 	
 	$("#clear").click(function(){
@@ -160,37 +330,39 @@ function helper_grid(table_element){
 						$table.jqGrid('delRowData', currRow);
 					}	
 					
+					
+					jQuery.fn.jDirectMapTreeInit.mapping = [];
+					sessvars.mapping = [];
+					jQuery.fn.jDirectMapTreeInit.functions = [];
+					sessvars.functions = [];
+				
+					
 				 });
 				 
 	$("#import").click(function(){
-				/*	// get IDs of all the rows odf jqGrid 
-					var rowIds = $table.jqGrid('getDataIDs');
-					// iterate through the rows and delete each of them
-					for(var i=0,len=rowIds.length;i<len;i++){
-						var currRow = rowIds[i];
-						$table.jqGrid('delRowData', currRow);
-					}	
-					$("form").show();
-					//$("#mapping_main").hide();
-					
+		sessvars.$.clearMem();
+		 location.reload();
+		 /*
 					https://github.com/valums/file-uploader
 					*/
-				 });
+				
+	
+	});
 	
 	
 	$("#collapse").click(function(){
 		$.fn.zTree.getZTreeObj("tree_source").expandAll(true);
 		$.fn.zTree.getZTreeObj("tree_destination").expandAll(true);
-		 });
+		
+	
+	
+	});
 	
 	
 	
 	$("#export").click(function(){
 		
-		var rowIds = $('#mapping_list').jqGrid('getDataIDs');
-		jQuery.fn.jDirectMapTreeInit.mapping = [];
-
-		 var data=new Array();
+		var data=new Array();
 		 
 			//parameter object definition
 			var param=function(name,value){
@@ -198,15 +370,10 @@ function helper_grid(table_element){
 				this.value=value;
 			}	
 			
-				 
-			 
-		// iterate through the rows and delete each of them
-		for(var i=0,len=rowIds.length;i<len;i++){
-		    var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
-		    
-		    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
-				
-		}  
+			storeGrid();
+		
+		
+		
 		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
 		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
 		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
@@ -223,9 +390,7 @@ function helper_grid(table_element){
 	
 	$("#transform").click(function(){
 					
-			var rowIds = $('#mapping_list').jqGrid('getDataIDs');
-			jQuery.fn.jDirectMapTreeInit.mapping = [];
-
+		
 			 var data=new Array();
 			 
 				//parameter object definition
@@ -234,36 +399,23 @@ function helper_grid(table_element){
 					this.value=value;
 				}	
 				
-					 
+				storeGrid();
 				 
-			// iterate through the rows and delete each of them
-			for(var i=0,len=rowIds.length;i<len;i++){
-			    var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
-			    
-			    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
-					
-			}  
 			data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
 			data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
 			data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
 			data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
 			 //setting action as transform xml
-			 data[data.length]=new param('action','transform');
+			data[data.length]=new param('action','transform');
 			
 			 	$.download("/transformXML",data); 
 		
-		 		//	$.download("/downloadXML",data);   // pass all the parameters
 		
-				//	helper_grid();
-					
-					
-
 
 				 });	
 	
 	
 	$("#template").click(function(){
-		var rowIds = $('#mapping_list').jqGrid('getDataIDs');
 		jQuery.fn.jDirectMapTreeInit.mapping = [];
 
 		 var data=new Array();
@@ -273,16 +425,8 @@ function helper_grid(table_element){
 				this.name=name;
 				this.value=value;
 			}	
-			
+			storeGrid();
 				 
-			 
-		// iterate through the rows and delete each of them
-		for(var i=0,len=rowIds.length;i<len;i++){
-		    var currRowData =  $("#mapping_list").jqGrid('getRowData',  rowIds[i]);
-		    
-		    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": currRowData.id , "from":  currRowData.sparam, "to": currRowData.dparam,"rowid" : rowIds[i] });
-				
-		}  
 		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
 		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
 		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
@@ -290,7 +434,7 @@ function helper_grid(table_element){
 		 //setting action as export template
 		 data[data.length]=new param('action','export_template');
 		
-		 	$.download("/transformXML",data); 
+		$.download("/transformXML",data); 
 	
 	});
 	
@@ -332,7 +476,11 @@ function helper_grid(table_element){
 		 }
 		 // Sort the table   
 		 $table.setGridParam({sortname:'id'}).trigger('reloadGrid');
+		 storeGrid();
 		 }
-	}
-	
+				 }
+		 
+		
+		 
+		
 	}

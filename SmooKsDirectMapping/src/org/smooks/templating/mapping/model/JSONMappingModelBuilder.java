@@ -6,8 +6,10 @@ import java.util.Iterator;
 
 import org.smooks.templating.mapping.model.ztree.ZTreeModel;
 import org.smooks.templating.model.ModelBuilder;
+import org.smooks.templating.model.ModelBuilder.ElementType;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -22,7 +24,7 @@ public class JSONMappingModelBuilder {
 		super();
 		this.collection =  new ArrayList<ZTreeModel>();
 		
-		addNodeToModel(new ZTreeModel(1, 0, root.getNodeName(), "/" + root.getNodeName(), true, true));
+		addNodeToModel(new ZTreeModel(1, 0,  root.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) root) + ".." + ModelBuilder.getMaxOccurs((Element) root) + "]" , "/" + root.getNodeName(), true, true));
 		
 		vsTraverse(root, 1 , "/" + root.getNodeName());
 		
@@ -53,49 +55,22 @@ public class JSONMappingModelBuilder {
 			    for (int i = 0; i < nodeList.getLength(); i++) {
 			       
 			    	Node currentNode = nodeList.item(i);
-			        String currentxpath = xpath +  "/" + currentNode.getNodeName();
 			        
+			    	if(assertAddNodeToTemplate(currentNode)) {
+			    	String currentxpath = xpath +  "/" + currentNode.getNodeName();
 			        
-			        
-			        if(currentNode.hasChildNodes() )
-			        {
-			        	int id = collection.size() + 1;
-			        	addNodeToModel(new ZTreeModel(id, pId, currentNode.getNodeName(),currentxpath , true, true));
-			        	
-			            		if(assertAddNodeToTemplate(currentNode)) {
-								
-								
-								vsTraverse(currentNode,  id , currentxpath);
-								
-						    	if(currentNode.hasAttributes())
-								{				
-					        	vsTraverseAttr(currentNode, id , currentxpath);
-								}
-				
-						    	
-			            		}
-						
-					 
-			        	        }
-			        else
-			        {
-			        	if(currentNode.hasAttributes())
-						{
-			        		int id = collection.size() + 1;
-			            	addNodeToModel(new ZTreeModel(id, pId, currentNode.getNodeName(),currentxpath , true, true));
-			            	
-			            	vsTraverseAttr(currentNode, id , currentxpath);
-						}
-			        	else if(currentNode.getNodeType() == Node.ELEMENT_NODE)
-			        	{
-			        		int id = collection.size() + 1;
-			        		addNodeToModel(new ZTreeModel(id, pId, currentNode.getNodeName(),currentxpath));
-			     		   
-			        	}
-			        	
-			        }
-			             
-			        
+			            if(currentNode.hasChildNodes()){
+				           	int id = collection.size() + 1;
+				        	addNodeToModel(new ZTreeModel(id, pId, buildNodeName(currentNode) ,currentxpath , true, true));
+				        	vsTraverse(currentNode,  id , currentxpath);
+							vsTraverseAttr(currentNode, id , currentxpath);
+				        }
+				        else{
+				        		int id = collection.size() + 1;
+				            	addNodeToModel(new ZTreeModel(id, pId,buildNodeName(currentNode),currentxpath , currentNode.hasAttributes(), currentNode.hasAttributes()));
+				            	vsTraverseAttr(currentNode, id , currentxpath);
+				        }
+				  	}
 			        
 			        
 			    }
@@ -106,10 +81,38 @@ public class JSONMappingModelBuilder {
 		
 		 
 		 private boolean assertAddNodeToTemplate(Node currentNode) {
+			 
+			 
 			// TODO Auto-generated method stub
 			return !ModelBuilder.isInReservedNamespace(currentNode);
 		}
 
+		 
+		 private boolean assertAddAttributeToTemplate(Node currentNode) {
+			 
+			  if(currentNode.getNodeName().contains("xsi"))
+			  {
+				  return false;
+			  }
+				// TODO Auto-generated method stub
+				return !ModelBuilder.isInReservedNamespace(currentNode);
+			}
+		 
+		 
+		 
+		 
+		 private String buildNodeName(Node currentNode) {
+			 
+			  if(ModelBuilder.getElementType((Element) currentNode) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) currentNode) > 1)
+			  {
+				  return  currentNode.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]" + " - complex";
+			  }
+		  return  currentNode.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]";
+				
+		}
+		 
+		 
+	
 		/** processing  attributes of xml element
 		 *
 		 * @input1 node to process
@@ -127,9 +130,9 @@ public class JSONMappingModelBuilder {
 				        Attr attr = (Attr) nodeList.item(i);
 				        String name = attr.getName();
 				        
-				        if(assertAddNodeToTemplate(attr))
+				        if(assertAddAttributeToTemplate(attr))
 				        {
-				        	addNodeToModel(new ZTreeModel(collection.size()+1, pId, name,xpath + "/@" +  name));
+				        	addNodeToModel(new ZTreeModel(collection.size()+1, pId, "@" + name,xpath + "/@" +  name));
 				        }
 				       
 				    }
@@ -143,24 +146,21 @@ public class JSONMappingModelBuilder {
 		 {
 			 
 			
-			  int i = 0;
+			/**  not needed as trim model will do the job
+			 *  int i = 0;
 			  Iterator<ZTreeModel> itrnode = collection.iterator();
 			  while(itrnode.hasNext()) {
 		        ZTreeModel element = itrnode.next();
-		
-		        if(node.getXpath().equalsIgnoreCase(element.getXpath()))
-		        {
+		        if(node.getXpath().equalsIgnoreCase(element.getXpath())){
 		       	 i++;
 		        }
-		        
-		        
-		        
+		     }		     
+		     if(i==0){
+		     collection.add(node);  
 		     }
-		     
-		     if(i==0)
-		     {
+		    	 
+		    	*/ 
+		    	 
 		   	  collection.add(node);
-		     }
-		
 		 }
 }

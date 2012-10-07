@@ -66,6 +66,11 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 			
 		};
 		
+		
+	
+		
+		
+		
 		function dropFunction(e, treeId, treeNodes, targetNode, moveType) {
 			var domId = "dom_" + treeId;
 			var parId = "par_" + treeId;
@@ -81,11 +86,11 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 					
 					if(treeId == "tree_source") {
 						id = "in" + id;
-						$("#" + parId).append("<span class='domBtn_source'   domId='" + treeId + treeNodes[0].id +   "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
+						$("#" + parId).append("<span class='domBtn_source'   domId='" + treeId + id +   "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
 					}
 					else if(treeId == "tree_destination") {
 						id = "out" + id;
-						$("#" + parId).append("<span class='domBtn_destination'   domId='" + treeId + treeNodes[0].id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
+						$("#" + parId).append("<span class='domBtn_destination'   domId='" + treeId + id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
 						
 					}
 					
@@ -121,22 +126,29 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 		function beforeDrop(treeId, treeNodes, targetNode, moveType) {
 		
 			
-			
+			      if(jQuery.fn.jDirectMapTreeInit.mapping ==null){
+			    		  jQuery.fn.jDirectMapTreeInit.mapping = [];
+			      }
+			    		  
 					var numberOfRecords = jQuery("#mapping_list").getGridParam("records");
 					
 						if(type == "source" && treeId == "tree_destination") {
 								jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: treeNodes[0].xpath, dparam: targetNode.xpath  } );
 								$("#tree_source").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+							    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": numberOfRecords , "from":  treeNodes[0].xpath, "to": targetNode.xpath,"rowid" : numberOfRecords });
 								
 								
 						}
 						else if (type == "destination" && treeId == "tree_source") {
 								jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: targetNode.xpath , dparam: treeNodes[0].xpath } );
 								$("#tree_destination").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
-							
+								jQuery.fn.jDirectMapTreeInit.mapping.push({"id": numberOfRecords , "from": targetNode.xpath , "to": treeNodes[0].xpath,"rowid" : numberOfRecords });
+									
 						}
 						
-			
+						sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+	        	
+		    	
 					
 			return false;
 				

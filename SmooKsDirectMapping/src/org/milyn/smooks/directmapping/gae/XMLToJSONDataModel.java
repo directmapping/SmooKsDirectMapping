@@ -88,6 +88,7 @@ public class XMLToJSONDataModel extends HttpServlet {
 		try {
 			
 			builder = new XMLSampleModelBuilder(xml);	
+			builder.configureModel();
 			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
 			return jsonmodel.getJSON();
 			
