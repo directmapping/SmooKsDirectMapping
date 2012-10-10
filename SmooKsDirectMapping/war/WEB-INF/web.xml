@@ -1,67 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<servlet>
-		<description>XML to XML Conversion</description>
-		<servlet-name>toXML</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.SmooKsDirectMappingServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description>Template Builder</description>
-		<servlet-name>templatebuilder</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.TemplateBuilderServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description>XML Transform Servlet</description>
-		<servlet-name>transformXML</servlet-name>
+		<description>Transform Servlet</description>
+		<servlet-name>transform</servlet-name>
 		<servlet-class>org.milyn.smooks.directmapping.gae.TransformServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>XML Serving Servlet</description>
-		<servlet-name>downloadXML</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.DownloadServlet</servlet-class>
+		<description>Mapping Export Servlet</description>
+		<servlet-name>export</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.ExportServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>XML Serving Servlet</description>
-		<servlet-name>uploadXML</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.UploadServlet</servlet-class>
+		<description>Mapping Import Servlet</description>
+		<servlet-name>import</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.ImportServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>XML Serving Servlet</description>
-		<servlet-name>displayXML</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.XMLDisplay</servlet-class>
-	</servlet>
-		<servlet>
-		<description>XML Serving Servlet</description>
-		<servlet-name>xmltojsondm</servlet-name>
-		<servlet-class>org.milyn.smooks.directmapping.gae.XMLToJSONDataModel</servlet-class>
+		<description>XML Input Servlet</description>
+		<servlet-name>input</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.InputServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>toXML</servlet-name>
-		<url-pattern>/toXML</url-pattern>
+		<servlet-name>export</servlet-name>
+		<url-pattern>/export</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>downloadXML</servlet-name>
-		<url-pattern>/downloadXML</url-pattern>
+		<servlet-name>import</servlet-name>
+		<url-pattern>/import</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>uploadXML</servlet-name>
-		<url-pattern>/uploadXML</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>xmltojsondm</servlet-name>
+		<servlet-name>input</servlet-name>
 		<url-pattern>/input</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>transformXML</servlet-name>
-		<url-pattern>/transformXML</url-pattern>
+		<servlet-name>transform</servlet-name>
+		<url-pattern>/transform</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>displayXML</servlet-name>
-		<url-pattern>/result/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>templatebuilder</servlet-name>
-		<url-pattern>/templatebuilder/*</url-pattern>
-	</servlet-mapping>	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

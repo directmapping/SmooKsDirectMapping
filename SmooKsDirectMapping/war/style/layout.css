@@ -16,7 +16,7 @@ ul {
 	list-style-type: none;
 }
 li {
-	background: url("../images/bullet.png") 0 7px no-repeat;
+	background: 0 7px no-repeat;
 	padding: 5px 0 5px 13px;
 }
 p {
@@ -51,19 +51,6 @@ h2 {
 	font-size: 135%;
 	text-align: center;
 }
-
-.description{
-	
-	text-align: center;
-}
-
-
-h3 {
-	font-size: 125%;
-	text-align: left;
-}
-
-
 .textbody {
 	font-size: 110%;
 	line-height: 120%;
@@ -71,19 +58,7 @@ h3 {
 	text-align: justify;
 }
 
-#mapping_main  li{
-	
-	background: transparent;
-	
-}
 
-/* Links */
-#containerMiddle a {
-	border-radius: 3px;
-	color: navy;
-	padding: 0 2px;
-	text-decoration: none;
-}
 #containerMiddle a:hover {
 	background: none repeat scroll 0 0 #c0daa4;
 	color: #000;
@@ -106,7 +81,7 @@ a img,
 /* Menu */
 #layerMenu {
 	position: absolute;
-	width:  90%;
+	width: 920px;
 	height: 20px;
 	z-index: 3;
 	left: 200px;
@@ -142,9 +117,9 @@ a img,
 	background: url("../images/menu_about.png") no-repeat 0 0;
 	width: 128px;
 }
-#menu-smooksdirectmapping {
-	background: url("../images/menu_smooksdirectmapping.png") no-repeat 0 0;
-	width: 240px;
+#menu-jdirectmap {
+	background: url("../images/menu_jdirectmap.png") no-repeat 0 0;
+	width: 128px;
 }
 #menu-demo {
 	background: url("../images/menu_demo.png") no-repeat 0 0;
@@ -160,7 +135,7 @@ a img,
 }
 #layerMenuShadow {
 	position: absolute;
-	width: 90%;
+	width: 900px;
 	height: 20px;
 	z-index: 4;
 	left: 185px;
@@ -170,33 +145,16 @@ a img,
 
 /* Background */
 #containerTop {
-	
-	width: 100%;
-	margin: 10% auto 0 auto;
-	position: relative;
-	clear: left;
-	background-color: transparent;
-}
-#containerTopSpace {
 	height: 15px;
-	
-	width: 100%;
-	margin: 10% auto 0 auto;
-
+	width: 1000px;
 }
-
 #containerMiddle {
 	min-height: 400px;
 	padding: 0 40px;
 }
 #containerBottom {
 	height: 56px;
-	
-	width: 100%
-	margin: 10% auto 0 auto;
-	position: relative;
-	clear: left;
-	background-color: transparent;
+	width: 1000px;
 }
 
 
@@ -210,22 +168,22 @@ a img,
 	top: -95px;
 }
 #container {
-	
+	margin: 100px auto 0 auto;
 	position: relative;
-	height: 100%;
-	width: 100%;
+	height: 600px;
+	width: 95%;
 	clear: left;
 	background-color: transparent;
 }
 #layerfooter {
-	width: 100%;
+	width: 1136px;
 	height: 37px;
 	z-index: 2;
 	margin: -10px auto 40px auto;
 }
 
 #layerfooterimg {
-	width: 100%;
+	width: 1136px;
 	height: 37px;
 	
 }
@@ -317,5 +275,3 @@ a.transparency:hover {
 	padding: 0.3em 0;
 	margin-top: 0.3em;
 }
-
-

@@ -340,13 +340,8 @@ function helper_grid(table_element){
 				 });
 				 
 	$("#reset").click(function(){
-		_sessvars.$.clearMem();
-		 location.reload();
-		 
-		 /*	https://github.com/valums/file-uploader
-					*/
-				
-	
+		sessvars.$.clearMem();
+		location.reload();
 	});
 	
 	
@@ -381,7 +376,7 @@ function helper_grid(table_element){
 		 //setting action as transform xml
 	  //  data[data.length]=new param('action','transform');
 		
-	 	$.download("/downloadXML",data);   // pass all the parameters
+	 	$.download("/export",data);   // pass all the parameters
 	
 				
 
@@ -408,7 +403,7 @@ function helper_grid(table_element){
 			 //setting action as transform xml
 			data[data.length]=new param('action','transform');
 			
-			 	$.download("/transformXML",data); 
+			 	$.download("/transform",data); 
 		
 		
 
@@ -434,7 +429,7 @@ function helper_grid(table_element){
 		 //setting action as export template
 		 data[data.length]=new param('action','export_template');
 		
-		$.download("/transformXML",data); 
+		$.download("/transform",data); 
 	
 	});
 	

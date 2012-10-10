@@ -28,9 +28,9 @@ import com.google.gson.JsonObject;
 
 
 @SuppressWarnings("serial")
-public class XMLToJSONDataModel extends HttpServlet {
+public class InputServlet extends HttpServlet {
 
-	private static final Logger logger = Logger.getLogger(XMLToJSONDataModel.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(InputServlet.class.getCanonicalName());
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)

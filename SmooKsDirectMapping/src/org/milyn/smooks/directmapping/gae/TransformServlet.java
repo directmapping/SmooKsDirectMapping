@@ -31,7 +31,6 @@ import org.smooks.templating.model.ModelBuilderException;
 import org.smooks.templating.template.exception.TemplateBuilderException;
 import org.smooks.templating.template.util.SmooksFMUtil;
 
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -64,91 +63,88 @@ public class TransformServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		 doSmooksTransformation(req,resp);
-	
-	}
+		doSmooksTransformation(req, resp);
 
-	
+	}
 
 	private void doSmooksTransformation(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
 		String source = req.getParameter("sourceXML");
 		String destination = req.getParameter("destinationXML");
-		String mapping = URLDecoder.decode(req.getParameter("mapping"), "UTF-8");
-		String functions = URLDecoder.decode(req.getParameter("functions"),"UTF-8");
+		String mapping = URLDecoder
+				.decode(req.getParameter("mapping"), "UTF-8");
+		String functions = URLDecoder.decode(req.getParameter("functions"),
+				"UTF-8");
 		String action = req.getParameter("action");
-		
+
 		String template = "";
 		Smooks smooks = null;
 		String sourceXML = getStoredXML(source, "sourceXML");
 		String destinationXML = getStoredXML(destination, "destinationXML");
 		Writer outWriter = new StringWriter();
 		StreamResult resultStream = new StreamResult(outWriter);
-		
-		try {
-					
-				
-				template = SmooksFMUtil.createTemplate(sourceXML, mapping, destinationXML);
-				
-				if(action.equals("export_template")){
-					prepareXMLFile(resp,SmooksFMUtil.getSmooksConfigurationWriter(template), "SmooksConfig");
-				}
-				else{
-					//smooks = new Smooks(SmooksFMUtil.getSmooksConfiguration(template));
-					
-					
-				    smooks = new Smooks();
 
-				    smooks.addVisitor(new DomModelCreator(), "$document");
-				    smooks.addVisitor(new FreeMarkerTemplateProcessor(new TemplatingConfiguration(template)),"$document");
-				    smooks.setFilterSettings(new FilterSettings(StreamFilterType.DOM));
-				  	    
-				    
-				    
-					StreamSource sourceStream = new StreamSource(new ByteArrayInputStream(sourceXML.getBytes("utf-8")));
-					
-					//SmooKs transformation 
-					smooks.filterSource(sourceStream, resultStream);
-					prepareXMLFile(resp,resultStream.getWriter(), destination);
-				}		
-				
-			} catch (XPathExpressionException e2) {
-				// TODO Auto-generated catch block
-				logger.log(Level.SEVERE, "Exception happening when processing key "
-						+ source, e2);
-				throw new RuntimeException("Failed to process XML document", e2);
-			} catch (InvocationTargetException e2) {
-				// TODO Auto-generated catch block
-				logger.log(Level.SEVERE, "Exception happening when processing key "
-						+ source, e2);
-				throw new RuntimeException("Failed to process XML document", e2);
-			} catch (ModelBuilderException e2) {
-				// TODO Auto-generated catch block
-				logger.log(Level.SEVERE, "Exception happening when processing key "
-						+ source, e2);
-				throw new RuntimeException("Failed to process XML document", e2);
-			} catch (TemplateBuilderException e2) {
-				// TODO Auto-generated catch block
-				logger.log(Level.SEVERE, "Exception happening when processing key "
-						+ source, e2);
-				throw new RuntimeException("Failed to process XML document", e2);
-			} catch (Exception e){
-				logger.log(Level.SEVERE, "Exception happening when processing key "
-						+ source, e);
-				throw new RuntimeException("Failed to process XML document", e);
+		try {
+
+			template = SmooksFMUtil.createTemplate(sourceXML, mapping,
+					destinationXML);
+
+			if (action.equals("export_template")) {
+				prepareXMLFile(resp,
+						SmooksFMUtil.getSmooksConfigurationWriter(template),
+						"SmooksConfig");
+			} else {
+				// smooks = new
+				// Smooks(SmooksFMUtil.getSmooksConfiguration(template));
+
+				smooks = new Smooks();
+
+				smooks.addVisitor(new DomModelCreator(), "$document");
+				smooks.addVisitor(new FreeMarkerTemplateProcessor(
+						new TemplatingConfiguration(template)), "$document");
+				smooks.setFilterSettings(new FilterSettings(
+						StreamFilterType.DOM));
+
+				StreamSource sourceStream = new StreamSource(
+						new ByteArrayInputStream(sourceXML.getBytes("utf-8")));
+
+				// SmooKs transformation
+				smooks.filterSource(sourceStream, resultStream);
+				prepareXMLFile(resp, resultStream.getWriter(), destination);
 			}
-			finally {
-			    if(!action.equals("export_template") && smooks !=null)
-			    {
-			    	smooks.close();
-			    }
+
+		} catch (XPathExpressionException e2) {
+			// TODO Auto-generated catch block
+			logger.log(Level.SEVERE, "Exception happening when processing key "
+					+ source, e2);
+			throw new RuntimeException("Failed to process XML document", e2);
+		} catch (InvocationTargetException e2) {
+			// TODO Auto-generated catch block
+			logger.log(Level.SEVERE, "Exception happening when processing key "
+					+ source, e2);
+			throw new RuntimeException("Failed to process XML document", e2);
+		} catch (ModelBuilderException e2) {
+			// TODO Auto-generated catch block
+			logger.log(Level.SEVERE, "Exception happening when processing key "
+					+ source, e2);
+			throw new RuntimeException("Failed to process XML document", e2);
+		} catch (TemplateBuilderException e2) {
+			// TODO Auto-generated catch block
+			logger.log(Level.SEVERE, "Exception happening when processing key "
+					+ source, e2);
+			throw new RuntimeException("Failed to process XML document", e2);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception happening when processing key "
+					+ source, e);
+			throw new RuntimeException("Failed to process XML document", e);
+		} finally {
+			if (!action.equals("export_template") && smooks != null) {
+				smooks.close();
 			}
+		}
 
 	}
 
-
-
-	
 	private String getStoredXML(String keyString, String propertyName) {
 
 		DatastoreService datastore = DatastoreServiceFactory
@@ -172,7 +168,8 @@ public class TransformServlet extends HttpServlet {
 		return "";
 	}
 
-	private void prepareXMLFile(HttpServletResponse resp, Writer xml, String destination) {
+	private void prepareXMLFile(HttpServletResponse resp, Writer xml,
+			String destination) {
 		try {
 
 			ByteArrayInputStream b = new ByteArrayInputStream(xml.toString()
