@@ -1,4 +1,4 @@
-package org.smooks.templating.mapping.model.ztree;
+package org.smooks.templating.mapping.model.util;
 
 public class ZTreeModel {
 

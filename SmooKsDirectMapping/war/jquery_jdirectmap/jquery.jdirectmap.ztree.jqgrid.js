@@ -339,11 +339,11 @@ function helper_grid(table_element){
 					
 				 });
 				 
-	$("#import").click(function(){
-		sessvars.$.clearMem();
+	$("#reset").click(function(){
+		_sessvars.$.clearMem();
 		 location.reload();
-		 /*
-					https://github.com/valums/file-uploader
+		 
+		 /*	https://github.com/valums/file-uploader
 					*/
 				
 	
@@ -351,8 +351,8 @@ function helper_grid(table_element){
 	
 	
 	$("#collapse").click(function(){
-		$.fn.zTree.getZTreeObj("tree_source").expandAll(true);
-		$.fn.zTree.getZTreeObj("tree_destination").expandAll(true);
+		$.fn.zTree.getZTreeObj("tree_source").expandAll(false);
+		$.fn.zTree.getZTreeObj("tree_destination").expandAll(false);
 		
 	
 	

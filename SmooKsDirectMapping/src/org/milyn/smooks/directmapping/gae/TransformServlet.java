@@ -138,7 +138,7 @@ public class TransformServlet extends HttpServlet {
 				throw new RuntimeException("Failed to process XML document", e);
 			}
 			finally {
-			    if(!action.equals("export_template"))
+			    if(!action.equals("export_template") && smooks !=null)
 			    {
 			    	smooks.close();
 			    }

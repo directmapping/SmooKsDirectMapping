@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.smooks.templating.mapping.model.ztree.ZTreeModel;
+import org.smooks.templating.mapping.model.util.ZTreeModel;
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilder.ElementType;
 

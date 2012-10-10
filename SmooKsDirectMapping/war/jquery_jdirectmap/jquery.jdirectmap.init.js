@@ -24,6 +24,48 @@
 			
 		}
 	
+
+	function createUploader(){            
+	    var uploader = new qq.FileUploader({
+	        element: $('#basicUploadSuccessExample')[0],
+	        action: "/uploadXML",
+	        allowedExtensions: ['json'],
+	        sizeLimit: 50000,
+	        uploadButtonText:'Import already existing project.',//text for uploader button
+             onComplete: function(id, fileName, request){
+	        	
+	    	
+							
+	    		sessvars.$.clearMem();
+	   	
+							jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
+				 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["destination"]), $("#tree_destination"),"destination");
+				 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
+				 			jQuery.fn.jDirectMapTreeInit.destinationKey = request["destinationXML"];
+				 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
+		            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
+						  
+		            		sessvars.sourceXML = jQuery.fn.jDirectMapTreeInit.sourceKey;
+		        			sessvars.destinationXML = jQuery.fn.jDirectMapTreeInit.destinationKey;
+		        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+		        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+		        			sessvars.source = jQuery.parseJSON(request["source"]);
+							sessvars.destination = jQuery.parseJSON(request["destination"]);
+					
+			
+	        		helper_grid("#mapping_list");	
+	        		helper_ui_xml_to_map();
+	        		location.reload();  
+	        	
+						 
+				
+	        }
+	    });
+	}
+	
+
+	
+	
 function helper_init_xml(){
 		$("#source_xml_area").val("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>	<shiporder orderid=\"889923\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"shiporder.xsd\"><orderperson>John Smith</orderperson>							  <shipto>							    <name>Ola Nordmann</name>							    <address>Langgt 23</address>							    <city>4000 Stavanger</city>							    <country>Norway</country>							  </shipto>							  <item>							    <title>Empire Burlesque</title>							    <note>Special Edition</note>							    <quantity>1</quantity>							    <price>10.90</price>							  </item>							  <item>							    <title>Hide your heart</title>							    <quantity>1</quantity>							    <price>9.90</price>							  </item>							</shiporder>");
 	
@@ -151,15 +193,16 @@ function helper_init_xml(){
 		+'			<table id="mapping_list"></table>'
 					
 		+'			<div id="gridpager">	'
-		+'					<input type="button" id="deletedata" value="Delete" />'
+		+'					<input type="button" id="reset"  value="Reset Project"  />'
+		+'					<input type="button" id="deletedata" value="Delete Row" />'
 		+'					<input type="button" id="moveup" value="Move up" />'
 		+'					<input type="button" id="movedown"  value="Move down"  />'
-		+'					<input type="button" id="clear"  value="Clear"  />'
+		+'					<input type="button" id="clear"  value="Clear Mapping"  />'
 		+'					<input type="button" id="collapse"  value="Collapse All"  />'
-		+'					<input type="button" id="import"  value="Import"  />'
-		+'					<input type="button" id="export"  value="Export"  />'
-		+'					<input type="button" id="transform"  value="Transform"  />'
-		+'					<input type="button" id="template"  value="Template"  />'
+		
+		+'					<input type="button" id="export"  value="Export Project"  />'
+		+'					<input type="button" id="transform"  value="Transform XML"  />'
+		+'					<input type="button" id="template"  value="Export Smooks Configuration"  />'
 		+'			</div> '
 		+'			</div>'
 		+'			<br />'
@@ -215,5 +258,11 @@ function helper_init_xml(){
 			
 			
 			jQuery("#directmappping").html(html_jdirectmap);
+	
+	
+	
 			
 	}
+
+
+

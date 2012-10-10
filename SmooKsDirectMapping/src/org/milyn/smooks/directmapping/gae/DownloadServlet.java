@@ -25,6 +25,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 @SuppressWarnings("serial")
 public class DownloadServlet extends HttpServlet {
@@ -42,15 +43,38 @@ public class DownloadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String source = req.getParameter("sourceXML");
 		String destination = req.getParameter("destinationXML");
-		String mapping = URLDecoder.decode(req.getParameter("mapping"), "UTF-8");
-		String functions = URLDecoder.decode(req.getParameter("functions"), "UTF-8");
-	
-	
+		String mappingStr = URLDecoder.decode(req.getParameter("mapping"), "UTF-8");
+		String functionStr = URLDecoder.decode(req.getParameter("functions"), "UTF-8");
+		 JsonArray mappings =  null;
+		 JsonArray functions =  null;
 		 JsonObject json = new JsonObject();
 		 json.addProperty("source", source);
 		 json.addProperty("destination", destination);
-		 json.addProperty("mapping", mapping);
-		 json.addProperty("functions", functions);
+		 
+		 try{
+			JsonParser parser = new JsonParser();
+			mappings = (JsonArray)parser.parse(mappingStr);
+			
+		 }
+		 catch(JsonSyntaxException e)
+		 {
+			 mappings =  null;
+		 }
+		 
+		 try{
+				JsonParser parser = new JsonParser();
+				functions = (JsonArray)parser.parse(functionStr);
+				
+			 }
+			 catch(JsonSyntaxException e)
+			 {
+				 functions =  null;
+			 }
+		 
+		 
+			
+		 json.add("mapping", mappings);
+		 json.add("functions", functions);
 		 
 		 
 		 //PUSH JSON FILE 

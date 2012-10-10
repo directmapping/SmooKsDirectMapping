@@ -248,6 +248,11 @@ public class SmooksFMUtil {
 			JsonObject json = (JsonObject)iterator.next();
 		    String from = json.get("from").getAsString();
 		    String to = json.get("to").getAsString();
+		    if(!(from.contains(" Input") || to.contains(" Output"))){
+		    	
+		    
+		    
+		    
 		    Node source =  sourceBuilder.getModelNode(from);
 		    Node destination =  destinationBuilder.getModelNode(to);
 		    
@@ -265,7 +270,7 @@ public class SmooksFMUtil {
 		    	{
 		    		   destinationBuilder.addValueMapping(from,destination);   
 		    	}
-		    		   
+		    }	   
 		}
 		
 		for(CollectionMapping collection : collectionMappings) {

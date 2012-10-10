@@ -3,10 +3,11 @@
 jQuery(document).ready(function(){
 
 							
+	
 							if(sessvars.sourceXML!=null)
 							{
 								helper_init_xml();
-							
+								createUploader();
 								jQuery.fn.jDirectMapTreeInit.sourceKey = sessvars.sourceXML;
 								jQuery.fn.jDirectMapTreeInit.destinationKey = sessvars.destinationXML;
 								jQuery.fn.jDirectMapTreeInit.mapping = sessvars.mapping;
@@ -44,9 +45,10 @@ jQuery(document).ready(function(){
 							else{							
 							
 							helper_init_xml();
+							createUploader();
 							$("#mapping_main").hide();
 							$("#xmlsubmit").click(function(){  
-							
+								
 							//parameter object definition
 							var param=function(name,value){
 								this.name=name;
@@ -96,7 +98,7 @@ jQuery(document).ready(function(){
 							
 				            		helper_grid("#mapping_list");	
 				            		helper_ui_xml_to_map();
-				            		    
+				            	
 				            	
 														},
 								 

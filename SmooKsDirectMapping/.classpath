@@ -20,5 +20,6 @@
 	<classpathentry kind="src" path="input"/>
 	<classpathentry kind="src" path="output"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

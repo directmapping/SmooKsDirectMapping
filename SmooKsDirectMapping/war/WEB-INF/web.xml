@@ -21,6 +21,11 @@
 	</servlet>
 	<servlet>
 		<description>XML Serving Servlet</description>
+		<servlet-name>uploadXML</servlet-name>
+		<servlet-class>org.milyn.smooks.directmapping.gae.UploadServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>XML Serving Servlet</description>
 		<servlet-name>displayXML</servlet-name>
 		<servlet-class>org.milyn.smooks.directmapping.gae.XMLDisplay</servlet-class>
 	</servlet>
@@ -36,6 +41,10 @@
 	<servlet-mapping>
 		<servlet-name>downloadXML</servlet-name>
 		<url-pattern>/downloadXML</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>uploadXML</servlet-name>
+		<url-pattern>/uploadXML</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>xmltojsondm</servlet-name>
