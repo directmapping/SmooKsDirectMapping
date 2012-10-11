@@ -17,7 +17,10 @@ package org.smooks.templating.demo;
  */
 
 
-import org.eclipse.emf.common.util.URI;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import org.milyn.FilterSettings;
 import org.milyn.Smooks;
 import org.milyn.SmooksException;
@@ -25,47 +28,18 @@ import org.milyn.StreamFilterType;
 import org.milyn.delivery.DomModelCreator;
 import org.milyn.templating.TemplatingConfiguration;
 import org.milyn.templating.freemarker.FreeMarkerTemplateProcessor;
-import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
-import org.smooks.templating.model.ModelBuilder.ElementType;
-import org.smooks.templating.model.xml.XMLSampleModelBuilder;
-import org.smooks.templating.template.exception.InvalidMappingException;
 import org.smooks.templating.template.exception.TemplateBuilderException;
-import org.smooks.templating.template.freemarker.FreeMarkerTemplateBuilder;
 import org.smooks.templating.template.util.SmooksFMUtil;
-import org.smooks.templating.template.xml.XMLFreeMarkerTemplateBuilder;
-import org.smooks.templating.template.CollectionMapping;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+
 import org.xml.sax.SAXException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
 
 /**
  * 

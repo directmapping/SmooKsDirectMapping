@@ -24,16 +24,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -44,13 +42,17 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.eclipse.emf.common.util.URI;
-import org.milyn.javabean.decoders.DateDecoder;
+
+import org.smooks.templating.mapping.model.util.Functions;
+import org.smooks.templating.mapping.model.util.FunctionsObject;
+import org.smooks.templating.mapping.model.util.FunctionsValues;
+import org.smooks.templating.mapping.model.util.MappingObject;
 import org.smooks.templating.model.ModelBuilder;
 import org.smooks.templating.model.ModelBuilderException;
 import org.smooks.templating.model.ModelBuilder.ElementType;
 import org.smooks.templating.model.xml.XMLSampleModelBuilder;
 import org.smooks.templating.template.CollectionMapping;
-import org.smooks.templating.template.ValueMapping;
+
 import org.smooks.templating.template.exception.InvalidMappingException;
 import org.smooks.templating.template.exception.TemplateBuilderException;
 import org.smooks.templating.template.freemarker.FreeMarkerTemplateBuilder;
@@ -58,10 +60,12 @@ import org.smooks.templating.template.xml.XMLFreeMarkerTemplateBuilder;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 /**
  * SmooKs utility methods.
@@ -176,13 +180,13 @@ public class SmooksFMUtil {
 		destinationBuilder = new XMLFreeMarkerTemplateBuilder(destinationModel);
 		sourceBuilder =  new XMLFreeMarkerTemplateBuilder(sourceModel);
 		destinationBuilder = addMappping(sourceBuilder, mapping, destinationBuilder);
-		printDocument(destinationBuilder.getModel(), System.out);
+		//printDocument(destinationBuilder.getModel(), System.out);
 		destinationBuilder.setNodeModelSource(true);
 		return destinationBuilder.buildTemplate();
 		
 	}
 	
-	public static String createTemplate(String sourceXML, String mapping, String destinationXML)
+	public static String createTemplate(String sourceXML, String mapping, String functions, String destinationXML)
 			throws InvocationTargetException, ModelBuilderException,
 			TemplateBuilderException, XPathExpressionException, IOException {
 		FreeMarkerTemplateBuilder destinationBuilder = null;
@@ -205,6 +209,7 @@ public class SmooksFMUtil {
 		destinationBuilder = new XMLFreeMarkerTemplateBuilder(destinationModel);
 		sourceBuilder =  new XMLFreeMarkerTemplateBuilder(sourceModel);
 		destinationBuilder = addMappping(sourceBuilder, mapping, destinationBuilder);
+		destinationBuilder = addFunctions(sourceBuilder, functions, destinationBuilder);
 		destinationBuilder.setNodeModelSource(true);
 		return destinationBuilder.buildTemplate();
 
@@ -283,6 +288,79 @@ public class SmooksFMUtil {
 			
 	}
 	
+	
+	public static FreeMarkerTemplateBuilder addFunctions(FreeMarkerTemplateBuilder sourceBuilder,  String functions,   FreeMarkerTemplateBuilder destinationBuilder) throws InvalidMappingException, XPathExpressionException{
+		Gson gson = new Gson();
+		Functions[] obj = null;
+		
+		JsonReader reader = new JsonReader(new StringReader(functions));
+		reader.setLenient(true);
+
+		obj = gson.fromJson(reader, Functions[].class);
+
+		List<CollectionMapping> collectionMappings = new ArrayList<CollectionMapping>();
+		
+		
+		for (Functions iterator : obj){ 
+		
+		//TODO identify the collection mappings mapped to complex types create list ie collection mappings get the collection names as last part of xpath
+		
+			Functions function = iterator;
+			String functionName = function.getFunctionname();
+			String functionValue = function.getValue();
+			
+			Iterator<FunctionsValues> inputparamIterator = function.getInput().iterator();
+			while(inputparamIterator.hasNext()){
+				FunctionsValues inputparam = inputparamIterator.next();
+				
+			}
+			FunctionsValues output = null;
+			Iterator<FunctionsValues> outputparamIterator = function.getOutput().iterator();
+			while(outputparamIterator.hasNext()){
+				 output = outputparamIterator.next();
+				
+			}
+			
+			//TODO case when 1 output param
+			
+			//TODO case when more output param 
+			
+			/*String from = "";
+		    String to = output.getXpath();
+		    Node destination =  destinationBuilder.getModelNode(to);
+			   	
+		    
+		    
+		    
+		    Node source =  sourceBuilder.getModelNode(from);
+		    
+		   
+		    	if(source.getNodeType() == Node.ELEMENT_NODE) { 
+					   if(ModelBuilder.getElementType((Element) source) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) source) > 1){
+						   
+						   CollectionMapping collection = new CollectionMapping(from, destination, source.getNodeName());
+						   collectionMappings.add(collection);
+					   }
+					   else{
+						   destinationBuilder.addValueMapping(from,destination);   
+					   }
+		    	}else
+		    	{
+		    		   destinationBuilder.addValueMapping(from,destination);   
+		    	}
+		    }	   
+		
+		
+		for(CollectionMapping collection : collectionMappings) {
+			//TODO change it ?
+			destinationBuilder.addCollectionMapping(collection.getSrcPath(), (Element) collection.getMappingNode(), collection.getCollectionItemName());
+			ModelBuilder.setCollectionVariable((Element) collection.getMappingNode(), collection.getCollectionItemName(), collection.getSrcPath());
+		}
+				*/
+		}
+		return destinationBuilder;
+			
+	}
 	
 	public static void printDocument(org.w3c.dom.Document document,
 			OutputStream out) throws IOException, TransformerException {

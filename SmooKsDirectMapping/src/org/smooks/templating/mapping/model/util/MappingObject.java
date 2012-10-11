@@ -25,7 +25,7 @@ public class MappingObject {
 		   
 		    this.source = source;
 		    this.destination =  destination;
-		    this.mapping = mapping;
+		    this.mapping = mappings;
 		    this.functions = functions;
 		  }
 	 

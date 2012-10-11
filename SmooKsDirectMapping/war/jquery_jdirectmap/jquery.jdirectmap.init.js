@@ -210,7 +210,7 @@ function helper_init_xml(){
 		+'				<table id="function_table" class="ui-jqgrid-htable" border="0" cellpadding="0" cellspacing="0">'
 		+'				<tr class="ui-state-default ui-jqgrid-hdiv"> '
 		+'				<td width="25%" > Function Input </td>'
-		+'				<td width="50%" > Function Script </td>'
+		+'				<td width="50%" > Function Script (FreeMarker Syntax)</td>'
 		+'				<td width="25%" > Function Output</td>'
 		+'				</tr>'
 		+'				<tr valign="top" >'

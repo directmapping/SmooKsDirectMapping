@@ -89,9 +89,13 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 						$("#" + parId).append("<span class='domBtn_source'   domId='" + treeId + id +   "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
 					}
 					else if(treeId == "tree_destination") {
+						
+						if(id>1){
+							alert("Currently, there is allowed only one output parameter!");
+						}else{
 						id = "out" + id;
 						$("#" + parId).append("<span class='domBtn_destination'   domId='" + treeId + id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
-						
+						}
 					}
 					
 					

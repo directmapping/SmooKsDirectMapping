@@ -38,15 +38,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import freemarker.ext.dom.NodeModel;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 @SuppressWarnings("serial")
 public class TransformServlet extends HttpServlet {
@@ -86,17 +77,14 @@ public class TransformServlet extends HttpServlet {
 
 		try {
 
-			template = SmooksFMUtil.createTemplate(sourceXML, mapping,
-					destinationXML);
+			template = SmooksFMUtil.createTemplate(sourceXML, mapping, functions, destinationXML);
 
 			if (action.equals("export_template")) {
 				prepareXMLFile(resp,
 						SmooksFMUtil.getSmooksConfigurationWriter(template),
 						"SmooksConfig");
 			} else {
-				// smooks = new
-				// Smooks(SmooksFMUtil.getSmooksConfiguration(template));
-
+				
 				smooks = new Smooks();
 
 				smooks.addVisitor(new DomModelCreator(), "$document");
@@ -111,6 +99,7 @@ public class TransformServlet extends HttpServlet {
 				// SmooKs transformation
 				smooks.filterSource(sourceStream, resultStream);
 				prepareXMLFile(resp, resultStream.getWriter(), destination);
+				
 			}
 
 		} catch (XPathExpressionException e2) {
