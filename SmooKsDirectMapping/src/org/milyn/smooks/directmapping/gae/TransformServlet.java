@@ -77,14 +77,15 @@ public class TransformServlet extends HttpServlet {
 
 		try {
 
-			template = SmooksFMUtil.createTemplate(sourceXML, mapping, functions, destinationXML);
+			template = SmooksFMUtil.createTemplate(sourceXML, mapping,
+					functions, destinationXML);
 
 			if (action.equals("export_template")) {
 				prepareXMLFile(resp,
 						SmooksFMUtil.getSmooksConfigurationWriter(template),
 						"SmooksConfig");
 			} else {
-				
+
 				smooks = new Smooks();
 
 				smooks.addVisitor(new DomModelCreator(), "$document");
@@ -99,7 +100,7 @@ public class TransformServlet extends HttpServlet {
 				// SmooKs transformation
 				smooks.filterSource(sourceStream, resultStream);
 				prepareXMLFile(resp, resultStream.getWriter(), destination);
-				
+
 			}
 
 		} catch (XPathExpressionException e2) {
