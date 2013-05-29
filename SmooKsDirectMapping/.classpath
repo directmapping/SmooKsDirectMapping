@@ -21,8 +21,10 @@
 	<classpathentry kind="src" path="output"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Misko/Downloads/xsd-runtime-2.8.3/eclipse/plugins/org.eclipse.xsd_2.8.1.v20130125-0826.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Misko/Downloads/xercesImpl-2.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Misko/Downloads/org.eclipse.emf.ecore-2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore-2.6.0.v20100614-1136.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xsd_2.8.1.v20130125-0826.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.10.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

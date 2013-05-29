@@ -8,7 +8,7 @@ function helper_grid(table_element){
 	
 	$table.jqGrid({        
 				datatype: "local",
-				colNames:['id','Source Parameter', 'Destination Parameter'],
+				colNames:['id','Source Parameter', 'Target Parameter'],
 				colModel:[
 					{name:'id',index:'id', width:100 , sortable: false},
 					{name:'sparam',index:'sparam', width:1000 , sortable: false},
@@ -31,7 +31,7 @@ function helper_grid(table_element){
 					  if(id){ 
 						  
 						  $("#tree_source").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
-						  $("#tree_destination").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+						  $("#tree_target").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
 													
 						var streeObj = $.fn.zTree.getZTreeObj("tree_source");
 						var snode = streeObj.getNodesByParam("xpath",  $table.getRowData(id).sparam);
@@ -45,7 +45,7 @@ function helper_grid(table_element){
 							streeObj.expandAll(true);
 							
 							
-							var dtreeObj = $.fn.zTree.getZTreeObj("tree_destination");
+							var dtreeObj = $.fn.zTree.getZTreeObj("tree_target");
 							var dnode = dtreeObj.getNodesByParam("xpath",  $table.getRowData(id).dparam);
 						
 							for( var i=0, l=dnode.length; i<l; i++) {
@@ -73,7 +73,7 @@ function helper_grid(table_element){
 								   {
 								   
 								    $("#par_tree_source").empty();
-									$("#par_tree_destination").empty();
+									$("#par_tree_target").empty();
 									$("#functionname").val(functionname);
 									$("#createfunction").val("Update");
 									
@@ -82,7 +82,7 @@ function helper_grid(table_element){
 									var input_param = jQuery.fn.jDirectMapTreeInit.functions[i]['input'];
 									var output_param = jQuery.fn.jDirectMapTreeInit.functions[i]['output'];
 									  $("#tree_source").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
-									  $("#tree_destination").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+									  $("#tree_target").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
 											
 									jQuery.each(input_param,function(i,e){  
 									var id = input_param[i]['name'].substring(0,input_param[i]['name'].indexOf(':'));
@@ -105,10 +105,10 @@ function helper_grid(table_element){
 									
 									jQuery.each(output_param,function(i,e){  
 									var id = output_param[i]['name'].substring(0,output_param[i]['name'].indexOf(':'));
-									$("#par_tree_destination").append("<span class='domBtn_destination'   domId='tree_destination"  + id +   "' xpath='"   + output_param[i]['xpath'] + "'>" +  output_param[i]['name'] + "</span>");
+									$("#par_tree_target").append("<span class='domBtn_target'   domId='tree_target"  + id +   "' xpath='"   + output_param[i]['xpath'] + "'>" +  output_param[i]['name'] + "</span>");
 									
 										
-										var dtreeObj = $.fn.zTree.getZTreeObj("tree_destination");
+										var dtreeObj = $.fn.zTree.getZTreeObj("tree_target");
 										var dnode = dtreeObj.getNodesByParam("xpath",  output_param[i]['xpath']);
 									
 										for( var i=0, l=dnode.length; i<l; i++) {
@@ -182,7 +182,7 @@ function helper_grid(table_element){
 							jQuery.fn.jDirectMapTreeInit.functions = functionslist;
 							
 							$("#par_tree_source").empty();
-							$("#par_tree_destination").empty();
+							$("#par_tree_target").empty();
 							$("#functionname").val("");
 							jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
 							
@@ -195,7 +195,7 @@ function helper_grid(table_element){
 	
 	$("#clearfunction").click(function(){
 		$("#par_tree_source").empty();
-		$("#par_tree_destination").empty();
+		$("#par_tree_target").empty();
 		jQuery.fn.jDirectMapTreeInit.editor.setValue("");
 	});
 
@@ -213,7 +213,7 @@ function helper_grid(table_element){
 		if($("#functionname").val() == ""){
 			alert("Please specify unique funcation name");	
 		}
-		else if($("#par_tree_destination" ).find('span').length == 0){
+		else if($("#par_tree_target" ).find('span').length == 0){
 			alert("Please specify at least one ouput parameter");	
 			}
 		else if($("#par_tree_source" ).find('span').length == 0){
@@ -238,13 +238,13 @@ function helper_grid(table_element){
 							var output_param = new Array();
 							
 							$("#par_tree_source" ).find('span').each(function(i,e){  input_param.push({name : $(this).text() , xpath : $(this).attr("xpath")  });  });
-							$("#par_tree_destination" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
+							$("#par_tree_target" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
 							
 							 functions[i]['input'] = input_param;
 							 functions[i]['output'] = output_param;
 				
 								$("#par_tree_source").empty();
-								$("#par_tree_destination").empty();
+								$("#par_tree_target").empty();
 								$("#functionname").val("");
 								jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
 								
@@ -266,7 +266,7 @@ function helper_grid(table_element){
 				var output_param = new Array();
 				
 				$("#par_tree_source" ).find('span').each(function(i,e){  input_param.push({name : $(this).text() , xpath : $(this).attr("xpath")  });  });
-				$("#par_tree_destination" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
+				$("#par_tree_target" ).find('span').each(function(i,e){  output_param.push({name : $(this).text() , xpath : $(this).attr("xpath")});  });
 
 				
 				functions.push({id: numberOfRecords, functionname: $("#functionname").val(), value : jQuery.fn.jDirectMapTreeInit.editor.getValue(), input : input_param, output : output_param});
@@ -277,7 +277,7 @@ function helper_grid(table_element){
 				
 				// TODO add input parameters and output parameters
 				$("#par_tree_source").empty();
-				$("#par_tree_destination").empty();
+				$("#par_tree_target").empty();
 				$("#functionname").val("");
 				jQuery.fn.jDirectMapTreeInit.editor.setValue("");	
 				
@@ -347,7 +347,7 @@ function helper_grid(table_element){
 	
 	$("#collapse").click(function(){
 		$.fn.zTree.getZTreeObj("tree_source").expandAll(false);
-		$.fn.zTree.getZTreeObj("tree_destination").expandAll(false);
+		$.fn.zTree.getZTreeObj("tree_target").expandAll(false);
 		
 	
 	
@@ -370,7 +370,7 @@ function helper_grid(table_element){
 		
 		
 		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
+		data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
 		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
 		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
 		 //setting action as transform xml
@@ -397,7 +397,7 @@ function helper_grid(table_element){
 				storeGrid();
 				 
 			data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-			data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
+			data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
 			data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
 			data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
 			 //setting action as transform xml
@@ -423,7 +423,7 @@ function helper_grid(table_element){
 			storeGrid();
 				 
 		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-		data[1] = new param("destinationXML",jQuery.fn.jDirectMapTreeInit.destinationKey);
+		data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
 		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
 		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
 		 //setting action as export template

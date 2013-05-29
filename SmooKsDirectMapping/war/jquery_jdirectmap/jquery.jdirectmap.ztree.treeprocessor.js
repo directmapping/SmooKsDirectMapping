@@ -40,7 +40,7 @@
 jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 	
 		var sourceKey;
-		var destinationKey;
+		var targetKey;
 		var mapping = [];
 		var functions =  [];
 		
@@ -88,13 +88,13 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 						id = "in" + id;
 						$("#" + parId).append("<span class='domBtn_source'   domId='" + treeId + id +   "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
 					}
-					else if(treeId == "tree_destination") {
+					else if(treeId == "tree_target") {
 						
 						if(id>1){
 							alert("Currently, there is allowed only one output parameter!");
 						}else{
 						id = "out" + id;
-						$("#" + parId).append("<span class='domBtn_destination'   domId='" + treeId + id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
+						$("#" + parId).append("<span class='domBtn_target'   domId='" + treeId + id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
 						}
 					}
 					
@@ -107,7 +107,7 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 				if(treeId = "tree_source") {
 					alert("Input parameters accept only elements from source tree");
 				}
-				else if(treeId = "tree_destination") {
+				else if(treeId = "tree_target") {
 					alert("Ouput parameters accept only elements from detination tree");
 				}
 				else {
@@ -136,16 +136,16 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 			    		  
 					var numberOfRecords = jQuery("#mapping_list").getGridParam("records");
 					
-						if(type == "source" && treeId == "tree_destination") {
+						if(type == "source" && treeId == "tree_target") {
 								jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: treeNodes[0].xpath, dparam: targetNode.xpath  } );
 								$("#tree_source").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
 							    jQuery.fn.jDirectMapTreeInit.mapping.push({"id": numberOfRecords , "from":  treeNodes[0].xpath, "to": targetNode.xpath,"rowid" : numberOfRecords });
 								
 								
 						}
-						else if (type == "destination" && treeId == "tree_source") {
+						else if (type == "target" && treeId == "tree_source") {
 								jQuery("#mapping_list").jqGrid('addRowData',++numberOfRecords,{id: numberOfRecords, sparam: targetNode.xpath , dparam: treeNodes[0].xpath } );
-								$("#tree_destination").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
+								$("#tree_target").find('a').removeClass($.fn.zTree.consts.node.CURSELECTED);
 								jQuery.fn.jDirectMapTreeInit.mapping.push({"id": numberOfRecords , "from": targetNode.xpath , "to": treeNodes[0].xpath,"rowid" : numberOfRecords });
 									
 						}

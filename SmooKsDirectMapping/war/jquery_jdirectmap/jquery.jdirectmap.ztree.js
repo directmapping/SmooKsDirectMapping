@@ -9,12 +9,12 @@ jQuery(document).ready(function(){
 								helper_init_xml();
 								createUploader();
 								jQuery.fn.jDirectMapTreeInit.sourceKey = sessvars.sourceXML;
-								jQuery.fn.jDirectMapTreeInit.destinationKey = sessvars.destinationXML;
+								jQuery.fn.jDirectMapTreeInit.targetKey = sessvars.targetXML;
 								jQuery.fn.jDirectMapTreeInit.mapping = sessvars.mapping;
 								jQuery.fn.jDirectMapTreeInit.functions = sessvars.functions;
 								
 								jQuery.fn.jDirectMapTreeInit(sessvars.source, $("#tree_source"),"source");
-					 			jQuery.fn.jDirectMapTreeInit(sessvars.destination, $("#tree_destination"),"destination");
+					 			jQuery.fn.jDirectMapTreeInit(sessvars.target, $("#tree_target"),"target");
 					 		
 					 			
 					 			helper_grid("#mapping_list");	
@@ -37,7 +37,7 @@ jQuery(document).ready(function(){
 			            		
 			            		
 			            		$("#par_tree_source").empty();
-								$("#par_tree_destination").empty();
+								$("#par_tree_target").empty();
 								$("#functionname").val("");
 								$("#function_area").val("");
 			            		
@@ -59,9 +59,9 @@ jQuery(document).ready(function(){
 							 
 
 								data[0] = new param("source",$("#source_xml_area").val());
-								data[1] = new param("destination",$("#dest_xml_area").val());
+								data[1] = new param("target",$("#dest_xml_area").val());
 								data[2] = new param("sourceXML", "");
-								data[3] = new param("destinationXML", "");
+								data[3] = new param("targetXML", "");
 								
 								 //setting action as PUT
 								 data[data.length]=new param('action','PUT');
@@ -82,18 +82,18 @@ jQuery(document).ready(function(){
 											
 											  
 											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
-								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["destination"]), $("#tree_destination"),"destination");
+								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["target"]), $("#tree_target"),"target");
 								 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
-								 			jQuery.fn.jDirectMapTreeInit.destinationKey = request["destinationXML"];
+								 			jQuery.fn.jDirectMapTreeInit.targetKey = request["targetXML"];
 								 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
 						            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
 										  
 						            		sessvars.sourceXML = jQuery.fn.jDirectMapTreeInit.sourceKey;
-						        			sessvars.destinationXML = jQuery.fn.jDirectMapTreeInit.destinationKey;
+						        			sessvars.targetXML = jQuery.fn.jDirectMapTreeInit.targetKey;
 						        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
 						        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
 						        			sessvars.source = jQuery.parseJSON(request["source"]);
-											sessvars.destination = jQuery.parseJSON(request["destination"]);
+											sessvars.target = jQuery.parseJSON(request["target"]);
 									
 							
 				            		helper_grid("#mapping_list");	
