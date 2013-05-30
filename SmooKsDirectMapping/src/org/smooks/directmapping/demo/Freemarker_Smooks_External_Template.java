@@ -2,13 +2,28 @@ package org.smooks.directmapping.demo;
 
 
 import org.milyn.SmooksException;
-import org.smooks.directmapping.mapping.model.util.MappingObject;
+import org.smooks.directmapping.mapping.model.JSONMappingModelBuilder;
+import org.smooks.directmapping.model.ModelBuilder;
+import org.smooks.directmapping.model.ModelBuilderException;
+
+import org.smooks.directmapping.model.xml.XSDModelBuilder;
 import org.xml.sax.SAXException;
 
-import com.google.gson.Gson;
 
 
+import java.io.BufferedReader;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+
+import javax.xml.transform.stream.StreamSource;
 
 
 
@@ -19,27 +34,124 @@ public class Freemarker_Smooks_External_Template {
 	 */
 	 public static void main(String[] args) throws IOException, SAXException, SmooksException, InterruptedException
 	    {
-	
 		 
+		 	ModelBuilder builderXML;
+		    JSONMappingModelBuilder jsonmodel;
+		    List<String> elements = new ArrayList<String>(); 
+		 /**
+		 //XML
 		 
-		    String json =  "{\"source\":\"agp4bWwtdG8teG1scg8LEglzb3VyY2VYTUwYSQw\",\"target\":\"agp4bWwtdG8teG1scg8LEglzb3VyY2VYTUwYSQw\",\"mapping\":[\n  {\n    \"id\": \"1\",\n    \"from\": \"/shiporder/item/price\",\n    \"to\": \"/catalog/book/price\",\n    \"rowid\": \"1\"\n  },\n  {\n    \"id\": \"2\",\n    \"from\": \"/shiporder/item/quantity\",\n    \"to\": \"/catalog/book/@id\",\n    \"rowid\": \"2\"\n  },\n  {\n    \"id\": \"3\",\n    \"from\": \"/shiporder/shipto/name\",\n    \"to\": \"/catalog/book/author\",\n    \"rowid\": \"3\"\n  },\n  {\n    \"id\": \"4\",\n    \"from\": \"/shiporder/item/title\",\n    \"to\": \"/catalog/book/title\",\n    \"rowid\": \"4\"\n  },\n  {\n    \"id\": \"5\",\n    \"from\": \"/shiporder/shipto/city\",\n    \"to\": \"/catalog/book/genre\",\n    \"rowid\": \"5\"\n  }\n],\"functions\":[]}";
-
-		    
-		    Gson gson = new Gson();
-		     
-		    
+		 String xml = getStringFromInputStream(new FileInputStream("input/input-message.xml"));
+	 	  
+	   
+		
+		
+	   
+		
+		
+		try {
 			
-	 		//convert the json string back to object
-	 		MappingObject obj = gson.fromJson(json, MappingObject.class);
-		        // Now do the magic.
-		        //Data data = new Gson().fromJson(json, Data.class);
-
-		        // Show it.
-		     System.out.println(gson.toJson(obj));
+			builderXML = new XMLSampleModelBuilder(xml);	
+			builderXML.configureModel();
+			jsonmodel = new JSONMappingModelBuilder(builderXML.buildModel().getDocumentElement());
+			System.out.println(jsonmodel.getJSON().toString());
+		} catch (Exception e) {
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		String file = null;
+		file = "input/PO.xsd";
+		XSDModelBuilder xsdModelBuilder;
+		try {
+			xsdModelBuilder = new XSDModelBuilder(URI.createFileURI(file));
+			Set<String> elementNames = xsdModelBuilder.getRootElementNames();
+			Iterator<String> it = elementNames.iterator();
+			while (it.hasNext()) {
+				String name = it.next();
+				elements.add(name);
+			
+			}
+			
+			((XSDModelBuilder)xsdModelBuilder).setRootElementName("purchaseOrder");
+			xsdModelBuilder.configureModel();
+			jsonmodel = new JSONMappingModelBuilder(xsdModelBuilder.buildModel().getDocumentElement());
+			System.out.println(jsonmodel.getJSON().toString());
+			
+			
+		} catch (ModelBuilderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		**/
+		//XSD
+		XSDModelBuilder builderXSD;
+		 // ModelBuilder builderXSD;
+		     
+		     String xsd = getStringFromInputStream(new FileInputStream("input/PO.xsd")); 	     
+		     try {
+				builderXSD = new XSDModelBuilder(xsd);
+				Set<String> elementNames = builderXSD.getRootElementNames();
+				Iterator<String> it = elementNames.iterator();
+				while (it.hasNext()) {
+					String name = it.next();
+					elements.add(name);
+					System.out.println(name);
+				}
+				((XSDModelBuilder)builderXSD).setRootElementName("purchaseOrder");
+				
+				jsonmodel = new JSONMappingModelBuilder(builderXSD.buildModel().getDocumentElement());
+				System.out.println(jsonmodel.getJSON().toString());
+			} catch (ModelBuilderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		  
+		       
+			
+			
+		     
+		    		     
+		    	 
 		    }
 	 
 	 
 	    
+	// convert InputStream to String
+		private static String getStringFromInputStream(InputStream is) {
+	 
+			BufferedReader br = null;
+			StringBuilder sb = new StringBuilder();
+	 
+			String line;
+			try {
+	 
+				br = new BufferedReader(new InputStreamReader(is));
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+	 
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+	 
+			return sb.toString();
+	 
+		}
 	 
 }
 	 

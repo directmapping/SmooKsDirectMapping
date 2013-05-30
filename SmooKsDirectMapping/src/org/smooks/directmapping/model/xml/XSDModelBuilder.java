@@ -80,27 +80,28 @@ import org.xml.sax.SAXException;
  * Uses the Eclipse Schema Infoset Model API.
  *
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author <a href="mailto:michal skackov at gmail">michal skackov at gmail</a> 
  */
 public class XSDModelBuilder extends ModelBuilder {
 
     private Map<String, XSDElementDeclaration> elements = new LinkedHashMap<String, XSDElementDeclaration>();
     private Map<String, XSDTypeDefinition> types = new LinkedHashMap<String, XSDTypeDefinition>();
-//	private ResourceSet resourceSet;
-//	private Set<URI> loadedSchemas = new HashSet<URI>();
+	private ResourceSet resourceSet;
+	private Set<URI> loadedSchemas = new HashSet<URI>();
     private Stack<XSDTypeDefinition> elementExpandStack = new Stack<XSDTypeDefinition>();
     private String rootElementName;
     private Properties nsPrefixes = new Properties();
 
-    /*
+
     public XSDModelBuilder(URI schemaURI) throws IOException, ModelBuilderException {
 		this.resourceSet = createResourceSet();
 		loadSchema(schemaURI);
 	}
-*/
+
     
     public XSDModelBuilder(String xsd) throws IOException, ModelBuilderException {
-	//	this.resourceSet = createResourceSet();
-		loadSchema(new ByteArrayInputStream(xsd.getBytes("utf-8")));
+		this.resourceSet = createResourceSet();
+		loadSchema(xsd);//new ByteArrayInputStream(xsd.getBytes("utf-8")));
 	}
     
 	private ResourceSet createResourceSet() {
@@ -143,7 +144,7 @@ public class XSDModelBuilder extends ModelBuilder {
      * Validate the supplied message against this XSD ModelBuilder instance.
      * @throws SAXException Validation error.
      * @throws IOException Error reading the XSD Sources.
-   
+   */
 	public void validate(Document message) throws SAXException, IOException {
 		StreamSource[] xsdSources = new StreamSource[loadedSchemas.size()];
 		int i = 0;
@@ -174,14 +175,14 @@ public class XSDModelBuilder extends ModelBuilder {
 			}
 		}
 	}
-	  */
+	  
 	/**
 	 * resolves a schema for a given system id on behalf of a list of schemes that were
 	 * extracted in a former step in #validate.
 	 * 
 	 * @see #validate
 	 * 
-	
+	*/
 	public class SchemeListLSResourceResolver implements LSResourceResolver {
 
 		public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId,
@@ -210,16 +211,25 @@ public class XSDModelBuilder extends ModelBuilder {
 
 	}
 	
-	 */
-	private void loadSchema(InputStream inputStream) throws IOException, ModelBuilderException {
+	 
+	private void loadSchema(String inputStream) throws IOException, ModelBuilderException {
 
 		Map<String, Object> options = new HashMap<String, Object>();
 		options.put(XSDResourceImpl.XSD_TRACK_LOCATION, true);
 
 
 		XSDParser parser = new  XSDParser(options);
-		parser.parse(inputStream);
+		
+		parser.parseString(inputStream);
 		XSDSchema schema = parser.getSchema();
+		String location = "uri://directmapping.appspot.com/";
+		if (!(schema.getSchemaForSchemaNamespace().isEmpty() && schema.getTargetNamespace().isEmpty()))
+		{
+			location = location + "" + schema.getSchemaForSchemaNamespace().replace("http://", "") + "/" + schema.getTargetNamespace().replace("http://", "");
+		}
+
+		schema.setSchemaLocation(location);
+				
 		if (schema.getContents().isEmpty()) {
 			throw new ModelBuilderException("Failed to load schema '" + inputStream.toString() + "'."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -235,18 +245,16 @@ public class XSDModelBuilder extends ModelBuilder {
 		for (int i = 0; i < typeDefs.size(); i++) {
 			XSDTypeDefinition type = (XSDTypeDefinition) typeDefs.get(i);
 			types.put(type.getName(), type);
+			System.out.println(type.getComplexType());
 		}
-/*
-		EList<Resource> schemaResources = resourceSet.getResources();
-		for (Resource schemaRes : schemaResources) {
-			loadedSchemas.add(schemaRes.getURI());
-		}
-*/
+
+		
+
 		
 	}
 
 	
-	/*
+	
 	private void loadSchema(URI schemaURI) throws IOException, ModelBuilderException {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xsd", new XSDResourceFactoryImpl()); //$NON-NLS-1$
 		Resource resource = resourceSet.getResource(schemaURI, true);
@@ -274,6 +282,7 @@ public class XSDModelBuilder extends ModelBuilder {
 		for (int i = 0; i < typeDefs.size(); i++) {
 			XSDTypeDefinition type = (XSDTypeDefinition) typeDefs.get(i);
 			types.put(type.getName(), type);
+			System.out.println(type.getComplexType());
 		}
 
 		EList<Resource> schemaResources = resourceSet.getResources();
@@ -284,7 +293,7 @@ public class XSDModelBuilder extends ModelBuilder {
 		resourceSet.getResources().remove(resource);
 	}
 
-*/
+
     private void expand(XSDElementDeclaration elementDeclaration, int minOccurs, int maxOccurs, Node parent, Document document) {
         XSDTypeDefinition typeDef;
 
@@ -356,6 +365,10 @@ public class XSDModelBuilder extends ModelBuilder {
 
 	private void processComplexType(Document document, Element element, XSDComplexTypeDefinition complexTypeDef) {
         XSDParticle particle = complexTypeDef.getComplexType();
+        if(particle != null) {
+        	 particle = complexTypeDef.getComplexType();
+        }
+        
         EList<XSDAttributeGroupContent> attributes = complexTypeDef.getAttributeContents();
 
         addAttributes(element, attributes);
