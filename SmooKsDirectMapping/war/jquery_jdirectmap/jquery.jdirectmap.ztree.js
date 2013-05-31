@@ -47,6 +47,82 @@ jQuery(document).ready(function(){
 							helper_init_xml();
 							createUploader();
 							$("#mapping_main").hide();
+							$("#tranform_input_data").hide();
+							$("#xsd_input_data").hide();
+							
+							$("#button-xsd").toggle(function(){
+								
+								helper_init_xml();
+								$("#source_xml_area").val("");
+								$("#dest_xml_area").val("");
+								$("#source_xml_area").attr('rows', '15');
+								$("#dest_xml_area").attr('rows', '15');
+								$("#xmlsubmit").hide();
+								$("#input_data").show();
+								$("#tranform_input_data").hide();
+								$("#xsd_input_data").show();
+								$("#button-xsd").text("Import only from XML");
+								$("#source_xml_text").text("Source Sample XML (Optional for Tranformation) :");
+								$("#target_xml_text").text("Target Sample XML (Optional for Tranformation) :");
+								$("#mapping_main").hide();
+
+							}, function() {
+								
+								helper_init_xml();
+								$("#source_xml_area").attr('rows', '25');
+								$("#dest_xml_area").attr('rows', '25');
+								$("#input_data").show();
+								$("#mapping_main").hide();
+								$("#tranform_input_data").hide();
+								$("#xsd_input_data").hide();
+								$("#xmlsubmit").show();
+								$("#button-xsd").text("Import XSD");
+								$("#source_xml_text").text("Source XML:");
+								$("#target_xml_text").text("Target XML:");
+
+								
+								
+							});
+							
+							$("#buttons-transform").click(function(){
+								
+								$("#input_data").hide();
+								$("#tranform_input_data").show();
+								$("#xsd_input_data").hide();
+								
+							});
+							
+							$("#xsdsubmit").click(function(){
+								
+							
+								var sourceXSD = $("#source_xsd_area").val();
+								if($("#source_xml_area").val().length < 1)
+								{
+									// get root elements as drop down list to select as this is required or determine the root if only one is present
+									var xsddata = $.parseXML(sourceXSD);
+									var _root = $(xsddata).children(':first-child');
+												
+									if(_root.find('> element').length > 1)
+										{
+										
+										}
+									else
+										{
+									var rootname =  _root.find('> element').attr('name')
+								}
+								}
+								
+									
+								
+							});
+							
+							$("#transformsubmit").click(function(){
+								
+								alert('transformsubmit');
+							});
+							
+							
+							
 							$("#xmlsubmit").click(function(){  
 								
 							//parameter object definition
@@ -117,6 +193,11 @@ jQuery(document).ready(function(){
    function helper_ui_xml_to_map(){
 	   
 		$("#input_data").hide();
+		$("#tranform_input_data").hide();
+		$("#xsd_input_data").hide();
+		$("#button-xsd").hide();
+		$("#button-transform").hide();
+		
 		$('#mapping_list').hideCol("id")
 		$("#mapping_main").show();
 		
