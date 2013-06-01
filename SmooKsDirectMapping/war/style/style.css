@@ -3,6 +3,19 @@
 				width: 100%;
 			}
 			
+			
+			#popuperror_textarea{
+    padding: 20px;
+    border-radius: 10px;
+    behavior: url('/js/lib/PIE-1.0.0/PIE.htc'); /* for IE6-8 */
+    border: 3px solid #ccc;
+    outline: none;
+    width: 85%;
+    height: 85%;
+    
+}
+
+
 			#tree_source{
 				width: 95%;
 				height: 400px;

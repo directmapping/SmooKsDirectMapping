@@ -211,13 +211,13 @@ function helper_grid(table_element){
 			}
 		
 		if($("#functionname").val() == ""){
-			alert("Please specify unique funcation name");	
+			helper_ui_xml_to_map("Please specify unique funcation name","Warning");	
 		}
 		else if($("#par_tree_target" ).find('span').length == 0){
-			alert("Please specify at least one ouput parameter");	
+			helper_ui_xml_to_map("Please specify at least one ouput parameter","Warning");
 			}
 		else if($("#par_tree_source" ).find('span').length == 0){
-			alert("Please specify at least one input parameter");				
+			helper_ui_xml_to_map("Please specify at least one input parameter","Warning"); 	
 		}
 		else{
 			
@@ -286,7 +286,8 @@ function helper_grid(table_element){
 			}
 			else{
 				if($("#createfunction").val() == "Create"){
-					alert("Function with name " + functionname + " already exists!")
+				
+					helper_ui_xml_to_map("Function with name " + functionname + " already exists!","Warning"); 
 				}
 				
 				
@@ -305,7 +306,7 @@ function helper_grid(table_element){
 				 var dataString = '';
 				 var ids = $table.getDataIDs();
 				 dataString += 'Selected Row: ' + $table.getGridParam('selrow') + '\nRow ID: ' + ids[$table.getGridParam('selrow') - 1];
-				 alert(dataString);
+				 
 				});	
 	
 	$("#getdata").click(function(){
@@ -314,8 +315,7 @@ function helper_grid(table_element){
 					 for(var i = 0; i < ids.length; i++){
 						dataString += 'postion: ' + i + ' ' + ids[i] + '\n';
 					 }
-				 alert(dataString);
-				 
+			
 				 
 				 
 				 
