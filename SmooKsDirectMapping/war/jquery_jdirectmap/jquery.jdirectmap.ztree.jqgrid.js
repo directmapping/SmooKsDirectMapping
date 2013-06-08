@@ -369,14 +369,15 @@ function helper_grid(table_element){
 		
 		
 		
-		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-		data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
-		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
-		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
-		 //setting action as transform xml
-	  //  data[data.length]=new param('action','transform');
-		
-	 	$.download("/export",data);   // pass all the parameters
+			data[0] = new param("sourceXMLKey",jQuery.fn.jDirectMapTreeInit.sourceXMLKey);
+			data[1] = new param("targetXMLKey",jQuery.fn.jDirectMapTreeInit.targetXMLKey);
+			data[2] = new param("sourceXSDKey",jQuery.fn.jDirectMapTreeInit.sourceXSDKey);
+			data[3] = new param("targetXSDKey",jQuery.fn.jDirectMapTreeInit.targetXSDKey);
+			data[4] = new param("sourceRootElement",jQuery.fn.jDirectMapTreeInit.sourceRootElement);
+			data[5] = new param("targetRootElement",jQuery.fn.jDirectMapTreeInit.targetRootElement);
+			data[6] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
+			data[7] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
+		 	$.download("/export",data);   // pass all the parameters
 	
 				
 
@@ -396,12 +397,16 @@ function helper_grid(table_element){
 				
 				storeGrid();
 				 
-			data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-			data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
-			data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
-			data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
-			 //setting action as transform xml
-			data[data.length]=new param('action','transform');
+				data[0] = new param("sourceXMLKey",jQuery.fn.jDirectMapTreeInit.sourceXMLKey);
+				data[1] = new param("targetXMLKey",jQuery.fn.jDirectMapTreeInit.targetXMLKey);
+				data[2] = new param("sourceXSDKey",jQuery.fn.jDirectMapTreeInit.sourceXSDKey);
+				data[3] = new param("targetXSDKey",jQuery.fn.jDirectMapTreeInit.targetXSDKey);
+				data[4] = new param("sourceRootElement",jQuery.fn.jDirectMapTreeInit.sourceRootElement);
+				data[5] = new param("targetRootElement",jQuery.fn.jDirectMapTreeInit.targetRootElement);
+				data[6] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
+				data[7] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
+				//setting action as transform xml
+				data[data.length]=new param('action','transform');
 			
 			 	$.download("/transform",data); 
 		
@@ -422,12 +427,16 @@ function helper_grid(table_element){
 			}	
 			storeGrid();
 				 
-		data[0] = new param("sourceXML",jQuery.fn.jDirectMapTreeInit.sourceKey);
-		data[1] = new param("targetXML",jQuery.fn.jDirectMapTreeInit.targetKey);
-		data[2] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
-		data[3] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
+		data[0] = new param("sourceXMLKey",jQuery.fn.jDirectMapTreeInit.sourceXMLKey);
+		data[1] = new param("targetXMLKey",jQuery.fn.jDirectMapTreeInit.targetXMLKey);
+		data[2] = new param("sourceXSDKey",jQuery.fn.jDirectMapTreeInit.sourceXSDKey);
+		data[3] = new param("targetXSDKey",jQuery.fn.jDirectMapTreeInit.targetXSDKey);
+		data[4] = new param("sourceRootElement",jQuery.fn.jDirectMapTreeInit.sourceRootElement);
+		data[5] = new param("targetRootElement",jQuery.fn.jDirectMapTreeInit.targetRootElement);
+		data[6] = new param("mapping", JSON.stringify(jQuery.fn.jDirectMapTreeInit.mapping, null, 2));
+		data[7] = new param("functions", JSON.stringify(jQuery.fn.jDirectMapTreeInit.functions, null, 2));
 		 //setting action as export template
-		 data[data.length]=new param('action','export_template');
+		data[data.length]=new param('action','template');
 		
 		$.download("/transform",data); 
 	

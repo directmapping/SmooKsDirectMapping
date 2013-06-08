@@ -23,10 +23,17 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -63,7 +70,7 @@ public abstract class TemplateBuilder {
 	private Document model;
 	private List<Mapping> mappings = new ArrayList<Mapping>();
 	private XPathFactory xpathFactory = XPathFactory.newInstance();
-	private XPathNamespaceContext namespaceContext;
+	private NamespaceContext namespaceContext;
 
 	/**
 	 * Public constructor.
@@ -111,7 +118,7 @@ public abstract class TemplateBuilder {
 	public Node getModelNode(String xpathExpr) throws XPathExpressionException {
 		XPath xpath = xpathFactory.newXPath();
 		xpath.setNamespaceContext(namespaceContext);
-		return (Node) xpath.evaluate(xpathExpr, model, XPathConstants.NODE);
+		return  (Node) xpath.evaluate(xpathExpr, model, XPathConstants.NODE);
 	}
 
 	/**
@@ -673,26 +680,72 @@ public abstract class TemplateBuilder {
 
 	private class XPathNamespaceContext implements NamespaceContext {
 
-		private Properties namespaces;
+		//private Properties namespaces;
+		private Map<String, String> urisByPrefix = new HashMap<String, String>();
 
+		private Map<String, Set> prefixesByURI = new HashMap<String, Set>();
+		
+		
+		  
 		private XPathNamespaceContext(Properties namespaces) {
-			this.namespaces = namespaces;
+		    addNamespace(XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
+		    addNamespace(XMLConstants.XMLNS_ATTRIBUTE, XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+		    addNamespace("smk",ModelBuilder.NAMESPACE);
+		    
+		    Enumeration e = namespaces.propertyNames();
+
+			while (e.hasMoreElements()) {
+			      String key = (String) e.nextElement();
+			      addNamespace(key , namespaces.getProperty(key));
+			}			
 		}
+		
+		 public XPathNamespaceContext() {
+			    addNamespace(XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
+			    addNamespace(XMLConstants.XMLNS_ATTRIBUTE, XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+			    addNamespace("smk",ModelBuilder.NAMESPACE);
+		}
+
+		public synchronized void addNamespace(String prefix, String namespaceURI) {
+			    urisByPrefix.put(prefix, namespaceURI);
+			    if (prefixesByURI.containsKey(namespaceURI)) {
+			      (prefixesByURI.get(namespaceURI)).add(prefix);
+			    } else {
+			      Set<String> set = new HashSet<String>();
+			      set.add(prefix);
+			      prefixesByURI.put(namespaceURI, set);
+			    }
+			  }
 
 		public String getNamespaceURI(String prefix) {
 			if (prefix.equals("smk")) { //$NON-NLS-1$
 				return ModelBuilder.NAMESPACE;
 			} else {
-				return namespaces.getProperty(prefix);
-			}
+			
+			 if (prefix == null)
+		      throw new IllegalArgumentException("prefix cannot be null");
+		    if (urisByPrefix.containsKey(prefix))
+		      return (String) urisByPrefix.get(prefix);
+		    else
+		      return XMLConstants.NULL_NS_URI;
+		      }
 		}
 
 		public String getPrefix(String namespaceURI) {
-			return null;
+			 return (String) getPrefixes(namespaceURI).next();
 		}
 
 		public Iterator getPrefixes(String namespaceURI) {
-			return null;
+			 	if (namespaceURI == null){
+			      throw new IllegalArgumentException("namespaceURI cannot be null");
+			    }
+			    if (prefixesByURI.containsKey(namespaceURI)) {
+			      return ((Set) prefixesByURI.get(namespaceURI)).iterator();
+			    } else {
+			      return Collections.EMPTY_SET.iterator();
+			    }
+			  
 		}
 	}
+	
 }

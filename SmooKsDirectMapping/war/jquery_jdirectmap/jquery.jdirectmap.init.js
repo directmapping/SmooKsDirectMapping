@@ -38,19 +38,27 @@
 							
 	    		sessvars.$.clearMem();
 	   	
-							jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
-				 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["target"]), $("#tree_target"),"target");
-				 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
-				 			jQuery.fn.jDirectMapTreeInit.targetKey = request["targetXML"];
+							jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["sourceJSON"]), $("#tree_source"),"source");
+				 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["targetJSON"]), $("#tree_target"),"target");
+				 			jQuery.fn.jDirectMapTreeInit.sourceXMLKey = request["sourceXMLKey"];
+				 			jQuery.fn.jDirectMapTreeInit.targetXMLKey = request["targetXMLKey"];
+				 			jQuery.fn.jDirectMapTreeInit.sourceXSDKey = request["sourceXSDKey"];
+				 			jQuery.fn.jDirectMapTreeInit.targetXSDKey = request["targetXSDKey"];
+				 			jQuery.fn.jDirectMapTreeInit.sourceRootElement = request["sourceRootElement"];
+				 			jQuery.fn.jDirectMapTreeInit.targetRootElement = request["targetRootElement"];
 				 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
 		            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
 						  
-		            		sessvars.sourceXML = jQuery.fn.jDirectMapTreeInit.sourceKey;
-		        			sessvars.targetXML = jQuery.fn.jDirectMapTreeInit.targetKey;
+		            		sessvars.sourceXMLKey = jQuery.fn.jDirectMapTreeInit.sourceXMLKey;
+		        			sessvars.targetXMLKey = jQuery.fn.jDirectMapTreeInit.targetXMLKey;
+		        			sessvars.sourceXSDKey = jQuery.fn.jDirectMapTreeInit.sourceXSDKey;
+		        			sessvars.targetXSDKey = jQuery.fn.jDirectMapTreeInit.targetXSDKey;
+		        			sessvars.sourceRootElement = jQuery.fn.jDirectMapTreeInit.sourceRootElement;
+		        			sessvars.targetRootElement = jQuery.fn.jDirectMapTreeInit.targetRootElement;
 		        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
 		        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
-		        			sessvars.source = jQuery.parseJSON(request["source"]);
-							sessvars.target = jQuery.parseJSON(request["target"]);
+		        			sessvars.sourceJSON = jQuery.parseJSON(request["sourceJSON"]);
+							sessvars.targetJSON = jQuery.parseJSON(request["targetJSON"]);
 					
 			
 	        		helper_grid("#mapping_list");	
@@ -63,8 +71,65 @@
 	    });
 	}
 
-	
+	  function helper_ui_xml_to_map(){
+		   
+			$("#input_data").hide();
+			$("#tranform_input_data").hide();
+			$("#xsd_input_data").hide();
+			$("#button-xsd").hide();
+			$("#button-transform").hide();
+			
+			$('#mapping_list').hideCol("id")
+			$("#mapping_main").show();
+			
+			$("#function_area").val("//Please specify function. FreeMarker syntax \n//Example : \n \"Hello ${in1}!\ See attached invoice for book ${in2}\"");
+			jQuery.fn.jDirectMapTreeInit.editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
+			       lineNumbers: true,
+			       matchBrackets: true
+			     });
+			$("#function_table").css('width','100%')   
+			  
+			$("#mapping_list").setGridWidth($(document).width()*0.40);
+			$("#mapping_list").setGridWidth($(document).width()*0.40);
+			$("#mapping_list").css('width','100%'); 
+			$("#gbox_mapping_list").css('width','100%'); 
+			$("#gview_mapping_list").css('width','100%'); 
+			$("#gridpager").css('width','100%');
+			$("#mapping_list").css('width','100%');
+			$(".ui-jqgrid-hdiv").css('width','100%');
+			$(".ui-jqgrid-htable").css('width','100%');
+			$(".ui-jqgrid-bdiv").css('width','100%');
+		}
+		
+	 
+	   function helper_ui_msg(errormsg, type){
+		   $("#popuperror").empty();
+		   $("#popuperror").append('<textarea id="popuperror_textarea"/>')
+		   var text_area   = $("#popuperror").children("#popuperror_textarea");
+		   text_area.text(errormsg);
+		   text_area.attr('readonly', true);
+		   
+		   $("#popuperror").dialog({		   
+				// display drop down pop up message to show
+				  autoOpen: true,
+				  height: 'auto',
+				  width: 'auto',
+			      modal: true,
+			      title:   'Message Window - ' + type,
+			      buttons: {
+			          "Ok": function() {
+			            $(this).dialog("close");
+			          }										        
+			        },
+			        close: function() {
+			        	$("#popuperror").empty();
+			        }
+			});
+		}
 function helper_init_xml(){
+	
+
+	
 		$("#source_xml_area").val("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>	<shiporder orderid=\"889923\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"shiporder.xsd\"><orderperson>John Smith</orderperson>							  <shipto>							    <name>Ola Nordmann</name>							    <address>Langgt 23</address>							    <city>4000 Stavanger</city>							    <country>Norway</country>							  </shipto>							  <item>							    <title>Empire Burlesque</title>							    <note>Special Edition</note>							    <quantity>12</quantity>							    <price>12.90</price>							  </item>							  <item>							    <title>Hide your heart</title>							    <quantity>1</quantity>							    <price>9.90</price>							  </item>							</shiporder>");
 	
 		$("#target_xml_area").val(						"<?xml version=\"1.0\"?>" +

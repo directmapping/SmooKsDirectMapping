@@ -3,8 +3,10 @@ package org.smooks.directmapping.gae;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import org.smooks.directmapping.mapping.model.util.MappingObject;
 import org.smooks.directmapping.mapping.model.util.Mappings;
 import org.smooks.directmapping.model.ModelBuilder;
 import org.smooks.directmapping.model.xml.XMLSampleModelBuilder;
+import org.smooks.directmapping.model.xml.XSDModelBuilder;
 import org.smooks.directmapping.template.exception.InvalidMappingException;
 import org.smooks.directmapping.template.freemarker.FreeMarkerTemplateBuilder;
 import org.xml.sax.SAXException;
@@ -102,19 +105,55 @@ public class ImportServlet extends HttpServlet {
 
 			JsonArray functionsArray = elemfunctions.getAsJsonArray();
 
-			String sourceXML = getStoredXML(obj.getSource(), "sourceXML");
-			String targetXML = getStoredXML(obj.getTarget(),
-					"targetXML");
+			String sourceXML = ""; 
+			String targetXML = "";
+			String sourceXSD = "";
+			String targetXSD = "";
+			boolean sampleXML = false;
+			boolean schemaXSD = true;
+			
+			if (obj.getSourceXMLKey() != null && obj.getSourceXMLKey().length() > 0){
+				sourceXML = getStoreFile(obj.getSourceXMLKey(), "sourceXML");
+				sampleXML = true;
+			}
+			if (obj.getTargetXMLKey() != null && obj.getTargetXMLKey().length() > 0){
+				targetXML = getStoreFile(obj.getTargetXMLKey(), "targetXML");
+			}
+			if (obj.getSourceXSDKey() != null && obj.getSourceXSDKey().length() > 0){
+				sourceXSD = getStoreFile(obj.getSourceXSDKey(), "sourceXSD");
+			}else{
+				schemaXSD = false;
+			}
+			if (obj.getTargetXSDKey() != null && obj.getTargetXSDKey().length() > 0){
+				targetXSD = getStoreFile(obj.getTargetXSDKey(), "targetXSD");
+			}else{
+				schemaXSD = false;
+			}
+			
+			
+			String sourceRootElement = obj.getSourceRootElement();
+			String targetRootElement = obj.getTargetRootElement();
 
+			
 			JsonObject jsonObj = new JsonObject();
 			jsonObj.addProperty("success", "true");
 			jsonObj.add("mapping", jsonArray);
 			jsonObj.add("functions", functionsArray);
-			jsonObj.addProperty("sourceXML", obj.getSource());
-			jsonObj.addProperty("targetXML", obj.getTarget());
-			jsonObj.addProperty("source", processXMLtoJSON(sourceXML));
-			jsonObj.addProperty("target", processXMLtoJSON(targetXML));
-
+			jsonObj.addProperty("sourceXMLKey", obj.getSourceXMLKey());
+			jsonObj.addProperty("targetXMLKey", obj.getTargetXMLKey());
+			jsonObj.addProperty("sourceXSDKey", obj.getSourceXSDKey());
+			jsonObj.addProperty("targetXSDKey", obj.getTargetXSDKey());
+			jsonObj.addProperty("sourceRootElement", sourceRootElement);
+			jsonObj.addProperty("targetRootElement", targetRootElement);
+		
+			
+			if(schemaXSD){
+				jsonObj.addProperty("sourceJSON", processXSDtoJSON(sourceXSD,sourceRootElement));
+				jsonObj.addProperty("targetJSON", processXSDtoJSON(targetXSD,targetRootElement));
+			}else{
+				jsonObj.addProperty("sourceJSON", processXMLtoJSON(sourceXML));
+				jsonObj.addProperty("targetJSON", processXMLtoJSON(targetXML));
+			}
 			returnJSON(jsonObj, print);
 
 		} catch (JsonSyntaxException e) {
@@ -158,7 +197,35 @@ public class ImportServlet extends HttpServlet {
 
 	}
 
-
+	private String processXSDtoJSON(String xsd, String rootElement) {
+		XSDModelBuilder builder;
+		JSONMappingModelBuilder jsonmodel;
+		try {
+			
+			builder = new XSDModelBuilder(xsd);
+			
+			/** DEBUG **/
+			List<String> elements = new ArrayList<String>(); 
+			Set<String> elementNames = builder.getRootElementNames();
+			Iterator<String> it = elementNames.iterator();
+			while (it.hasNext()) {
+				String name = it.next();
+				elements.add(name);
+				 logger.log(Level.INFO, "XSD root elements : " + name);
+			}
+			/** DEBUG **/
+			((XSDModelBuilder)builder).setRootElementName(rootElement);
+			
+			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
+			return jsonmodel.getJSON();
+			
+		} catch (Exception e) {
+			 logger.log(Level.WARNING, "XML to JSON XML problem occured : " + e.getMessage()); 
+			 return "";
+		  }
+		
+		
+	}
 	private String processXMLtoJSON(String xml) {
 		ModelBuilder builder;
 		JSONMappingModelBuilder jsonmodel;
@@ -178,7 +245,7 @@ public class ImportServlet extends HttpServlet {
 
 	}
 
-	private String getStoredXML(String keyString, String propertyName) {
+	private String getStoreFile(String keyString, String propertyName) {
 
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

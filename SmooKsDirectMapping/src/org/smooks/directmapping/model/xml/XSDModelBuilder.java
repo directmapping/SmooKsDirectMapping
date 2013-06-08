@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.dom.DOMSource;
@@ -61,6 +63,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.util.XSDParser;
 import org.eclipse.xsd.util.XSDResourceFactoryImpl;
 import org.eclipse.xsd.util.XSDResourceImpl;
+import org.smooks.directmapping.gae.TransformServlet;
 import org.smooks.directmapping.model.ModelBuilder;
 import org.smooks.directmapping.model.ModelBuilderException;
 import org.smooks.directmapping.template.xml.XMLFreeMarkerTemplateBuilder;
@@ -91,7 +94,10 @@ public class XSDModelBuilder extends ModelBuilder {
     private Stack<XSDTypeDefinition> elementExpandStack = new Stack<XSDTypeDefinition>();
     private String rootElementName;
     private Properties nsPrefixes = new Properties();
+    
 
+	private static final Logger logger = Logger
+			.getLogger(TransformServlet.class.getCanonicalName());
 
     public XSDModelBuilder(URI schemaURI) throws IOException, ModelBuilderException {
 		this.resourceSet = createResourceSet();
@@ -194,7 +200,7 @@ public class XSDModelBuilder extends ModelBuilder {
 				input.setByteStream(in);
 				return input;
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				logger.log(Level.INFO, "SchemeListLSResourceResolver : " + ex.getMessage());  //$NON-NLS-1$ 
 				return null;
 			}
 		}
@@ -245,7 +251,6 @@ public class XSDModelBuilder extends ModelBuilder {
 		for (int i = 0; i < typeDefs.size(); i++) {
 			XSDTypeDefinition type = (XSDTypeDefinition) typeDefs.get(i);
 			types.put(type.getName(), type);
-			System.out.println(type.getComplexType());
 		}
 
 		
@@ -282,7 +287,6 @@ public class XSDModelBuilder extends ModelBuilder {
 		for (int i = 0; i < typeDefs.size(); i++) {
 			XSDTypeDefinition type = (XSDTypeDefinition) typeDefs.get(i);
 			types.put(type.getName(), type);
-			System.out.println(type.getComplexType());
 		}
 
 		EList<Resource> schemaResources = resourceSet.getResources();
@@ -323,7 +327,10 @@ public class XSDModelBuilder extends ModelBuilder {
             
             if(elementNS == null || elementNS.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)) {
                 element = document.createElement(elementName);
-            } else {            	
+            } else if ( getPrefix(elementNS) == null){
+            	element = document.createElement(elementName);
+            }else{
+                    	
             	String nsPrefix = getPrefix(elementNS);
             	
             	element = document.createElementNS(elementNS, nsPrefix + ":" + elementName); //$NON-NLS-1$
@@ -347,7 +354,7 @@ public class XSDModelBuilder extends ModelBuilder {
                 	ModelBuilder.setElementType(element, ElementType.simple);                	
                 }
             } else if(typeDef != null) {
-                System.out.println("?? " + typeDef); //$NON-NLS-1$
+            	logger.log(Level.INFO, "?? " + typeDef);  //$NON-NLS-1$
             }
         } finally {
             elementExpandStack.pop();
@@ -356,10 +363,11 @@ public class XSDModelBuilder extends ModelBuilder {
 
 	private String getPrefix(String elementNS) {
 		String nsPrefix = nsPrefixes.getProperty(elementNS);
-		if(nsPrefix == null) {
-			nsPrefix = "ns" + nsPrefixes.size(); //$NON-NLS-1$
-			nsPrefixes.setProperty(elementNS, nsPrefix);
-		}
+		//if(nsPrefix == null) {
+			//nsPrefix = "ns" + nsPrefixes.size(); //$NON-NLS-1$
+			//nsPrefixes.setProperty(elementNS, nsPrefix);
+			
+		//}
 		return nsPrefix;
 	}
 
@@ -440,7 +448,9 @@ public class XSDModelBuilder extends ModelBuilder {
 
                 if(attributeNS == null || attributeNS.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)) {
                 	element.setAttribute(name, value);
-                } else {
+                } else if ( getPrefix(attributeNS) == null){
+                	element.setAttribute(name, value);
+                }else{
                 	String nsPrefix = getPrefix(attributeNS);
                 	
                 	element.setAttributeNS(attributeNS, nsPrefix + ":" + name, value); //$NON-NLS-1$

@@ -1,52 +1,27 @@
-<?xml version="1.0"encoding="UTF-8"?>
-
-<#list doc.order?children as c>
-- ${c?node_type} <#if c?node_type = 'element'>${c?node_name}</#if>
-</#list> 
-
-		
-	
-<#list doc.order.@@ as attr>
-- ${attr?node_name} = ${attr}
-</#list> 
-
-
-		
-	
-<#list doc.order.* as c>
-- ${c?node_name}
-</#list>  
-
-
-
-   <salesorder>
-    <details>
-        <orderid>${doc["order/@id"]}</orderid>
-        <customer>
-           
-            <name>${doc["order/header/customer"]}</name>
-        </customer>
-    </details>
-   <#list doc["order/order-items"]  as order_items>
-   <itemList>
-    
-   		<#list doc["order/order-items/order-item"]  as order_item>
-   		<item>
-   		 <orderid>${doc["order/header/customer/@number"]}</orderid>
-   			<id>${order_item.@id}</id>
-   			<productid>${order_item.product}</productid>
-   			<quantity>${order_item.quantity[0]!""}</quantity>
-   			<price>${order_item.price[0]!""}</price>
-   			
-   			 	 <#list doc["order/order-items/order-item/quantity"]  as prd>
-   	 ${prd}
-   	 ${order_item.priceprice[0]!"0"} * ${prd} 
-   	 </#list>
-   	 
-   		</item>
-   		</#list>
-   	</itemList>
-   	</#list>   
-  
-   
-</salesorder>
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.3.xsd" xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">
+<ftl:freemarker applyOnElement="#document">
+<ftl:template><![CDATA[<?xml version="1.0" xmlns="ns1:http://tempuri.org/po.xsd" encoding="UTF-8"?>
+<purchaseOrder>
+    <shipTo country='${.vars["purchaseOrder"]["shipTo"]["@country"][0]!}'>
+        <name>${.vars["purchaseOrder"]["shipTo"]["name"][0]!}</name>        
+        <street>${.vars["purchaseOrder"]["shipTo"]["street"][0]!}</street>        
+        <city>${.vars["purchaseOrder"]["shipTo"]["city"][0]!}</city>        
+        <state>${.vars["purchaseOrder"]["shipTo"]["state"][0]!}</state>        
+        <zip>${.vars["purchaseOrder"]["shipTo"]["zip"][0]!}</zip>        
+    </shipTo>    
+    <billTo>
+        <name>#required</name>        
+        <street>#required</street>        
+        <city>#required</city>        
+        <state>#required</state>        
+        <zip>#required</zip>        
+    </billTo>    
+    <items>
+    </items>    
+</purchaseOrder>]]></ftl:template>
+</ftl:freemarker>
+<resource-config selector="#document">
+<resource>org.milyn.delivery.DomModelCreator</resource>
+</resource-config>
+</smooks-resource-list>

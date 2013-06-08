@@ -4,18 +4,23 @@ jQuery(document).ready(function(){
 
 							
 	
-							if(sessvars.sourceXML!=null)
+							if(sessvars.sourceJSON!=null)
 							{
 								helper_init_xml();
 								createUploader();
-								jQuery.fn.jDirectMapTreeInit.sourceKey = sessvars.sourceXML;
-								jQuery.fn.jDirectMapTreeInit.targetKey = sessvars.targetXML;
+								jQuery.fn.jDirectMapTreeInit.sourceXMLKey = sessvars.sourceXMLKey;
+								jQuery.fn.jDirectMapTreeInit.targetXMLKey = sessvars.targetXMLKey;
 								jQuery.fn.jDirectMapTreeInit.mapping = sessvars.mapping;
 								jQuery.fn.jDirectMapTreeInit.functions = sessvars.functions;
 								
-								jQuery.fn.jDirectMapTreeInit(sessvars.source, $("#tree_source"),"source");
-					 			jQuery.fn.jDirectMapTreeInit(sessvars.target, $("#tree_target"),"target");
-					 		
+								jQuery.fn.jDirectMapTreeInit(sessvars.sourceJSON, $("#tree_source"),"source");
+					 			jQuery.fn.jDirectMapTreeInit(sessvars.targetJSON, $("#tree_target"),"target");
+					 			  
+			            		jQuery.fn.jDirectMapTreeInit.sourceXSDKey = sessvars.sourceXSDKey;
+			        			jQuery.fn.jDirectMapTreeInit.targetXSDKey = sessvars.targetXSDKey;
+			        			jQuery.fn.jDirectMapTreeInit.sourceRootElement =sessvars.sourceRootElement;
+			        			jQuery.fn.jDirectMapTreeInit.targetRootElement = sessvars.targetRootElement;
+			        			
 					 			
 					 			helper_grid("#mapping_list");	
 			            		helper_ui_xml_to_map();
@@ -84,23 +89,91 @@ jQuery(document).ready(function(){
 								
 							});
 							
-							$("#buttons-transform").click(function(){
+							$("#button-transform").click(function(){
 								
 								$("#input_data").hide();
 								$("#tranform_input_data").show();
 								$("#xsd_input_data").hide();
+								sessvars.$.clearMem();
+								$("#source_transform_area").val("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+									    "	<purchaseOrder>" +
+									    "	    <shipTo country='US'>" +
+										     "	        <name>Alice Smith</name>" +
+											     "	        <street>123 Maple Street</street>" +
+											     "	        <city>Mill Valley</city>" +
+											     "	        <state>CA</state>" +
+											     "	        <zip>90952</zip>" +
+											     "	    </shipTo>" +
+										     "	    <billTo>" +
+										     "	        <name>Smooks Direct Mapping - US</name>" +
+											     "	        <street>1919 Connecticut Ave NW</street>" +
+											     "	        <city>Washington</city>" +
+											     "	        <state>DC</state>" +
+											     "	        <zip>20009</zip>" +
+											     "    </billTo>" +
+										     "	    <items>" +
+										     "	    </items>" +
+										     "</purchaseOrder>");
+
+										
+										$("#template_transform_area").val("<smooks-resource-list xmlns=\"http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.3.xsd\" xmlns:ftl=\"http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd\">" +
+										     "	<ftl:freemarker applyOnElement=\"#document\">" +
+									    "	<ftl:template><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+									    "	<Order>" +
+									    "	    <address country='${.vars[\"purchaseOrder\"][\"shipTo\"][\"@country\"][0]!}'>" +
+										     "        <name>${.vars[\"purchaseOrder\"][\"shipTo\"][\"name\"][0]!}</name>        " +
+											     "	        <street>${.vars[\"purchaseOrder\"][\"shipTo\"][\"street\"][0]!}</street>        " +
+											     "	        <city>${.vars[\"purchaseOrder\"][\"shipTo\"][\"city\"][0]!}</city>" +
+											     "	        <state>${.vars[\"purchaseOrder\"][\"shipTo\"][\"state\"][0]!}</state>" +
+											     "       <zip>${.vars[\"purchaseOrder\"][\"shipTo\"][\"zip\"][0]!}</zip>" +
+											     "	    </address>" +
+										     "  <billTo>" +
+										     "    <name>Smooks Direct Mapping - EU</name>" +
+											     "      <street>Wiedner Hauptstrasse 12</street>" +
+											     "   <city>Vienna</city>" +
+											     "     <country>Austria</country>" +
+											     "     <blz>A-1104</blz>" +
+											     "   </billTo>" +
+										     "   <items>" +
+										     "   </items>" +
+										     "</Order>]]>" +
+									    "</ftl:template>" +
+									    "</ftl:freemarker>" +
+									    "<resource-config selector=\"#document\">" +
+									    "<resource>org.milyn.delivery.DomModelCreator</resource>" +
+									    "</resource-config>" +
+									    "</smooks-resource-list>");
+										
 								
 							});
+							
+							
 							
 							$("#xsdsubmit").click(function(){
 								
 								try{
 									
+									
+									//parameter object definition
+									var param=function(name,value){
+										this.name=name;
+										this.value=value;
+									}	
+									
+									 var data=new Array();
+									 
+										
+									  
+
+									
+										
+										
+										
 							
 								var pop_up_div_element ="#popup";
 							    $(pop_up_div_element).empty();
-								var source_rootname = "";
-								var target_rootname = "";
+								var sourceRootElement = "";
+								var targetRootElement = "";
 								var sourceXSD = $("#source_xsd_area").val();
 								var targetXSD = $("#target_xsd_area").val();
 								var sourceXML = $("#source_xml_area").val();
@@ -123,11 +196,11 @@ jQuery(document).ready(function(){
 											}										
 											else{
 												// get the root element
-												source_rootname  =  _root.find('> element').attr('name');
+												sourceRootElement  =  _root.find('> element').attr('name');
 											}
 								}else{
 									// get the root element from XML
-									source_rootname = $($.parseXML(sourceXML)).children(':first-child')[0].localName;								
+									sourceRootElement = $($.parseXML(sourceXML)).children(':first-child')[0].nodeName;								
 								}
 																															
 								// TARGET
@@ -149,11 +222,11 @@ jQuery(document).ready(function(){
 											}
 											else{
 												// get the root element
-												target_rootname  =  _root.find('> element').attr('name');
+												targetRootElement  =  _root.find('> element').attr('name');
 											}
 								}else{
 									// get the root element from XML
-												target_rootname = $($.parseXML(targetXML)).children(':first-child')[0].localName;								
+									targetRootElement = $($.parseXML(targetXML)).children(':first-child')[0].nodeName;								
 									}
 								
 								
@@ -169,41 +242,162 @@ jQuery(document).ready(function(){
 								     buttons: {
 								          "Confirm": function() {
 								        	if($(this).children("#root_dropdown_source").length  > 0){
-								        		  source_rootname = $(this).children("#root_dropdown_source").find(":selected").text();
+								        		sourceRootElement = $(this).children("#root_dropdown_source").find(":selected").text();
 								          	}
 								        	if($(this).children("#root_dropdown_target").length  > 0){
-								        		  target_rootname = $(this).children("#root_dropdown_target").find(":selected").text();
+								        		targetRootElement = $(this).children("#root_dropdown_target").find(":selected").text();
 								        	}
 								
 								            $(this).dialog("close");
 								          }										        
 								        },
 								        close: function() {
-								        	helper_ui_xml_to_map('source_rootname :' + source_rootname + '<br/>' + 'target_rootname :' +  target_rootname, 'Debug');
-									        								        	
+								            								        	
 											$(pop_up_div_element).empty();
+											
+											
+											data[0] = new param("sourceXML",sourceXML);
+											data[1] = new param("targetXML",targetXML);
+											data[2] = new param("sourceXSD", sourceXSD);
+											data[3] = new param("targetXSD", targetXSD);
+											data[4] = new param("sourceRootElement", sourceRootElement);
+											data[5] = new param("targetRootElement", targetRootElement);
+											data[data.length]=new param('action','xml_input');
+											 //making the ajax call
+											 $.ajax({
+													url : "/input",
+													type : "POST",
+													data:data,
+													dataType:"json",
+													success : function(request) {
+													
+														
+														  
+														jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["sourceJSON"]), $("#tree_source"),"source");
+											 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["targetJSON"]), $("#tree_target"),"target");
+											 			jQuery.fn.jDirectMapTreeInit.sourceXMLKey = request["sourceXMLKey"];
+											 			jQuery.fn.jDirectMapTreeInit.targetXMLKey = request["targetXMLKey"];
+											 			jQuery.fn.jDirectMapTreeInit.sourceXSDKey = request["sourceXSDKey"];
+											 			jQuery.fn.jDirectMapTreeInit.targetXSDKey = request["targetXSDKey"];
+											 			jQuery.fn.jDirectMapTreeInit.sourceRootElement = request["sourceRootElement"];
+											 			jQuery.fn.jDirectMapTreeInit.targetRootElement = request["targetRootElement"];
+											 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
+									            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
+													  
+									            		sessvars.sourceXMLKey = jQuery.fn.jDirectMapTreeInit.sourceXMLKey;
+									        			sessvars.targetXMLKey = jQuery.fn.jDirectMapTreeInit.targetXMLKey;
+									        			sessvars.sourceXSDKey = jQuery.fn.jDirectMapTreeInit.sourceXSDKey;
+									        			sessvars.targetXSDKey = jQuery.fn.jDirectMapTreeInit.targetXSDKey;
+									        			sessvars.sourceRootElement = jQuery.fn.jDirectMapTreeInit.sourceRootElement;
+									        			sessvars.targetRootElement = jQuery.fn.jDirectMapTreeInit.targetRootElement;
+									        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+									        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+									        			sessvars.sourceJSON = jQuery.parseJSON(request["sourceJSON"]);
+														sessvars.targetJSON = jQuery.parseJSON(request["targetJSON"]);
+												
+												
+										
+							            		helper_grid("#mapping_list");	
+							            		helper_ui_xml_to_map();
+							            	
+							            	
+																	},
+											 
+													error: function(){
+																helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable');
+														  }
+													 
+											});
+						
+											
 								        }
 								});
 									}
 								else{
-									helper_ui_xml_to_map('source_rootname :' + source_rootname + '<br/>' + 'target_rootname :' +  target_rootname, 'Debug');
-								     
-								sessvars.sourceXML = target_rootname;
-				        		sessvars.targetXML = source_rootname;
+												        		
+				        		data[0] = new param("sourceXML",sourceXML);
+								data[1] = new param("targetXML",targetXML);
+								data[2] = new param("sourceXSD", sourceXSD);
+								data[3] = new param("targetXSD", targetXSD);
+								data[4] = new param("sourceRootElement", sourceRootElement);
+								data[5] = new param("targetRootElement", targetRootElement);
+								data[data.length]=new param('action','xsd_input');
+								 //making the ajax call
+								 $.ajax({
+										url : "/input",
+										type : "POST",
+										data:data,
+										dataType:"json",
+										success : function(request) {
+										
+											
+											  
+											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["sourceJSON"]), $("#tree_source"),"source");
+								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["targetJSON"]), $("#tree_target"),"target");
+								 			jQuery.fn.jDirectMapTreeInit.sourceXMLKey = request["sourceXMLKey"];
+								 			jQuery.fn.jDirectMapTreeInit.targetXMLKey = request["targetXMLKey"];
+								 			jQuery.fn.jDirectMapTreeInit.sourceXSDKey = request["sourceXSDKey"];
+								 			jQuery.fn.jDirectMapTreeInit.targetXSDKey = request["targetXSDKey"];
+								 			jQuery.fn.jDirectMapTreeInit.sourceRootElement = request["sourceRootElement"];
+								 			jQuery.fn.jDirectMapTreeInit.targetRootElement = request["targetRootElement"];
+								 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
+						            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
+										  
+						            		sessvars.sourceXMLKey = jQuery.fn.jDirectMapTreeInit.sourceXMLKey;
+						        			sessvars.targetXMLKey = jQuery.fn.jDirectMapTreeInit.targetXMLKey;
+						        			sessvars.sourceXSDKey = jQuery.fn.jDirectMapTreeInit.sourceXSDKey;
+						        			sessvars.targetXSDKey = jQuery.fn.jDirectMapTreeInit.targetXSDKey;
+						        			sessvars.sourceRootElement = jQuery.fn.jDirectMapTreeInit.sourceRootElement;
+						        			sessvars.targetRootElement = jQuery.fn.jDirectMapTreeInit.targetRootElement;
+						        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
+						        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
+						        			sessvars.sourceJSON = jQuery.parseJSON(request["sourceJSON"]);
+											sessvars.targetJSON = jQuery.parseJSON(request["targetJSON"]);
+									
+									
+							
+				            		helper_grid("#mapping_list");	
+				            		helper_ui_xml_to_map();
+				            	
+				            	
+														},
+								 
+										error: function(xhr, ajaxOptions, thrownError){
+													helper_ui_msg('Problem occured during upload. Please try again!' +  ' '  + xhr.status + '     ' + thrownError, ' Service Unavailable');
+											  }
+										 
+								});
+			
 				        	}
 								}catch(ex){
-									helper_ui_xml_to_map(ex.message, ex.name);
+									helper_ui_msg(ex.message, ex.name);
 								}
 								
 							});
+						
 							
+							
+
 							$("#transformsubmit").click(function(){
 								
-								helper_ui_xml_to_map('transformation submitt', 'Debug');
-							     
+								//parameter object definition
+								var param=function(name,value){
+									this.name=name;
+									this.value=value;
+								}	
+								
+								 var data=new Array();
+								 
+								 
+								 var sourceXML = $("#source_transform_area").val();
+								 var template = $("#template_transform_area").val();
+								 
+								 data[0] = new param("sourceXML",sourceXML);
+								 data[1] = new param("template",template);
+								 
+								 $.download("/smooks",data); 
+									
 							});
-							
-							
 							
 							$("#xmlsubmit").click(function(){  
 								
@@ -215,21 +409,23 @@ jQuery(document).ready(function(){
 							
 							 var data=new Array();
 							 
-
-								data[0] = new param("source",$("#source_xml_area").val());
-								data[1] = new param("target",$("#target_xml_area").val());
-								data[2] = new param("sourceXML", "");
-								data[3] = new param("targetXML", "");
+							  var sourceXML = $("#source_xml_area").val();
+							  var targetXML = $("#target_xml_area").val();
+							  var sourceRootElement = $($.parseXML(sourceXML)).children(':first-child')[0].nodeName;								
+							  var targetRootElement = $($.parseXML(targetXML)).children(':first-child')[0].nodeName;								
 								
-								 //setting action as PUT
-								 data[data.length]=new param('action','PUT');
+							  
+
+								data[0] = new param("sourceXML",sourceXML);
+								data[1] = new param("targetXML",targetXML);
+								data[2] = new param("sourceXSD", "");
+								data[3] = new param("targetXSD", "");
+								data[4] = new param("sourceRootElement", sourceRootElement);
+								data[5] = new param("targetRootElement", targetRootElement);
+								data[data.length]=new param('action','xml_input');
 								 //making the ajax call
 								
-								 //$.post("/downloadXML",data); 
-								
-								//  download file test  $.download("/downloadXML",data);
-								 
-								 /** $.post("/toXML",data);  		url : "/toXML",**/
+							
 								 $.ajax({
 										url : "/input",
 										type : "POST",
@@ -239,19 +435,28 @@ jQuery(document).ready(function(){
 										
 											
 											  
-											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["source"]), $("#tree_source"),"source");
-								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["target"]), $("#tree_target"),"target");
-								 			jQuery.fn.jDirectMapTreeInit.sourceKey = request["sourceXML"];
-								 			jQuery.fn.jDirectMapTreeInit.targetKey = request["targetXML"];
+											jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["sourceJSON"]), $("#tree_source"),"source");
+								 			jQuery.fn.jDirectMapTreeInit(jQuery.parseJSON(request["targetJSON"]), $("#tree_target"),"target");
+								 			jQuery.fn.jDirectMapTreeInit.sourceXMLKey = request["sourceXMLKey"];
+								 			jQuery.fn.jDirectMapTreeInit.targetXMLKey = request["targetXMLKey"];
+								 			jQuery.fn.jDirectMapTreeInit.sourceXSDKey = request["sourceXSDKey"];
+								 			jQuery.fn.jDirectMapTreeInit.targetXSDKey = request["targetXSDKey"];
+								 			jQuery.fn.jDirectMapTreeInit.sourceRootElement = request["sourceRootElement"];
+								 			jQuery.fn.jDirectMapTreeInit.targetRootElement = request["targetRootElement"];
 								 			jQuery.fn.jDirectMapTreeInit.mapping = request["mapping"];
 						            		jQuery.fn.jDirectMapTreeInit.functions = request["functions"];
 										  
-						            		sessvars.sourceXML = jQuery.fn.jDirectMapTreeInit.sourceKey;
-						        			sessvars.targetXML = jQuery.fn.jDirectMapTreeInit.targetKey;
+						            		sessvars.sourceXMLKey = jQuery.fn.jDirectMapTreeInit.sourceXMLKey;
+						        			sessvars.targetXMLKey = jQuery.fn.jDirectMapTreeInit.targetXMLKey;
+						        			sessvars.sourceXSDKey = jQuery.fn.jDirectMapTreeInit.sourceXSDKey;
+						        			sessvars.targetXSDKey = jQuery.fn.jDirectMapTreeInit.targetXSDKey;
+						        			sessvars.sourceRootElement = jQuery.fn.jDirectMapTreeInit.sourceRootElement;
+						        			sessvars.targetRootElement = jQuery.fn.jDirectMapTreeInit.targetRootElement;
 						        			sessvars.mapping = jQuery.fn.jDirectMapTreeInit.mapping;
 						        			sessvars.functions =  jQuery.fn.jDirectMapTreeInit.functions;
-						        			sessvars.source = jQuery.parseJSON(request["source"]);
-											sessvars.target = jQuery.parseJSON(request["target"]);
+						        			sessvars.sourceJSON = jQuery.parseJSON(request["sourceJSON"]);
+											sessvars.targetJSON = jQuery.parseJSON(request["targetJSON"]);
+									
 									
 							
 				            		helper_grid("#mapping_list");	
@@ -261,75 +466,21 @@ jQuery(document).ready(function(){
 														},
 								 
 										error: function(){
-													helper_ui_xml_to_map('Problem occured during upload. Please try again!', ' Service Unavailable');
+													helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable');
 											  }
 										 
 								});
 			
-						}); 	
+							}); 	
+						
 							}
-								
-					});
+		
  
-		
-   function helper_ui_xml_to_map(){
-	   
-		$("#input_data").hide();
-		$("#tranform_input_data").hide();
-		$("#xsd_input_data").hide();
-		$("#button-xsd").hide();
-		$("#button-transform").hide();
-		
-		$('#mapping_list').hideCol("id")
-		$("#mapping_main").show();
-		
-		$("#function_area").val("//Please specify function. FreeMarker syntax \n//Example : \n \"Hello ${in1}!\ See attached invoice for book ${in2}\"");
-		jQuery.fn.jDirectMapTreeInit.editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
-		       lineNumbers: true,
-		       matchBrackets: true
-		     });
-		$("#function_table").css('width','100%')   
-		  
-		$("#mapping_list").setGridWidth($(document).width()*0.40);
-		$("#mapping_list").setGridWidth($(document).width()*0.40);
-		$("#mapping_list").css('width','100%'); 
-		$("#gbox_mapping_list").css('width','100%'); 
-		$("#gview_mapping_list").css('width','100%'); 
-		$("#gridpager").css('width','100%');
-		$("#mapping_list").css('width','100%');
-		$(".ui-jqgrid-hdiv").css('width','100%');
-		$(".ui-jqgrid-htable").css('width','100%');
-		$(".ui-jqgrid-bdiv").css('width','100%');
-	}
-	
- 
-   function helper_ui_xml_to_map(errormsg, type){
-	   $("#popuperror").empty();
-	   $("#popuperror").append('<textarea id="popuperror_textarea"/>')
-	   var text_area   = $("#popuperror").children("#popuperror_textarea");
-	   text_area.text(errormsg);
-	   text_area.attr('readonly', true);
-	   
-	   $("#popuperror").dialog({		   
-			// display drop down pop up message to show
-			  autoOpen: true,
-			  height: 'auto',
-			  width: 'auto',
-		      modal: true,
-		      title:   'Message Window - ' + type,
-		      buttons: {
-		          "Ok": function() {
-		            $(this).dialog("close");
-		          }										        
-		        },
-		        close: function() {
-		        	$("#popuperror").empty();
-		        }
-		});
-	}
 	
 	
-	
+							
+							
+});
 	
 
 	

@@ -208,7 +208,7 @@ public class XMLSampleModelBuilder extends ModelBuilder {
 				QName childElementQName;
 
 				if(childElement.getPrefix() != null) {
-					childElementQName = new QName(childElement.getNamespaceURI(), childElement.getLocalName(), childElement.getPrefix());
+					childElementQName = new QName(childElement.getNamespaceURI(), childElement.getNodeName(), childElement.getPrefix());
 				} else {
 					childElementQName = new QName(childElement.getNamespaceURI(), childElement.getTagName());
 				}

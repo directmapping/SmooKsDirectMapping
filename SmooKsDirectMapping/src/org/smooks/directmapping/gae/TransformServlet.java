@@ -60,31 +60,57 @@ public class TransformServlet extends HttpServlet {
 
 	private void doSmooksTransformation(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
-		String source = req.getParameter("sourceXML");
-		String target = req.getParameter("targetXML");
-		String mapping = URLDecoder
-				.decode(req.getParameter("mapping"), "UTF-8");
-		String functions = URLDecoder.decode(req.getParameter("functions"),
-				"UTF-8");
+		String sourceXMLKey = req.getParameter("sourceXMLKey");
+		String targetXMLKey = req.getParameter("targetXMLKey");
+		String sourceXSDKey = req.getParameter("sourceXSDKey");
+		String targetXSDKey = req.getParameter("targetXSDKey");
+		String sourceRootElement = req.getParameter("sourceRootElement");
+		String targetRootElement = req.getParameter("targetRootElement");
+	    String mapping = URLDecoder.decode(req.getParameter("mapping"), "UTF-8");
+		String functions = URLDecoder.decode(req.getParameter("functions"),"UTF-8");
 		String action = req.getParameter("action");
-
+		boolean sampleXML = false;
+		boolean schemaXSD = true;
 		String template = "";
 		Smooks smooks = null;
-		String sourceXML = getStoredXML(source, "sourceXML");
-		String targetXML = getStoredXML(target, "targetXML");
+		String sourceXML = "";
+		String targetXML = "";
+		String sourceXSD = "";
+		String targetXSD = "";
+		
+		if (sourceXMLKey != null && sourceXMLKey.length() > 0){
+			sourceXML = getStoredFile(sourceXMLKey, "sourceXML");
+			sampleXML = true;
+		}
+		if (targetXMLKey != null && targetXMLKey.length() > 0){
+			targetXML = getStoredFile(targetXMLKey, "targetXML");
+		}
+		if (sourceXSDKey != null && sourceXSDKey.length() > 0){
+			sourceXSD = getStoredFile(sourceXSDKey, "sourceXSD");
+		}  else{
+			schemaXSD = false;
+		}
+		if (targetXSDKey != null && targetXSDKey.length() > 0){
+			targetXSD = getStoredFile(targetXSDKey, "targetXSD");
+		} else{
+			schemaXSD = false;
+		}
+	
 		Writer outWriter = new StringWriter();
 		StreamResult resultStream = new StreamResult(outWriter);
 
 		try {
 
-			template = SmooksFMUtil.createTemplate(sourceXML, mapping,
-					functions, targetXML);
-
-			if (action.equals("export_template")) {
-				prepareXMLFile(resp,
+			if(schemaXSD){
+				template = SmooksFMUtil.createTemplateFromXSD(sourceXSD, sourceRootElement, mapping, functions, targetXSD, targetRootElement);
+			}else{
+				template = SmooksFMUtil.createTemplateFromXML(sourceXML, mapping,functions, targetXML);
+			}
+			if (action.equals("template")) {
+				prepareResponseFile(resp,
 						SmooksFMUtil.getSmooksConfigurationWriter(template),
 						"SmooksConfig");
-			} else {
+			} else if (action.equals("transform")) {
 
 				smooks = new Smooks();
 
@@ -93,49 +119,59 @@ public class TransformServlet extends HttpServlet {
 						new TemplatingConfiguration(template)), "$document");
 				smooks.setFilterSettings(new FilterSettings(
 						StreamFilterType.DOM));
-
+				
+				if(sampleXML){
+				// remove namespaces without prefix
+				sourceXML = SmooksFMUtil.removeXmlStringNamespaceWithouthPrefix(sourceXML);
 				StreamSource sourceStream = new StreamSource(
 						new ByteArrayInputStream(sourceXML.getBytes("utf-8")));
 
 				// SmooKs transformation
 				smooks.filterSource(sourceStream, resultStream);
-				prepareXMLFile(resp, resultStream.getWriter(), target);
+				}else{
+					// no sample document present
+					outWriter.write("There is no sample XML present please export Smooks configuration template and use the transformation feature to try the transformation result.");
+					outWriter.flush();
+				}
+					
+				
+				prepareResponseFile(resp, resultStream.getWriter(), targetRootElement);
 
 			}
 
 		} catch (XPathExpressionException e2) {
 			// TODO Auto-generated catch block
-			logger.log(Level.SEVERE, "Exception happening when processing key "
-					+ source, e2);
+			logger.log(Level.SEVERE, "Exception happend when processing key "
+					+ sourceXMLKey, e2);
 			throw new RuntimeException("Failed to process XML document", e2);
 		} catch (InvocationTargetException e2) {
 			// TODO Auto-generated catch block
 			logger.log(Level.SEVERE, "Exception happening when processing key "
-					+ source, e2);
+					+ sourceXMLKey, e2);
 			throw new RuntimeException("Failed to process XML document", e2);
 		} catch (ModelBuilderException e2) {
 			// TODO Auto-generated catch block
 			logger.log(Level.SEVERE, "Exception happening when processing key "
-					+ source, e2);
+					+ sourceXMLKey, e2);
 			throw new RuntimeException("Failed to process XML document", e2);
 		} catch (TemplateBuilderException e2) {
 			// TODO Auto-generated catch block
 			logger.log(Level.SEVERE, "Exception happening when processing key "
-					+ source, e2);
+					+ sourceXMLKey, e2);
 			throw new RuntimeException("Failed to process XML document", e2);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Exception happening when processing key "
-					+ source, e);
+					+ sourceXMLKey, e);
 			throw new RuntimeException("Failed to process XML document", e);
 		} finally {
-			if (!action.equals("export_template") && smooks != null) {
+			if (!action.equals("template") && smooks != null) {
 				smooks.close();
 			}
 		}
 
 	}
 
-	private String getStoredXML(String keyString, String propertyName) {
+	private String getStoredFile(String keyString, String propertyName) {
 
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -158,11 +194,11 @@ public class TransformServlet extends HttpServlet {
 		return "";
 	}
 
-	private void prepareXMLFile(HttpServletResponse resp, Writer xml,
+	private void prepareResponseFile(HttpServletResponse resp, Writer responseFile,
 			String target) {
 		try {
 
-			ByteArrayInputStream b = new ByteArrayInputStream(xml.toString()
+			ByteArrayInputStream b = new ByteArrayInputStream(responseFile.toString()
 					.getBytes("UTF-8"));
 			DataInputStream in = new DataInputStream(b);
 

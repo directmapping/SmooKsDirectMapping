@@ -1,209 +1,32 @@
-<order id='332'>
-    <header>
-        <customer number="123">Joe</customer>
-    </header>
-    <order-items>
-        <order-item id='1'>
-            <product>1</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='2'>
-            <product>2</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='3'>
-            <product>3-2</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='4'>
-            <product>4</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='5'>
-            <product>5</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='6'>
-            <product>6</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='7'>
-            <product>7</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='8'>
-            <product>8</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='9'>
-            <product>9</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='10'>
-            <product>10</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='11'>
-            <product>11</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='12'>
-            <product>12</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='13'>
-            <product>13</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='14'>
-            <product>14</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='15'>
-            <product>15</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='16'>
-            <product>16</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='17'>
-            <product>17</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='18'>
-            <product>18</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='19'>
-            <product>19</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='20'>
-            <product>20</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-    </order-items>
-     <order-items>
-        <order-item id='1'>
-            <product>1</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='2'>
-            <product>2</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='3'>
-            <product>3-2</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='4'>
-            <product>4</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='5'>
-            <product>5</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='6'>
-            <product>6</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='7'>
-            <product>7</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='8'>
-            <product>8</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='9'>
-            <product>9</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='10'>
-            <product>10</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='11'>
-            <product>11</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='12'>
-            <product>12</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='13'>
-            <product>13</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='14'>
-            <product>14</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='15'>
-            <product>15</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='16'>
-            <product>16</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='17'>
-            <product>17</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='18'>
-            <product>18</product>
-            <quantity>2</quantity>
-            <price>8.80</price>
-        </order-item>
-        <order-item id='19'>
-            <product>19</product>
-           
-            <price>8.80</price>
-        </order-item>
-        <order-item id='20'>
-            <product>20</product>
-            <quantity>2</quantity>
-        
-        </order-item>
-    </order-items>
-</order>
+<?xml version="1.0"?>
+<purchaseOrder xmlns="ns1:http://tempuri.org/po.xsd" orderDate="1999-10-20">
+    <shipTo country="US">
+        <name>Alice Smith</name>
+        <street>123 Maple Street</street>
+        <city>Mill Valley</city>
+        <state>CA</state>
+        <zip>90952</zip>
+    </shipTo>
+    <billTo country="US">
+        <name>Robert Smith</name>
+        <street>8 Oak Avenue</street>
+        <city>Old Town</city>
+        <state>PA</state>
+        <zip>95819</zip>
+    </billTo>
+    <comment>Hurry, my lawn is going wild!</comment>
+    <items>
+        <item partNum="872-AA">
+            <productName>Lawnmower</productName>
+            <quantity>1</quantity>
+            <USPrice>148.95</USPrice>
+            <comment>Confirm this is electric</comment>
+        </item>
+        <item partNum="926-AA">
+            <productName>Baby Monitor</productName>
+            <quantity>1</quantity>
+            <USPrice>39.98</USPrice>
+            <shipDate>1999-05-21</shipDate>
+        </item>
+    </items>
+</purchaseOrder>

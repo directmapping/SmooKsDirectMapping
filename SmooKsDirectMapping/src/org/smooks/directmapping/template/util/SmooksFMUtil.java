@@ -51,6 +51,7 @@ import org.smooks.directmapping.model.ModelBuilder;
 import org.smooks.directmapping.model.ModelBuilderException;
 import org.smooks.directmapping.model.ModelBuilder.ElementType;
 import org.smooks.directmapping.model.xml.XMLSampleModelBuilder;
+import org.smooks.directmapping.model.xml.XSDModelBuilder;
 import org.smooks.directmapping.template.CollectionMapping;
 import org.smooks.directmapping.template.exception.InvalidMappingException;
 import org.smooks.directmapping.template.exception.TemplateBuilderException;
@@ -186,9 +187,9 @@ public class SmooksFMUtil {
 		
 	}
 	
-	public static String createTemplate(String sourceXML, String mapping, String functions, String targetXML)
+	public static String createTemplateFromXML(String sourceXML, String mapping, String functions, String targetXML)
 			throws InvocationTargetException, ModelBuilderException,
-			TemplateBuilderException, XPathExpressionException, IOException {
+			TemplateBuilderException, XPathExpressionException, IOException, TransformerException {
 		FreeMarkerTemplateBuilder targetBuilder = null;
 		FreeMarkerTemplateBuilder sourceBuilder = null;
 		ModelBuilder targetModel;
@@ -201,6 +202,38 @@ public class SmooksFMUtil {
 		targetModel.configureModel();
 		
 		sourceModel = new XMLSampleModelBuilder(sourceXML);
+		ModelBuilder.setStrictModel(sourceModel.buildModel(), true)		;
+		ModelBuilder.setEnforceCollectionSubMappingRules((Element) sourceModel.buildModel().getDocumentElement(), true)		;
+		sourceModel.configureModel();
+		
+	
+		targetBuilder = new XMLFreeMarkerTemplateBuilder(targetModel);
+		sourceBuilder =  new XMLFreeMarkerTemplateBuilder(sourceModel);
+		targetBuilder = addMappping(sourceBuilder, mapping, targetBuilder);
+		targetBuilder = addFunctions(sourceBuilder, functions, targetBuilder);
+		targetBuilder.setNodeModelSource(true);
+		return targetBuilder.buildTemplate();
+
+		
+
+	}
+
+	public static String createTemplateFromXSD(String sourceXSD, String sourceRootElement, String mapping, String functions, String targetXSD, String targetRootElement)
+			throws InvocationTargetException, ModelBuilderException,
+			TemplateBuilderException, XPathExpressionException, IOException, TransformerException {
+		FreeMarkerTemplateBuilder targetBuilder = null;
+		FreeMarkerTemplateBuilder sourceBuilder = null;
+		ModelBuilder targetModel;
+		ModelBuilder sourceModel;
+
+		targetModel = new XSDModelBuilder(targetXSD);
+		((XSDModelBuilder)targetModel).setRootElementName(targetRootElement);
+		ModelBuilder.setStrictModel(targetModel.buildModel(), true)		;
+		ModelBuilder.setEnforceCollectionSubMappingRules((Element) targetModel.buildModel().getDocumentElement(), true)		;
+		targetModel.configureModel();
+		
+		sourceModel = new XSDModelBuilder(sourceXSD);
+		((XSDModelBuilder)sourceModel).setRootElementName(sourceRootElement);
 		ModelBuilder.setStrictModel(sourceModel.buildModel(), true)		;
 		ModelBuilder.setEnforceCollectionSubMappingRules((Element) sourceModel.buildModel().getDocumentElement(), true)		;
 		sourceModel.configureModel();
@@ -240,7 +273,7 @@ public class SmooksFMUtil {
 
 	}
 
-	public static FreeMarkerTemplateBuilder addMappping(FreeMarkerTemplateBuilder sourceBuilder,  String mapping,   FreeMarkerTemplateBuilder targetBuilder) throws InvalidMappingException, XPathExpressionException{
+	public static FreeMarkerTemplateBuilder addMappping(FreeMarkerTemplateBuilder sourceBuilder,  String mapping,   FreeMarkerTemplateBuilder targetBuilder) throws InvalidMappingException, XPathExpressionException, TransformerException{
 		
 		JsonParser parser = new JsonParser();
 		JsonArray o = (JsonArray)parser.parse(mapping);
@@ -261,21 +294,27 @@ public class SmooksFMUtil {
 		    Node source =  sourceBuilder.getModelNode(from);
 		    Node target =  targetBuilder.getModelNode(to);
 		    
+		    if(source == null || target == null)
+		    {
+		    	throw new InvalidMappingException("cannot find matching source-to-target dependency"); 
+		    }else{
 		   
 		    	if(source.getNodeType() == Node.ELEMENT_NODE) { 
-		   if(ModelBuilder.getElementType((Element) source) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) source) > 1){
-			   
-			   CollectionMapping collection = new CollectionMapping(from, target, source.getNodeName());
-			   collectionMappings.add(collection);
-		   }
-		   else{
-			   targetBuilder.addValueMapping(from,target);   
-		   }
-		    	}else
-		    	{
+				   if(ModelBuilder.getElementType((Element) source) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) source) > 1){
+					   CollectionMapping collection = new CollectionMapping(from, target, source.getNodeName());
+					   collectionMappings.add(collection);
+				   }
+				   else{
+					   targetBuilder.addValueMapping(from,target);   
+				   }
+		    	}else{
 		    		   targetBuilder.addValueMapping(from,target);   
 		    	}
-		    }	   
+		    }
+		    
+		    
+		    
+		    }
 		}
 		
 		for(CollectionMapping collection : collectionMappings) {
@@ -288,6 +327,17 @@ public class SmooksFMUtil {
 			
 	}
 	
+	public static String removeXmlStringNamespaceWithouthPrefix(String xmlString) {
+		  return xmlString.replaceAll("xmlns.(\"|\').*?(\"|\')", ""); /* remove xmlns declaration */
+		  
+		}
+	
+	public static String removeXmlStringNamespaceAndPreamble(String xmlString) {
+		  return xmlString.replaceAll("(<\\?[^<]*\\?>)?", ""). /* remove preamble */
+		  replaceAll("xmlns.*?(\"|\').*?(\"|\')", "") /* remove xmlns declaration */
+		  .replaceAll("(<)(\\w+:)(.*?>)", "$1$3") /* remove opening tag prefix */
+		  .replaceAll("(</)(\\w+:)(.*?>)", "$1$3"); /* remove closing tags prefix */
+		}
 	
 	public static FreeMarkerTemplateBuilder addFunctions(FreeMarkerTemplateBuilder sourceBuilder,  String functions,   FreeMarkerTemplateBuilder targetBuilder) throws InvalidMappingException, XPathExpressionException{
 		Gson gson = new Gson();

@@ -62,9 +62,11 @@ public class ModelNodeResolver {
 				String nodeNS = node.getNamespaceURI();
 				if(nodeNS != null && nodeNS.length() > 0) {
 					if(node.getNodeType() == Node.ATTRIBUTE_NODE) {
-						pathBuilder.insert(0, "@" + getPrefix(nodeNS) + ":" + ((Attr)node).getName()); //$NON-NLS-1$ //$NON-NLS-2$
+						//pathBuilder.insert(0, "@" + getPrefix(nodeNS) + ":" + ((Attr)node).getName()); //$NON-NLS-1$ //$NON-NLS-2$
+						pathBuilder.insert(0, "@" + ((Attr)node).getName()); //$NON-NLS-1$ //$NON-NLS-2$
 					} else {
-						pathBuilder.insert(0, getPrefix(nodeNS) + ":" + DomUtils.getName((Element) node)); //$NON-NLS-1$
+						//pathBuilder.insert(0, getPrefix(nodeNS) + ":" + DomUtils.getName((Element) node)); //$NON-NLS-1$
+						pathBuilder.insert(0,  DomUtils.getName((Element) node)); //$NON-NLS-1$
 					}				
 				} else {
 					if(node.getNodeType() == Node.ATTRIBUTE_NODE) {

@@ -38,17 +38,28 @@ public class ExportServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String source = req.getParameter("sourceXML");
-		String target = req.getParameter("targetXML");
-		String mappingStr = URLDecoder.decode(req.getParameter("mapping"),
+		
+		
+		String sourceXMLKey = req.getParameter("sourceXMLKey");
+		String targetXMLKey = req.getParameter("targetXMLKey");
+		String sourceXSDKey = req.getParameter("sourceXSDKey");
+		String targetXSDKey = req.getParameter("targetXSDKey");
+		String sourceRootElement = req.getParameter("sourceRootElement");
+		String targetRootElement = req.getParameter("targetRootElement");
+	    String mappingStr = URLDecoder.decode(req.getParameter("mapping"),
 				"UTF-8");
 		String functionStr = URLDecoder.decode(req.getParameter("functions"),
 				"UTF-8");
 		JsonArray mappings = null;
 		JsonArray functions = null;
 		JsonObject json = new JsonObject();
-		json.addProperty("source", source);
-		json.addProperty("target", target);
+		json.addProperty("sourceXMLKey", sourceXMLKey);
+		json.addProperty("targetXMLKey", targetXMLKey);
+		json.addProperty("sourceXSDKey", sourceXSDKey);
+		json.addProperty("targetXSDKey", targetXSDKey);
+		json.addProperty("sourceRootElement",sourceRootElement);
+		json.addProperty("targetRootElement", targetRootElement);
+
 
 		try {
 			JsonParser parser = new JsonParser();

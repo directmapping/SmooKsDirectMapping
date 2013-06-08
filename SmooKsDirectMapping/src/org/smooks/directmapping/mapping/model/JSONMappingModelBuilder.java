@@ -24,13 +24,13 @@ public class JSONMappingModelBuilder {
 		super();
 		this.collection =  new ArrayList<ZTreeModel>();
 		
-		addNodeToModel(new ZTreeModel(1, 0,  root.getLocalName() + " ["+ ModelBuilder.getMinOccurs((Element) root) + ".." + ModelBuilder.getMaxOccurs((Element) root) + "]" , "/" + root.getLocalName(), true, true));
+		addNodeToModel(new ZTreeModel(1, 0,  root.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) root) + ".." + ModelBuilder.getMaxOccurs((Element) root) + "]" , "/" + root.getNodeName(), true, true));
 		
-		vsTraverse(root, 1 , "/" + root.getLocalName());
+		vsTraverse(root, 1 , "/" + root.getNodeName());
 		
 		if(root.hasAttributes())
 		{
-			vsTraverseAttr(root,  1 , "/" + root.getLocalName());
+			vsTraverseAttr(root,  1 , "/" + root.getNodeName());
 		}
 		
 	}
@@ -57,7 +57,7 @@ public class JSONMappingModelBuilder {
 			    	Node currentNode = nodeList.item(i);
 			        
 			    	if(assertAddNodeToTemplate(currentNode)) {
-			    	String currentxpath = xpath +  "/" + currentNode.getLocalName();
+			    	String currentxpath = xpath +  "/" + currentNode.getNodeName();
 			    	
 			        
 			            if(currentNode.hasChildNodes()){
@@ -106,9 +106,9 @@ public class JSONMappingModelBuilder {
 			 
 			  if(ModelBuilder.getElementType((Element) currentNode) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) currentNode) > 1)
 			  {
-				  return  currentNode.getLocalName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]" + " - complex";
+				  return  currentNode.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]" + " - complex";
 			  }
-		  return  currentNode.getLocalName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]";
+		  return  currentNode.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]";
 				
 		}
 		 
