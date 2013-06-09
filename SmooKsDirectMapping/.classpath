@@ -11,9 +11,6 @@
 	<classpathentry kind="lib" path="lib/xom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-gae-2.3.19.jar"/>
-	<classpathentry kind="src" path="template"/>
-	<classpathentry kind="src" path="input"/>
-	<classpathentry kind="src" path="output"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore-2.6.0.v20100614-1136.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.xsd_2.8.1.v20130125-0826.jar"/>

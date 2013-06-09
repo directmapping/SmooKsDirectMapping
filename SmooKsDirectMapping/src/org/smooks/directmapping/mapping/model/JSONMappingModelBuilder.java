@@ -104,7 +104,7 @@ public class JSONMappingModelBuilder {
 		 
 		 private String buildNodeName(Node currentNode) {
 			 
-			  if(ModelBuilder.getElementType((Element) currentNode) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) currentNode) > 1)
+			  if(ModelBuilder.getElementType((Element) currentNode) == ElementType.complex && (ModelBuilder.getMaxOccurs((Element) currentNode) > 1 ||  ModelBuilder.getMaxOccurs((Element) currentNode) < 0 ))
 			  {
 				  return  currentNode.getNodeName() + " ["+ ModelBuilder.getMinOccurs((Element) currentNode) + ".." + ModelBuilder.getMaxOccurs((Element) currentNode) + "]" + " - complex";
 			  }

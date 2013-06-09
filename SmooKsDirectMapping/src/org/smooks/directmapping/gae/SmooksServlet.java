@@ -47,11 +47,11 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
-public class SmooksTransformServlet extends HttpServlet {
+public class SmooksServlet extends HttpServlet {
 	private static DocumentBuilder docBuilder;
 	private Document doc;
 	private static final Logger logger = Logger
-			.getLogger(SmooksTransformServlet.class.getCanonicalName());
+			.getLogger(SmooksServlet.class.getCanonicalName());
 
 	
 	static {

@@ -3,6 +3,20 @@
 jQuery(document).ready(function(){
 
 							
+	$("body").on({
+	    ajaxStart: function() { 
+	    	$(this).addClass("loading"); 
+	        
+	    },
+	    ajaxStop: function() { 
+	        $(this).removeClass("loading"); 
+	    }    
+	});
+	
+	$("#button-reset").click(function(){
+		sessvars.$.clearMem();
+		location.reload();
+	});
 	
 							if(sessvars.sourceJSON!=null)
 							{
@@ -54,6 +68,7 @@ jQuery(document).ready(function(){
 							$("#mapping_main").hide();
 							$("#tranform_input_data").hide();
 							$("#xsd_input_data").hide();
+							$("#button-reset").hide()
 							
 							$("#button-xsd").toggle(function(){
 								
@@ -258,6 +273,10 @@ jQuery(document).ready(function(){
 								
 							});
 							
+							
+							
+							
+							
 							$("#button-transform").click(function(){
 								
 								$("#input_data").hide();
@@ -323,8 +342,7 @@ jQuery(document).ready(function(){
 							
 							$("#xsdsubmit").click(function(){
 								
-								try{
-									
+								
 									
 									//parameter object definition
 									var param=function(name,value){
@@ -340,7 +358,8 @@ jQuery(document).ready(function(){
 									
 										
 										
-										
+									 try{
+													
 							
 								var pop_up_div_element ="#popup";
 							    $(pop_up_div_element).empty();
@@ -476,7 +495,7 @@ jQuery(document).ready(function(){
 																	},
 											 
 													error: function(){
-																helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable');
+																helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable',250,400);
 														  }
 													 
 											});
@@ -535,14 +554,14 @@ jQuery(document).ready(function(){
 														},
 								 
 										error: function(xhr, ajaxOptions, thrownError){
-													helper_ui_msg('Problem occured during upload. Please try again!' +  ' '  + xhr.status + '     ' + thrownError, ' Service Unavailable');
+													helper_ui_msg('Problem occured during upload. Please try again!' +  ' '  + xhr.status + '     ' + thrownError, ' Service Unavailable',550,600);
 											  }
 										 
 								});
-			
-				        	}
+								}
+				        	
 								}catch(ex){
-									helper_ui_msg(ex.message, ex.name);
+									helper_ui_msg(ex.message, ex.name,550,600);
 								}
 								
 							});
@@ -551,7 +570,7 @@ jQuery(document).ready(function(){
 							
 
 							$("#transformsubmit").click(function(){
-								
+								try{
 								//parameter object definition
 								var param=function(name,value){
 									this.name=name;
@@ -576,16 +595,27 @@ jQuery(document).ready(function(){
 									  data: data,
 									  dataType: "text",
 									  success: function (xml){
-												helper_ui_msg(xml, ' Transformation Result :', 600, 700);
+												 helper_ui_msg(xml, ' Transformation Result :', 600, 700);
 												 $.download("/smooks",data); 	
 											
-									  }   
+									  } ,
+										 
+										error: function(){
+													helper_ui_msg('Problem occured during transformation. Please try again!', ' Service Unavailable',250,400);
+											  }  
 									});
+								 
+								 
+								 
+							
+							}catch(ex){
+								helper_ui_msg(ex.message, ex.name,550,600);
+							}
 									
 							});
 							
 							$("#xmlsubmit").click(function(){  
-								
+								try{
 							//parameter object definition
 							var param=function(name,value){
 								this.name=name;
@@ -651,11 +681,13 @@ jQuery(document).ready(function(){
 														},
 								 
 										error: function(){
-													helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable');
+													helper_ui_msg('Problem occured during upload. Please try again!', ' Service Unavailable',250,400);
 											  }
 										 
 								});
-			
+								}catch(ex){
+									helper_ui_msg(ex.message, ex.name,550,600);
+								}
 							}); 	
 						
 							}

@@ -22,7 +22,7 @@
 	<servlet>
 		<description>Smooks Transformation Servlet</description>
 		<servlet-name>smooks</servlet-name>
-		<servlet-class>org.smooks.directmapping.gae.SmooksTransformServlet</servlet-class>
+		<servlet-class>org.smooks.directmapping.gae.SmooksServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>export</servlet-name>

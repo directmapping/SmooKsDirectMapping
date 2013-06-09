@@ -28,9 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="org.smooks.directmapping.gae.SmooksTransformServlet" project="SmooKsDirectMapping" 
-    file="/SmooKsDirectMapping/src/org/smooks/directmapping/gae/SmooksTransformServlet.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="org.smooks.directmapping.gae.SmooksServlet" project="SmooKsDirectMapping" 
+    file="/SmooKsDirectMapping/src/org/smooks/directmapping/gae/SmooksServlet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="191" y="524"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

@@ -317,3 +317,22 @@ a.transparency:hover {
     background: #CC0000;
 }
 
+
+.button-reset {
+    display: block;
+    /*or inline-block*/
+    width: 305px;
+    padding: 7px 0;
+    text-align: center;
+    background: #880000;
+    border-bottom: 1px solid #DDD;
+    color: #FFF;
+    position: relative;
+    z-index: 3;
+    width: 200px;
+    left: 310px;
+    top: -32px;
+}
+.button-reset:hover {
+    background: #CC0000;
+}

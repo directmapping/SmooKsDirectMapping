@@ -91,7 +91,7 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 					else if(treeId == "tree_target") {
 						
 						if(id>1){
-							alert("Currently, there is allowed only one output parameter!");
+							helper_ui_msg("Currently, there is allowed only one output parameter!","User Prompt",250,400);
 						}else{
 						id = "out" + id;
 						$("#" + parId).append("<span class='domBtn_target'   domId='" + treeId + id +  "' xpath='"   + treeNodes[0].xpath + "'>" +  id + ": " + treeNodes[0].xpath + "</span>");
@@ -105,13 +105,13 @@ jQuery.fn.jDirectMapTreeInit = function(data,tree_element,type){
 				
 			} else if ( $(e.target).parents(".domBtnDiv").length > 0) {
 				if(treeId = "tree_source") {
-					alert("Input parameters accept only elements from source tree");
+					helper_ui_msg("Input parameters accept only elements from source tree",250,400);
 				}
 				else if(treeId = "tree_target") {
-					alert("Ouput parameters accept only elements from detination tree");
+					helper_ui_msg("Ouput parameters accept only elements from detination tree",250,400);
 				}
 				else {
-					alert("Only tree elements allowed to be droped here");
+					helper_ui_msg("Only tree elements allowed to be droped here",250,400);
 				}
 			}
 		}

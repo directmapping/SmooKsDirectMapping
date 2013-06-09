@@ -211,13 +211,13 @@ function helper_grid(table_element){
 			}
 		
 		if($("#functionname").val() == ""){
-			helper_ui_xml_to_map("Please specify unique funcation name","Warning");	
+			helper_ui_msg("Please specify unique funcation name","User Prompt",250,400);	
 		}
 		else if($("#par_tree_target" ).find('span').length == 0){
-			helper_ui_xml_to_map("Please specify at least one ouput parameter","Warning");
+			helper_ui_msg("Please specify at least one ouput parameter","User Prompt",250,400);
 			}
 		else if($("#par_tree_source" ).find('span').length == 0){
-			helper_ui_xml_to_map("Please specify at least one input parameter","Warning"); 	
+			helper_ui_msg("Please specify at least one input parameter","User Prompt",250,400); 	
 		}
 		else{
 			
@@ -339,10 +339,7 @@ function helper_grid(table_element){
 					
 				 });
 				 
-	$("#reset").click(function(){
-		sessvars.$.clearMem();
-		location.reload();
-	});
+	
 	
 	
 	$("#collapse").click(function(){

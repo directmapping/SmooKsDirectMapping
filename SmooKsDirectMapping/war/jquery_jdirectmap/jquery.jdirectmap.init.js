@@ -78,11 +78,12 @@
 			$("#xsd_input_data").hide();
 			$("#button-xsd").hide();
 			$("#button-transform").hide();
-			
+			$("#button-transform").hide();
+			$("#button-reset").show()
 			$('#mapping_list').hideCol("id")
 			$("#mapping_main").show();
 			
-			$("#function_area").val("//Please specify function. FreeMarker syntax \n//Example : \n \"Hello ${in1}!\ See attached invoice for book ${in2}\"");
+			$("#function_area").val("//Note : functions are currently not supported by the trasformation engine  \n//Please specify function. FreeMarker syntax \n//Example : \n \"Hello ${in1}!\ See attached invoice for book ${in2}\" \n //Note : functions are currently not supported by the trasformation engine ");
 			jQuery.fn.jDirectMapTreeInit.editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
 			       lineNumbers: true,
 			       matchBrackets: true
@@ -108,7 +109,7 @@
 		   var text_area   = $("#popuperror").children("#popuperror_textarea");
 		   text_area.text(errormsg);
 		   text_area.attr('readonly', true);
-		   
+		   text_area.autoGrowTextArea();
 		   if(height == null)
 			   {			   
 		   height = 'auto';
@@ -259,7 +260,6 @@ function helper_init_xml(){
 		+'			<table id="mapping_list"></table>'
 					
 		+'			<div id="gridpager">	'
-		+'					<input type="button" id="reset"  value="Reset Project"  />'
 		+'					<input type="button" id="deletedata" value="Delete Row" />'
 		+'					<input type="button" id="moveup" value="Move up" />'
 		+'					<input type="button" id="movedown"  value="Move down"  />'
