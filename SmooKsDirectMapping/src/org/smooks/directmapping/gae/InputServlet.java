@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,16 +88,12 @@ public class InputServlet extends HttpServlet {
 				try {
 					returnJSON("", "","", "","", "","", "", "Exception happening during XML document processing " + e.getMessage(), resp.getWriter());
 				} catch (IOException | SAXException e1) {
-					// TODO Auto-generated catch block
 					logger.log(Level.SEVERE, "Exception happening during XML document processing", e1);
-					
 					try {
 						
 						resp.sendRedirect("/");
 					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						logger.log(Level.SEVERE, "Exception happening during XML document processing", e2);
-						
+			      	logger.log(Level.SEVERE, "Exception happening during XML document processing", e2);
 					}
 				}
 			

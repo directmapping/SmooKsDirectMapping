@@ -3,10 +3,8 @@ package org.smooks.directmapping.gae;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 
 import java.util.logging.Level;
@@ -23,7 +21,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.milyn.FilterSettings;
 import org.milyn.Smooks;
@@ -31,20 +28,11 @@ import org.milyn.StreamFilterType;
 import org.milyn.delivery.DomModelCreator;
 import org.milyn.templating.TemplatingConfiguration;
 import org.milyn.templating.freemarker.FreeMarkerTemplateProcessor;
-import org.smooks.directmapping.model.ModelBuilderException;
-import org.smooks.directmapping.template.exception.TemplateBuilderException;
 import org.smooks.directmapping.template.util.SmooksFMUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 public class SmooksServlet extends HttpServlet {
@@ -149,7 +137,7 @@ public class SmooksServlet extends HttpServlet {
 			//
 			resp.setContentType((mimetype != null) ? mimetype
 					: "application/octet-stream"); // "application/octet-stream"
-			// resp.setContentLength( (int) (8192) ); // TODO set to what?
+			// resp.setContentLength( (int) (8192) ); 
 			resp.setHeader("Content-Disposition", "attachment; filename=\""
 					+ "transformation_result_" + target + ".xml" + "\"");
 

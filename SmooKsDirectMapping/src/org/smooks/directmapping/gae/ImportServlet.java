@@ -109,12 +109,10 @@ public class ImportServlet extends HttpServlet {
 			String targetXML = "";
 			String sourceXSD = "";
 			String targetXSD = "";
-			boolean sampleXML = false;
 			boolean schemaXSD = true;
 			
 			if (obj.getSourceXMLKey() != null && obj.getSourceXMLKey().length() > 0){
 				sourceXML = getStoreFile(obj.getSourceXMLKey(), "sourceXML");
-				sampleXML = true;
 			}
 			if (obj.getTargetXMLKey() != null && obj.getTargetXMLKey().length() > 0){
 				targetXML = getStoreFile(obj.getTargetXMLKey(), "targetXML");
@@ -157,10 +155,11 @@ public class ImportServlet extends HttpServlet {
 			returnJSON(jsonObj, print);
 
 		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Exception happening during import", e);
+			
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Exception happening during import", e);
+			
 		}
 
 	}

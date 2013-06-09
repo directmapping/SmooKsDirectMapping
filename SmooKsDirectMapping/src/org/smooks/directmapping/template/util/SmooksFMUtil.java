@@ -44,9 +44,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.eclipse.emf.common.util.URI;
 
 import org.smooks.directmapping.mapping.model.util.Functions;
-import org.smooks.directmapping.mapping.model.util.FunctionsObject;
 import org.smooks.directmapping.mapping.model.util.FunctionsValues;
-import org.smooks.directmapping.mapping.model.util.MappingObject;
 import org.smooks.directmapping.model.ModelBuilder;
 import org.smooks.directmapping.model.ModelBuilderException;
 import org.smooks.directmapping.model.ModelBuilder.ElementType;
