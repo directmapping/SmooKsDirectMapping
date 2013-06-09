@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -32,6 +34,8 @@ import org.milyn.templating.freemarker.FreeMarkerTemplateProcessor;
 import org.smooks.directmapping.model.ModelBuilderException;
 import org.smooks.directmapping.template.exception.TemplateBuilderException;
 import org.smooks.directmapping.template.util.SmooksFMUtil;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -44,10 +48,23 @@ import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 public class SmooksTransformServlet extends HttpServlet {
-
+	private static DocumentBuilder docBuilder;
+	private Document doc;
 	private static final Logger logger = Logger
 			.getLogger(SmooksTransformServlet.class.getCanonicalName());
 
+	
+	static {
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		docBuilderFactory.setNamespaceAware(true);
+		try {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			throw new RuntimeException("Messages.XMLSampleModelBuilder_UnexpectedXMLException", e);
+		}
+	}
+	
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.sendRedirect("/");
@@ -58,34 +75,58 @@ public class SmooksTransformServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String sourceXML = URLDecoder.decode(req.getParameter("sourceXML"), "UTF-8");
-		String template = URLDecoder.decode(req.getParameter("template"), "UTF-8");
+		String smooksconfig = URLDecoder.decode(req.getParameter("template"), "UTF-8");
 		Smooks smooks = null;
 		Writer outWriter = new StringWriter();
 		StreamResult resultStream = new StreamResult(outWriter);
-
-		
+		smooks = new Smooks();
+	
 		try {
-			InputStream is = new ByteArrayInputStream(template.getBytes("utf-8"));
-			smooks = new Smooks();
-			smooks.addConfigurations(is);
+			//InputStream is = new ByteArrayInputStream(template.getBytes("utf-8"));
 			
-		} catch (SAXException e1) {
-			// TODO Auto-generated catch block
+			//smooks.addConfigurations(is);
+			//} catch (SAXException e1) {}
+			
+			
+			try {
+			 doc = docBuilder.parse(new InputSource(new ByteArrayInputStream(smooksconfig.getBytes("utf-8"))));
+			} catch (SAXException e) {
+				logger.log(Level.SEVERE, "Exception happening when processing template "
+						+ smooksconfig, e);
+			
+			}
+			String template = doc.getDocumentElement().getElementsByTagName("ftl:template").item(0).getTextContent() ;
+			
+			if (template != null && template.length() > 0) {
+				
+			
+			smooks.addVisitor(new DomModelCreator(), "$document");
+			smooks.addVisitor(new FreeMarkerTemplateProcessor(
+					new TemplatingConfiguration(template)), "$document");
+			smooks.setFilterSettings(new FilterSettings(StreamFilterType.DOM));
+			
+			
+		
+		
+			// remove namespaces without prefix
+			sourceXML = SmooksFMUtil.removeXmlStringNamespaceWithouthPrefix(sourceXML);
+			StreamSource sourceStream = new StreamSource(
+					new ByteArrayInputStream(sourceXML.getBytes("utf-8")));
+	
+			// SmooKs transformation
+			smooks.filterSource(sourceStream, resultStream);
+			
+			
+			prepareResponseFile(resp, resultStream.getWriter(), "result");
+			
+		
+			}
+			
+		} catch (ParserConfigurationException e1) {
+			
 			e1.printStackTrace();
 		}
 
-		
-		
-		// remove namespaces without prefix
-		sourceXML = SmooksFMUtil.removeXmlStringNamespaceWithouthPrefix(sourceXML);
-		StreamSource sourceStream = new StreamSource(
-				new ByteArrayInputStream(sourceXML.getBytes("utf-8")));
-
-		// SmooKs transformation
-		smooks.filterSource(sourceStream, resultStream);
-		
-		
-		prepareResponseFile(resp, resultStream.getWriter(), "result");
 	}
 
 	

@@ -62,6 +62,170 @@ jQuery(document).ready(function(){
 								$("#target_xml_area").val("");
 								$("#source_xml_area").attr('rows', '15');
 								$("#target_xml_area").attr('rows', '15');
+								
+								$("#source_xsd_area").val("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://tempuri.org/po.xsd\" xmlns=\"http://tempuri.org/po.xsd\" elementFormDefault=\"qualified\">" +
+										 "<xs:annotation>" +
+										"  <xs:documentation xml:lang=\"en\">" +
+										"   Purchase order schema for Example.com." +
+										"   Copyright 2000 Example.com. All rights reserved." +
+										"  </xs:documentation>" +
+										" </xs:annotation>" +
+										
+										" <xs:element name=\"purchaseOrder\" type=\"PurchaseOrderType\"/>" +
+										
+										" <xs:element name=\"comment\" type=\"xs:string\"/>" +
+										
+										" <xs:complexType name=\"PurchaseOrderType\">" +
+										"  <xs:sequence>" +
+										"   <xs:element name=\"shipTo\" type=\"USAddress\"/>" +
+										"   <xs:element name=\"billTo\" type=\"USAddress\"/>" +
+										"   <xs:element ref=\"comment\" minOccurs=\"0\"/>" +
+										"   <xs:element name=\"items\"  type=\"Items\"/>" +
+										"  </xs:sequence>" +
+										"  <xs:attribute name=\"orderDate\" type=\"xs:date\"/>" +
+										" </xs:complexType>" +
+										
+										" <xs:complexType name=\"USAddress\">" +
+										"      <xs:annotation>" +
+										"      <xs:documentation>" +
+										"       Purchase order schema for Example.Microsoft.com." +
+										"       Copyright 2001 Example.Microsoft.com. All rights reserved." +
+										"      </xs:documentation>" +
+										"      <xs:appinfo>" +
+										"        Application info." +
+										"      </xs:appinfo>" +
+										"     </xs:annotation>" +
+										
+										"  <xs:sequence>" +
+										"   <xs:element name=\"name\"   type=\"xs:string\"/>" +
+										"   <xs:element name=\"street\" type=\"xs:string\"/>" +
+										"   <xs:element name=\"city\"   type=\"xs:string\"/>" +
+										"   <xs:element name=\"state\"  type=\"xs:string\"/>" +
+										"   <xs:element name=\"zip\"    type=\"xs:decimal\"/>" +
+										"  </xs:sequence>" +
+										"  <xs:attribute name=\"country\" type=\"xs:NMTOKEN\"" +
+										"     fixed=\"US\"/>" +
+										" </xs:complexType>" +
+										
+										" <xs:complexType name=\"Items\">" +
+										"  <xs:sequence>" +
+										"   <xs:element name=\"item\" minOccurs=\"0\" maxOccurs=\"unbounded\">" +
+										"    <xs:complexType>" +
+										"     <xs:sequence>" +
+										"      <xs:element name=\"productName\" type=\"xs:string\"/>" +
+										"      <xs:element name=\"quantity\">" +
+										"       <xs:simpleType>" +
+										"        <xs:restriction base=\"xs:positiveInteger\">" +
+										"         <xs:maxExclusive value=\"100\"/>" +
+										"        </xs:restriction>" +
+										"       </xs:simpleType>" +
+										"      </xs:element>" +
+										"      <xs:element name=\"USPrice\"    type=\"xs:decimal\"/>" +
+										"      <xs:element ref=\"comment\"   minOccurs=\"0\"/>" +
+										"      <xs:element name=\"shipDate\" type=\"xs:date\" minOccurs=\"0\"/>" +
+										"     </xs:sequence>" +
+										"     <xs:attribute name=\"partNum\" type=\"SKU\" use=\"required\"/>" +
+										"    </xs:complexType>" +
+										"   </xs:element>" +
+										"  </xs:sequence>" +
+										" </xs:complexType>" +
+										
+										" <!-- Stock Keeping Unit, a code for identifying products -->" +
+										" <xs:simpleType name=\"SKU\">" +
+										"  <xs:restriction base=\"xs:string\">" +
+										"   <xs:pattern value=\"\d{3}-[A-Z]{2}\"/>" +
+										"  </xs:restriction>" +
+										" </xs:simpleType>" +
+										"</xs:schema>");
+									
+								$("#source_xml_area").val("<?xml version=\"1.0\"?>" +
+						"		<purchaseOrder xmlns=\"http://tempuri.org/po.xsd\" orderDate=\"1999-10-20\">" +
+						"		    <shipTo country=\"US\">" +
+						"		        <name>Alice Smith</name>" +
+						"		        <street>123 Maple Street</street>" +
+						"		        <city>Mill Valley</city>" +
+						"		        <state>CA</state>" +
+						"		        <zip>90952</zip>" +
+						"		    </shipTo>" +
+						"		    <billTo country=\"US\">" +
+						"		        <name>Robert Smith</name>" +
+						"		        <street>8 Oak Avenue</street>" +
+						"		        <city>Old Town</city>" +
+						"		        <state>PA</state>" +
+						"		        <zip>95819</zip>" +
+						"		    </billTo>" +
+						"		    <comment>Hurry, my lawn is going wild!</comment>" +
+						"		    <items>" +
+						"		        <item partNum=\"872-AA\">" +
+						"		            <productName>Lawnmower</productName>" +
+						"		            <quantity>1</quantity>" +
+						"		            <USPrice>148.95</USPrice>" +
+						"		            <comment>Confirm this is electric</comment>" +
+						"		        </item>" +
+						"		        <item partNum=\"926-AA\">" +
+						"		            <productName>Baby Monitor</productName>" +
+						"		            <quantity>1</quantity>" +
+						"		            <USPrice>39.98</USPrice>" +
+						"		            <shipDate>1999-05-21</shipDate>" +
+						"		        </item>" +
+						"		    </items>" +
+						"		</purchaseOrder>");
+
+								$("#target_xsd_area").val("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> " +
+															"<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">  " +
+															"<xs:element name=\"shiporder\"> " +
+															"  <xs:complexType> " +
+															"    <xs:sequence> " +
+															"      <xs:element name=\"orderperson\" type=\"xs:string\"/> " +
+															"      <xs:element name=\"shipto\"> " +
+															"        <xs:complexType> " +
+															"          <xs:sequence> " +
+															"            <xs:element name=\"name\" type=\"xs:string\"/> " +
+															"            <xs:element name=\"address\" type=\"xs:string\"/> " +
+															"            <xs:element name=\"city\" type=\"xs:string\"/> " +
+															"            <xs:element name=\"country\" type=\"xs:string\"/> " +
+															"          </xs:sequence> " +
+															"        </xs:complexType> " +
+															"      </xs:element> " +
+															"      <xs:element name=\"item\" maxOccurs=\"unbounded\"> " +
+															"        <xs:complexType> " +
+															"          <xs:sequence> " +
+															"            <xs:element name=\"title\" type=\"xs:string\"/> " +
+															"            <xs:element name=\"note\" type=\"xs:string\" minOccurs=\"0\"/> " +
+															"            <xs:element name=\"quantity\" type=\"xs:positiveInteger\"/> " +
+															"            <xs:element name=\"price\" type=\"xs:decimal\"/> " +
+															"          </xs:sequence> " +
+															"        </xs:complexType> " +
+															"      </xs:element> " +
+															"    </xs:sequence> " +
+															"    <xs:attribute name=\"orderid\" type=\"xs:string\" use=\"required\"/> " +
+															"  </xs:complexType> " +
+															"</xs:element> " +
+															"</xs:schema>");
+								$("#target_xml_area").val("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> " +
+								"	<shiporder orderid=\"889923\" " +
+								"	xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+								"	xsi:noNamespaceSchemaLocation=\"shiporder.xsd\"> " +
+								"	  <orderperson>John Smith</orderperson> " +
+								"	  <shipto> " +
+								"	    <name>Ola Nordmann</name> " +
+								"	    <address>Langgt 23</address> " +
+								"	    <city>4000 Stavanger</city> " +
+								"	    <country>Norway</country> " +
+								"	  </shipto> " +
+								"	  <item> " +
+								"	    <title>Empire Burlesque</title> " +
+								"	    <note>Special Edition</note> " +
+								"	    <quantity>1</quantity> " +
+								"	    <price>10.90</price> " +
+								"	  </item> " +
+								"	  <item> " +
+								"	    <title>Hide your heart</title> " +
+								"	    <quantity>1</quantity> " +
+								"	    <price>9.90</price> " +
+								"	  </item> " +
+								"	</shiporder>");
+																			
 								$("#xmlsubmit").hide();
 								$("#input_data").show();
 								$("#tranform_input_data").hide();
@@ -70,6 +234,11 @@ jQuery(document).ready(function(){
 								$("#source_xml_text").text("Source Sample XML (Optional for Tranformation) :");
 								$("#target_xml_text").text("Target Sample XML (Optional for Tranformation) :");
 								$("#mapping_main").hide();
+								
+								
+								
+								
+								
 
 							}, function() {
 								
@@ -95,6 +264,9 @@ jQuery(document).ready(function(){
 								$("#tranform_input_data").show();
 								$("#xsd_input_data").hide();
 								sessvars.$.clearMem();
+								
+							
+								
 								$("#source_transform_area").val("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
 									    "	<purchaseOrder>" +
 									    "	    <shipTo country='US'>" +
@@ -116,7 +288,7 @@ jQuery(document).ready(function(){
 										     "</purchaseOrder>");
 
 										
-										$("#template_transform_area").val("<smooks-resource-list xmlns=\"http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.3.xsd\" xmlns:ftl=\"http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd\">" +
+										$("#template_transform_area").val("<smooks-resource-list xmlns=\"http://www.milyn.org/xsd/smooks-1.1.xsd\" xmlns:core=\"http://www.milyn.org/xsd/smooks/smooks-core-1.3.xsd\" xmlns:ftl=\"http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd\">" +
 										     "	<ftl:freemarker applyOnElement=\"#document\">" +
 									    "	<ftl:template><![CDATA[<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
 									    "	<Order>" +
@@ -262,7 +434,7 @@ jQuery(document).ready(function(){
 											data[3] = new param("targetXSD", targetXSD);
 											data[4] = new param("sourceRootElement", sourceRootElement);
 											data[5] = new param("targetRootElement", targetRootElement);
-											data[data.length]=new param('action','xml_input');
+											data[data.length]=new param('action','xsd_input');
 											 //making the ajax call
 											 $.ajax({
 													url : "/input",
@@ -395,7 +567,20 @@ jQuery(document).ready(function(){
 								 data[0] = new param("sourceXML",sourceXML);
 								 data[1] = new param("template",template);
 								 
-								 $.download("/smooks",data); 
+								
+								 
+								 
+								 $.ajax({
+									  type: 'POST',
+									  url: "/smooks",
+									  data: data,
+									  dataType: "text",
+									  success: function (xml){
+												helper_ui_msg(xml, ' Transformation Result :', 600, 700);
+												 $.download("/smooks",data); 	
+											
+									  }   
+									});
 									
 							});
 							

@@ -15,6 +15,9 @@
 	
 	<script src="./jquery_cookie/jquery.cookie.js" type="text/javascript" ></script>
 	
+	<!-- autogrow textarea plugin -->
+	<script src="./jquery_autogrow/jquery-autogrow-textarea.js" type="text/javascript" ></script>
+	
 	<!--  session variables  -->
 	<script src="./jquery_sessvars/sessvars.js" type="text/javascript" ></script>
 
@@ -81,26 +84,61 @@
 <div id="containerTopSpace"> </div>
 
 				<div id="containerMiddle">
-			<ul id="basicUploadSuccessExample" class="unstyled"></ul>
+			<ul id="basicUploadSuccessExample" class="unstyled"></ul> 
+			<div  id="button-xsd" class="button-xsd">
+			Import XSD</div>
+				<div  id="button-transform" class="button-transform">
+			Transform Documents</div>
 				
+				 <div id="xsd_input_data">
+
+				 <div style="width:48%; overflow-y:auto; float:left;text-align:center;">
+					<p>Source XSD:</p>
+					<textarea id="source_xsd_area" name="source_xsd_area" cols="80" rows="15" ></textarea>
+				</div>
+			   
+				<div style="width:48%; overflow-y:auto; float:rigt;text-align:center;" >
+					<p>Target XSD:</p>
+					<textarea id="target_xsd_area" name="target_xsd_area" cols="80" rows="15" ></textarea>
+				</div>
+				<div style="float:rigt;text-align:center;" >
+					<input id="xsdsubmit" type="submit" value="Upload source and target XSD" />
+					</div>
+
+		</div>
+		
+		
 				 <div id="input_data">
 
 				 <div style="width:48%; overflow-y:auto; float:left;text-align:center;">
-					<p>Source XML:</p>
+					<p id="source_xml_text">Source XML:</p>
 					<textarea id="source_xml_area" name="source_xml_area" cols="80" rows="25" ></textarea>
 				</div>
 			   
 				<div style="width:48%; overflow-y:auto; float:rigt;text-align:center;" >
-					<p>Target XML:</p>
+					<p id="target_xml_text">Target XML:</p>
 					<textarea id="target_xml_area" name="target_xml_area" cols="80" rows="25" ></textarea>
 				</div>
 				<div style="float:rigt;text-align:center;" >
-				<input id="xmlsubmit" type="submit" value="Upload source and target" />
+				<input id="xmlsubmit" type="submit" value="Upload source and target XML documents" />
 				</div>
 
 		</div>
-		
-			
+			 <div id="tranform_input_data">
+
+				 <div style="width:48%; overflow-y:auto; float:left;text-align:center;">
+					<p>Source Document:</p>
+					<textarea id="source_transform_area" name="source_transfrom_area" cols="80" rows="25" ></textarea>
+				</div>
+			   
+				<div style="width:48%; overflow-y:auto; float:rigt;text-align:center;" >
+					<p>Template:</p>
+					<textarea id="template_transform_area" name="template_transform_area" cols="80" rows="25" ></textarea>
+				</div>
+				<div style="float:rigt;text-align:center;" >
+					<input id="transformsubmit" type="submit" value="Transform Document" />
+					</div>
+		</div>
 
 		
 		
@@ -111,6 +149,8 @@
 		<div id="containerBottom">
 
 		<div id="layerfooter"><img id="layerfooterimg" src="./images/footer.png" width="1150" alt="Footer logos"/></div>
+		<div id="popup"></div>	
+		<div id="popuperror"></div>	
 	</div>
 	</div>
 	

@@ -229,10 +229,15 @@ public class XSDModelBuilder extends ModelBuilder {
 		parser.parseString(inputStream);
 		XSDSchema schema = parser.getSchema();
 		String location = "uri://directmapping.appspot.com/";
-		if (!(schema.getSchemaForSchemaNamespace().isEmpty() && schema.getTargetNamespace().isEmpty()))
+		if (schema.getSchemaForSchemaNamespace() != null  && !schema.getSchemaForSchemaNamespace().isEmpty())
 		{
-			location = location + "" + schema.getSchemaForSchemaNamespace().replace("http://", "") + "/" + schema.getTargetNamespace().replace("http://", "");
+			location = location + "" + schema.getSchemaForSchemaNamespace().replace("http://", "") ;
 		}
+		
+		if (schema.getTargetNamespace() != null &&  !schema.getTargetNamespace().isEmpty())
+		{
+			location = location + "" + "/" + schema.getTargetNamespace().replace("http://", "");
+		} 
 
 		schema.setSchemaLocation(location);
 				

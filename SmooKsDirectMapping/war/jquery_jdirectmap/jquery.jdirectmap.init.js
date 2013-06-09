@@ -102,18 +102,24 @@
 		}
 		
 	 
-	   function helper_ui_msg(errormsg, type){
+	   function helper_ui_msg(errormsg, type, height, width){
 		   $("#popuperror").empty();
 		   $("#popuperror").append('<textarea id="popuperror_textarea"/>')
 		   var text_area   = $("#popuperror").children("#popuperror_textarea");
 		   text_area.text(errormsg);
 		   text_area.attr('readonly', true);
 		   
+		   if(height == null)
+			   {			   
+		   height = 'auto';
+		   width = 'auto';
+			   }
+		   
 		   $("#popuperror").dialog({		   
 				// display drop down pop up message to show
 				  autoOpen: true,
-				  height: 'auto',
-				  width: 'auto',
+				  height: height,
+				  width: width,
 			      modal: true,
 			      title:   'Message Window - ' + type,
 			      buttons: {

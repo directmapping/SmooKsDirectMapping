@@ -163,7 +163,7 @@ public class InputServlet extends HttpServlet {
 			
 			builder = new XSDModelBuilder(xsd);
 			
-			/** DEBUG **/
+			/** DEBUG **
 			List<String> elements = new ArrayList<String>(); 
 			Set<String> elementNames = builder.getRootElementNames();
 			Iterator<String> it = elementNames.iterator();
@@ -172,7 +172,7 @@ public class InputServlet extends HttpServlet {
 				elements.add(name);
 				 logger.log(Level.INFO, "XSD root elements : " + name);
 			}
-			/** DEBUG **/
+			** DEBUG **/
 			((XSDModelBuilder)builder).setRootElementName(rootElement);
 			
 			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
