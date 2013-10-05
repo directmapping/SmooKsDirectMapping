@@ -62,13 +62,18 @@ import org.w3c.dom.NodeList;
  * <p/>
  * See <a href="http://www.jboss.org/community/wiki/SmooksEditorTemplateGeneration">Wiki Docs</a>.
  * 
+ * Extended by Michal Skackov
+ * 
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author Michal Skackov
  */
 public abstract class TemplateBuilder {
 
 	private ModelBuilder modelBuilder;
 	private Document model;
 	private List<Mapping> mappings = new ArrayList<Mapping>();
+	private List<Function> functions = new ArrayList<Function>();
+
 	private XPathFactory xpathFactory = XPathFactory.newInstance();
 	private NamespaceContext namespaceContext;
 
@@ -180,7 +185,7 @@ public abstract class TemplateBuilder {
 		List<Mapping> removeMappings = new ArrayList<Mapping>();
 		findChildMappings(modelCollectionPath, mapping, parseSourcePath(mapping), removeMappings);
 		//TODO MS remove mapping contains all nodes which need to be rewritten.
-		//TODO MS I will add attribute smk:fm_list_variable - to pull in template builder
+		//TODO MS to add attribute smk:fm_list_variable - to pull in template builder
 		//TODO MS and smk:fm_list_match - to say how many levels it matches in case of multiple lists
 		
 		 renameChildren(srcCollectionPath, modelCollectionPath, collectionItemName, removeMappings);
@@ -437,7 +442,7 @@ public abstract class TemplateBuilder {
 		Element collectionElement = getNearestCollectionElement(mappingNode);
 		if (collectionElement != null) {
 			CollectionMapping parentCollectionMapping = getCollectionMapping(collectionElement);
-			if (parentCollectionMapping == null && ModelBuilder.getEnforceCollectionSubMappingRules(collectionElement)) {
+			if (parentCollectionMapping == null && ModelBuilder.getEnforceCollectionSubMappingRules(collectionElement)  && mappingNode != collectionElement) {
 				throw new UnmappedCollectionNodeException(collectionElement);
 			}
 		}
@@ -483,6 +488,17 @@ public abstract class TemplateBuilder {
 		for (Mapping mapping : mappings) {
 			if (mapping.getMappingNode() == node) {
 				return mapping;
+			}
+		}
+
+		return null;
+	}
+	
+	
+	protected Function getFunction(Node node) {
+		for (Function function : functions) {
+			if (function.getFunctionNode() == node) {
+				return function;
 			}
 		}
 

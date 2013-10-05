@@ -28,7 +28,7 @@ import org.milyn.StreamFilterType;
 import org.milyn.delivery.DomModelCreator;
 import org.milyn.templating.TemplatingConfiguration;
 import org.milyn.templating.freemarker.FreeMarkerTemplateProcessor;
-import org.smooks.directmapping.template.util.SmooksFMUtil;
+import org.smooks.directmapping.gae.util.SmooksFMUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -70,11 +70,7 @@ public class SmooksServlet extends HttpServlet {
 		smooks = new Smooks();
 	
 		try {
-			//InputStream is = new ByteArrayInputStream(template.getBytes("utf-8"));
-			
-			//smooks.addConfigurations(is);
-			//} catch (SAXException e1) {}
-			
+				
 			
 			try {
 			 doc = docBuilder.parse(new InputSource(new ByteArrayInputStream(smooksconfig.getBytes("utf-8"))));

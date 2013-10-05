@@ -27,12 +27,13 @@ import org.smooks.directmapping.model.ModelBuilder;
 import org.w3c.dom.Node;
 
 /**
- * Extended by Michal Skackov
+ * 
  * Abstract Mapping.
  * <p/>
  * Represents a successful mapping. It also tells if the mapping requires
  * other model nodes to be hidden in the Editor view, so as to restrict mappings to these nodes.
- *
+ * Extended by Michal Skackov
+ * 
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
  * @author Michal Skackov
  */

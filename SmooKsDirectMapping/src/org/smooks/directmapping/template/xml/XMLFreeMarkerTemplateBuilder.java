@@ -51,7 +51,11 @@ import freemarker.template.Template;
 /**
  * Freemarker Template Builder for an XML messages.
  * 
+ * Extended by Michal Skackov
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
+ * @author <a href="mailto:mskackov@ google mail .com">michal skackov</a>
+ * 
+ *  
  */
 public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 	
@@ -228,6 +232,7 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 		if(children.getLength() == 0) {
 			Mapping mapping = getMapping(element);
 			
+			
 			if(ModelBuilder.getElementType(element) == ElementType.simple) {
 				templateWriter.write(">"); //$NON-NLS-1$
 				writeHistory.startClosed = true;
@@ -246,9 +251,25 @@ public class XMLFreeMarkerTemplateBuilder extends FreeMarkerTemplateBuilder {
 					
 					
 				} else {
-					templateWriter.write(ModelBuilder.REQUIRED);
+					// write the function as FreeMarker
+					if(ModelBuilder.getFunctionValue(element)!=null){
+						templateWriter.write(ModelBuilder.getFunctionValue(element));
+					}
+					else{
+						templateWriter.write(ModelBuilder.REQUIRED);
+					}
 				}
 			}
+			else{
+				// MS write the complex leafs in a loop 
+					templateWriter.write(">"); //$NON-NLS-1$
+					writeHistory.startClosed = true;
+					// Michal Skackov variable collection override 
+					templateWriter.write(FreeMarkerUtil.toFreeMarkerVariable(ModelBuilder.getCollectionName(element)));
+					
+				
+			}
+			
 		} else {
 			if(!ModelBuilder.isInReservedNamespace(element) && !writeHistory.startClosed) {
 				templateWriter.write(">"); //$NON-NLS-1$

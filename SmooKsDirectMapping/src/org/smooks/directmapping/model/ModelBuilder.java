@@ -43,7 +43,6 @@ import javax.xml.parsers.ParserConfigurationException;
  *   changes 
  *   
  *   25/09/2012 MS : added  setCollectionVariable , getCollectionName, getCollectionPath
- *   26/09/2012 MS : move from org.w3c.dom to org.dom4j
  *   
  */
 public abstract class ModelBuilder {
@@ -470,6 +469,32 @@ public abstract class ModelBuilder {
 	    	return  element.getAttributeNS(NAMESPACE, "list_variable"); //$NON-NLS-1$
 	        
 	    }
+	    
+	    
+	    
+	    /**
+	 		 * Extended by Michal Skackov
+	 		 * @param element
+	 		 * @param collectionName
+	 		 * @param collectionpath
+	 		 */
+	 		public static void setFunctionValue(Element element, String value) {
+	 		        element.setAttributeNS(NAMESPACE, "smk:function_value", value); //$NON-NLS-1$
+	 		}
+	 	 
+	 	    /**
+	 	     * 
+	 	     *  Extended by Michal Skackov
+	 	     * @param element
+	 	     * @return
+	 	     */
+	 	    public static String getFunctionValue(Element element) {
+	 	    	
+	 	    	return  element.getAttributeNS(NAMESPACE, "function_value"); //$NON-NLS-1$
+	 	        
+	 	    }
+	    
+	    
 	    
 	    /**
 	     * 

@@ -103,8 +103,9 @@ public class XSDModelBuilder extends ModelBuilder {
 	}
 
     
-    public XSDModelBuilder(String xsd) throws IOException, ModelBuilderException {
-		this.resourceSet = createResourceSet();
+    public XSDModelBuilder(String xsd, String rootElement) throws IOException, ModelBuilderException {
+    	this.resourceSet = createResourceSet();
+    	this.setRootElementName(rootElement);
 		loadSchema(xsd);//new ByteArrayInputStream(xsd.getBytes("utf-8")));
 	}
     
@@ -353,6 +354,8 @@ public class XSDModelBuilder extends ModelBuilder {
                 if(loadedType instanceof XSDComplexTypeDefinition) {
                 	ModelBuilder.setElementType(element, ElementType.complex);
                     processComplexType(document, element, (XSDComplexTypeDefinition) loadedType);
+                } else if (minOccurs == maxOccurs  && minOccurs > 1){
+                	ModelBuilder.setElementType(element, ElementType.complex);                	
                 } else {
                 	ModelBuilder.setElementType(element, ElementType.simple);                	
                 }

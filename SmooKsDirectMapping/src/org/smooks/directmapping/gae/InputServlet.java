@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.smooks.directmapping.mapping.model.JSONMappingModelBuilder;
+import org.smooks.directmapping.mapping.model.JSONMappingModel;
 import org.smooks.directmapping.model.ModelBuilder;
 import org.smooks.directmapping.model.xml.XMLSampleModelBuilder;
 import org.smooks.directmapping.model.xml.XSDModelBuilder;
@@ -130,12 +130,12 @@ public class InputServlet extends HttpServlet {
 	
 	private String processXMLtoJSON(String xml) {
 		ModelBuilder builder;
-		JSONMappingModelBuilder jsonmodel;
+		JSONMappingModel jsonmodel;
 		try {
 			
 			builder = new XMLSampleModelBuilder(xml);	
 			builder.configureModel();
-			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
+			jsonmodel = new JSONMappingModel(builder.buildModel().getDocumentElement());
 			return jsonmodel.getJSON();
 			
 		} catch (Exception e) {
@@ -150,10 +150,10 @@ public class InputServlet extends HttpServlet {
 	
 	private String processXSDtoJSON(String xsd, String rootElement) {
 		XSDModelBuilder builder;
-		JSONMappingModelBuilder jsonmodel;
+		JSONMappingModel jsonmodel;
 		try {
 			
-			builder = new XSDModelBuilder(xsd);
+			builder = new XSDModelBuilder(xsd,rootElement);
 			
 			/** DEBUG **
 			List<String> elements = new ArrayList<String>(); 
@@ -165,9 +165,9 @@ public class InputServlet extends HttpServlet {
 				 logger.log(Level.INFO, "XSD root elements : " + name);
 			}
 			** DEBUG **/
-			((XSDModelBuilder)builder).setRootElementName(rootElement);
+		
 			
-			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
+			jsonmodel = new JSONMappingModel(builder.buildModel().getDocumentElement());
 			return jsonmodel.getJSON();
 			
 		} catch (Exception e) {

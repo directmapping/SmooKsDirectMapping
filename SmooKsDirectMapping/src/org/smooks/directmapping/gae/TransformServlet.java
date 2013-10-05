@@ -27,9 +27,9 @@ import org.milyn.StreamFilterType;
 import org.milyn.delivery.DomModelCreator;
 import org.milyn.templating.TemplatingConfiguration;
 import org.milyn.templating.freemarker.FreeMarkerTemplateProcessor;
+import org.smooks.directmapping.gae.util.SmooksFMUtil;
 import org.smooks.directmapping.model.ModelBuilderException;
 import org.smooks.directmapping.template.exception.TemplateBuilderException;
-import org.smooks.directmapping.template.util.SmooksFMUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -79,19 +79,19 @@ public class TransformServlet extends HttpServlet {
 		String targetXSD = "";
 		
 		if (sourceXMLKey != null && sourceXMLKey.length() > 0){
-			sourceXML = getStoredFile(sourceXMLKey, "sourceXML");
+			sourceXML = getStoredFile(sourceXMLKey);
 			sampleXML = true;
 		}
 		if (targetXMLKey != null && targetXMLKey.length() > 0){
-			targetXML = getStoredFile(targetXMLKey, "targetXML");
+			targetXML = getStoredFile(targetXMLKey);
 		}
 		if (sourceXSDKey != null && sourceXSDKey.length() > 0){
-			sourceXSD = getStoredFile(sourceXSDKey, "sourceXSD");
+			sourceXSD = getStoredFile(sourceXSDKey);
 		}  else{
 			schemaXSD = false;
 		}
 		if (targetXSDKey != null && targetXSDKey.length() > 0){
-			targetXSD = getStoredFile(targetXSDKey, "targetXSD");
+			targetXSD = getStoredFile(targetXSDKey);
 		} else{
 			schemaXSD = false;
 		}
@@ -171,7 +171,7 @@ public class TransformServlet extends HttpServlet {
 
 	}
 
-	private String getStoredFile(String keyString, String propertyName) {
+	private String getStoredFile(String keyString) {
 
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

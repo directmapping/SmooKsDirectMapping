@@ -83,7 +83,7 @@
 			$('#mapping_list').hideCol("id")
 			$("#mapping_main").show();
 			
-			$("#function_area").val("//Note : functions are currently not supported by the trasformation engine  \n//Please specify function. FreeMarker syntax \n//Example : \n \"Hello ${in1}!\ See attached invoice for book ${in2}\" \n //Note : functions are currently not supported by the trasformation engine ");
+			$("#function_area").val("//Please specify function. FreeMarker syntax \n//Example : \n Hello in1: \ See attached invoice for book in2: \n ");
 			jQuery.fn.jDirectMapTreeInit.editor = CodeMirror.fromTextArea(document.getElementById("function_area"), {
 			       lineNumbers: true,
 			       matchBrackets: true

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.smooks.directmapping.mapping.model.JSONMappingModelBuilder;
+import org.smooks.directmapping.mapping.model.JSONMappingModel;
 import org.smooks.directmapping.mapping.model.util.Functions;
 import org.smooks.directmapping.mapping.model.util.MappingObject;
 import org.smooks.directmapping.mapping.model.util.Mappings;
@@ -198,12 +198,12 @@ public class ImportServlet extends HttpServlet {
 
 	private String processXSDtoJSON(String xsd, String rootElement) {
 		XSDModelBuilder builder;
-		JSONMappingModelBuilder jsonmodel;
+		JSONMappingModel jsonmodel;
 		try {
 			
-			builder = new XSDModelBuilder(xsd);
+			builder = new XSDModelBuilder(xsd,rootElement);
 			
-			/** DEBUG **/
+			/** DEBUG **
 			List<String> elements = new ArrayList<String>(); 
 			Set<String> elementNames = builder.getRootElementNames();
 			Iterator<String> it = elementNames.iterator();
@@ -213,9 +213,9 @@ public class ImportServlet extends HttpServlet {
 				 logger.log(Level.INFO, "XSD root elements : " + name);
 			}
 			/** DEBUG **/
-			((XSDModelBuilder)builder).setRootElementName(rootElement);
+		
 			
-			jsonmodel = new JSONMappingModelBuilder(builder.buildModel().getDocumentElement());
+			jsonmodel = new JSONMappingModel(builder.buildModel().getDocumentElement());
 			return jsonmodel.getJSON();
 			
 		} catch (Exception e) {
@@ -227,12 +227,12 @@ public class ImportServlet extends HttpServlet {
 	}
 	private String processXMLtoJSON(String xml) {
 		ModelBuilder builder;
-		JSONMappingModelBuilder jsonmodel;
+		JSONMappingModel jsonmodel;
 		try {
 
 			builder = new XMLSampleModelBuilder(xml);
 			builder.configureModel();
-			jsonmodel = new JSONMappingModelBuilder(builder.buildModel()
+			jsonmodel = new JSONMappingModel(builder.buildModel()
 					.getDocumentElement());
 			return jsonmodel.getJSON();
 
