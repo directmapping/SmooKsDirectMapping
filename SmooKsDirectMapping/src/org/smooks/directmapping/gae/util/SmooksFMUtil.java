@@ -314,13 +314,13 @@ public class SmooksFMUtil {
 		    
 		    }
 		}
-		/*
+		
 		for(CollectionMapping collection : collectionMappings) {
 			//TODO change it ?
 			targetBuilder.addCollectionMapping(collection.getSrcPath(), (Element) collection.getMappingNode(), collection.getCollectionItemName());
 			ModelBuilder.setCollectionVariable((Element) collection.getMappingNode(), collection.getCollectionItemName(), collection.getSrcPath());
 		}
-				*/
+				
 		return targetBuilder;
 			
 	}
