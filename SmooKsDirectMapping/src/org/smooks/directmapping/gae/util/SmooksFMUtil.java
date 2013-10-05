@@ -296,9 +296,11 @@ public class SmooksFMUtil {
 		    }else{
 		   
 		    	if(source.getNodeType() == Node.ELEMENT_NODE) { 
-				   if(ModelBuilder.getElementType((Element) source) == ElementType.complex && ModelBuilder.getMaxOccurs((Element) source) > 1){
+				   if(ModelBuilder.getElementType((Element) source) == ElementType.complex && (ModelBuilder.getMaxOccurs((Element) source) > 1  || ModelBuilder.getMaxOccurs((Element) source) < 0)   ){
 					   CollectionMapping collection = new CollectionMapping(from, target, source.getNodeName());
 					   collectionMappings.add(collection);
+						targetBuilder.addCollectionMapping(collection.getSrcPath(), (Element) collection.getMappingNode(), collection.getCollectionItemName());
+						ModelBuilder.setCollectionVariable((Element) collection.getMappingNode(), collection.getCollectionItemName(), collection.getSrcPath());
 				   }
 				   else{
 					   targetBuilder.addValueMapping(from,target);   
@@ -312,13 +314,13 @@ public class SmooksFMUtil {
 		    
 		    }
 		}
-		
+		/*
 		for(CollectionMapping collection : collectionMappings) {
 			//TODO change it ?
 			targetBuilder.addCollectionMapping(collection.getSrcPath(), (Element) collection.getMappingNode(), collection.getCollectionItemName());
 			ModelBuilder.setCollectionVariable((Element) collection.getMappingNode(), collection.getCollectionItemName(), collection.getSrcPath());
 		}
-				
+				*/
 		return targetBuilder;
 			
 	}
